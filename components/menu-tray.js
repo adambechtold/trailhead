@@ -8,11 +8,10 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation }) {
 
   return (
     <div className={styles.container}>
-      {
-        isSettingLocation ?
-          <button onClick={toggleIsSettingLocation} >Cancel</button>
-          : <button onClick={toggleIsSettingLocation} >Set Location</button>
-      }
+      {isSettingLocation && <button>Confirm</button>}
+      {isSettingLocation && <button onClick={toggleIsSettingLocation} >Cancel</button>}
+
+      {!isSettingLocation && <button onClick={toggleIsSettingLocation} >Set Location</button>}
     </div>
   )
 }

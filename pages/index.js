@@ -3,11 +3,14 @@ import MenuTray from '@/components/menu-tray';
 import Crosshairs from '@/components/crosshairs';
 import dynamic from 'next/dynamic';
 
+import { useState } from 'react';
+
 const Map = dynamic(() => import('@/components/map'), {
   ssr: false
 });
 
 export default function App() {
+  const [isSettingLocation, setIsSettingLocation] = useState(false);
 
   return (
     <>
@@ -15,9 +18,12 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Crosshairs />
+      { isSettingLocation ? <Crosshairs /> : null }
       <Map />
-      <MenuTray />
+      <MenuTray 
+        setIsSettingLocation={setIsSettingLocation}
+        isSettingLocation={isSettingLocation}
+      />
     </>
   )
 }

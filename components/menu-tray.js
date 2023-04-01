@@ -4,8 +4,7 @@ export default function MenuTray() {
 
   return (
     <div className={styles.container}>
-      <button>Confirm</button>
-      <button>Cancel</button>
+      <button>Set Location</button>
     </div>
   )
 }

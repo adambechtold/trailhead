@@ -15,6 +15,7 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Crosshairs />
       <Map />
       <MenuTray />
     </>

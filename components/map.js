@@ -1,4 +1,5 @@
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import styles from '@/components/map.module.css';
 
 const mapFilePath = '/images/trail-map-smaller.jpeg';
 
@@ -18,8 +19,8 @@ function getWidthRatio(mapWidth, viewportWidth) {
   return viewportWidth / mapWidth;
 }
 
-export default function Map() {
-  
+export default function Map({ firstPinCorrdinates }) {
+
   // TODO: Use this to set the initial scale
   // I'm not sure why, but something breaks when I try to use it
   // I can get the ratio, but if I use it to set the initial scale, the map doesn't render correctly
@@ -44,6 +45,15 @@ export default function Map() {
       maxScale={20}
     >
       <TransformComponent>
+        <img
+          src='map-pin.svg'
+          alt='Map Pin'
+          className={styles.mapPin}
+          style={{
+            top: firstPinCorrdinates.top,
+            left: firstPinCorrdinates.left
+          }}
+        />
         <img src={mapFilePath} alt="Trail Map" />
       </TransformComponent>
     </TransformWrapper>

@@ -1,9 +1,13 @@
+import { useState } from 'react';
+
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+
+import MapStateTracker from './map-state-tracker';
 import styles from '@/components/map.module.css';
 
 const mapFilePath = '/images/trail-map-smaller.jpeg';
 
-function getMapDimensions(mapFilePath) {
+function getMapImageDimensions(mapFilePath) {
   const map = new Image();
   map.src = mapFilePath;
   const { width, height } = map;
@@ -27,13 +31,22 @@ export default function Map({ firstPinCorrdinates }) {
   // To replicate, uncomment the initialScale prop in the TransformWrapper component below
   const {
     width: mapWidth
-  } = getMapDimensions(mapFilePath);
+  } = getMapImageDimensions(mapFilePath);
 
   const {
     width: viewportWidth,
   } = getViewportDimensions();
 
   const widthRatio = getWidthRatio(mapWidth, viewportWidth);
+  
+  // get the current centerpoint of the map
+  const [currentMapState, setCurrentMapState] = useState({});
+
+  const handleMapStateUpdate = (state) => { 
+    setCurrentMapState(state);
+    console.log('currentMapState', currentMapState);
+  };
+
 
   return (
     <TransformWrapper
@@ -45,6 +58,9 @@ export default function Map({ firstPinCorrdinates }) {
       maxScale={20}
     >
       <TransformComponent>
+        <MapStateTracker 
+          setCurrentMapState={handleMapStateUpdate}
+        />
         <img
           src='map-pin.svg'
           alt='Map Pin'

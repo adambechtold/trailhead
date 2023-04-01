@@ -11,6 +11,7 @@ const Map = dynamic(() => import('@/components/map'), {
 
 export default function App() {
   const [isSettingLocation, setIsSettingLocation] = useState(false);
+  const [pins, setPins] = useState([]);
 
   return (
     <>
@@ -18,11 +19,11 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      { isSettingLocation ? <Crosshairs /> : null }
-      <Map 
+      {isSettingLocation && <Crosshairs /> }
+      <Map
         firstPinCorrdinates={{ top: '100px', left: '100px' }}
       />
-      <MenuTray 
+      <MenuTray
         setIsSettingLocation={setIsSettingLocation}
         isSettingLocation={isSettingLocation}
       />

@@ -19,7 +19,9 @@ export default function App() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       { isSettingLocation ? <Crosshairs /> : null }
-      <Map />
+      <Map 
+        firstPinCorrdinates={{ top: '100px', left: '100px' }}
+      />
       <MenuTray 
         setIsSettingLocation={setIsSettingLocation}
         isSettingLocation={isSettingLocation}

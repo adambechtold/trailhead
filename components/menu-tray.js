@@ -1,10 +1,14 @@
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray() {
+export default function MenuTray({ isSettingLocation, setIsSettingLocation}) {
+
+  const toggleIsSettingLocation = () => {
+    setIsSettingLocation(!isSettingLocation);
+  }
 
   return (
     <div className={styles.container}>
-      <button>Set Location</button>
+      <button onClick={ toggleIsSettingLocation } >Set Location</button>
     </div>
   )
 }

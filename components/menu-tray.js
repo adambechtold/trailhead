@@ -1,6 +1,11 @@
+import { useState } from 'react';
+
 import styles from '@/components/menu-tray.module.css';
 
 export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition }) {
+
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
@@ -11,15 +16,28 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
     toggleIsSettingLocation();
   };
 
+  const updateUserLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLatitude(position.coords.latitude);
+      setLongitude(position.coords.longitude);
+    }, (error) => {
+      console.log(error);
+    });
+}
+
   const addPin = () => {
     const { scale } = mapPosition;
+
+    updateUserLocation();
 
     setPins([
       ...pins,
       {
         left: (crosshairsPosition.x - mapPosition.x) / scale,
         top: (crosshairsPosition.y - mapPosition.y) / scale,
-        index: pins.length
+        index: pins.length,
+        latitude,
+        longitude
       }
     ]);
   };
@@ -32,6 +50,8 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
       {!isSettingLocation && <button onClick={toggleIsSettingLocation} >
         {!pins.length ? "Set Location" : "Set Another Location"}
       </button>}
+      
+      <button onClick={updateUserLocation} >Update Location | latitude: {latitude}, longitude{longitude}</button>
     </div>
   );
 }

@@ -2,31 +2,11 @@ import { useState } from 'react';
 
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition }) {
-
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
+export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage}) {
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
   };
-
-  const updateUserLocation = ({ callback }) => {
-    setIsUpdatingLocation(true);
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
-      setIsUpdatingLocation(false);
-      if (callback) callback({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      });
-    }, (error) => {
-      console.log(error);
-      setIsUpdatingLocation(false);
-    });
-  }
 
   const addPin = ({ latitude, longitude }) => {
     const { scale } = mapPosition;
@@ -50,8 +30,13 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
     toggleIsSettingLocation();
   };
 
+  const handleUpdateLocation = () => {
+    updateUserLocation({ pins });
+  }
+
   return (
     <div className={styles.container}>
+      {debugMessage && <div>{debugMessage}</div>}
       {isSettingLocation && <button onClick={handleConfirmLocation}>Confirm</button>}
       {isSettingLocation && <button onClick={toggleIsSettingLocation} >Cancel</button>}
 
@@ -59,7 +44,9 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
         {!pins.length ? "Set Location" : "Set Another Location"}
       </button>}
 
-      <button onClick={updateUserLocation} >Update Location | latitude: {latitude}, longitude{longitude} | updating? {isUpdatingLocation ? "yes" : "no"}</button>
+      <button onClick={handleUpdateLocation} >Update Location</button>
+      {userLocation && <div>latitude: {userLocation && userLocation.latitude}, longitude{userLocation.longitude}</div>}
+      <div>updating? {isUpdatingLocation ? "yes" : "no"}</div>
     </div>
   );
 }

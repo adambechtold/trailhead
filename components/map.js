@@ -14,7 +14,7 @@ function getWidthRatio(mapWidth, viewportWidth) {
   return viewportWidth / mapWidth;
 }
 
-export default function Map({ mapPosition, setMapPosition, pins }) {  
+export default function Map({ mapPosition, setMapPosition, pins, userLocation }) {  
 
   // get the current centerpoint of the map
   // Example State
@@ -42,7 +42,6 @@ export default function Map({ mapPosition, setMapPosition, pins }) {
     });
   };
 
-
   const showPin = (pin) => {
     return (
       <img
@@ -56,8 +55,22 @@ export default function Map({ mapPosition, setMapPosition, pins }) {
         key={`pin-${pin.index}}`}
       />
     )
-  }
+  };
 
+  const showUserLocation = (location) => {
+    return (
+      <img 
+        src='user-location.svg'
+        alt='User Location'
+        className={styles.mapPin}
+        style={{
+          top: location.top,
+          left: location.left
+        }}
+        key={`user-location`}
+      />
+    );
+  };
 
   return (
     <TransformWrapper
@@ -73,6 +86,7 @@ export default function Map({ mapPosition, setMapPosition, pins }) {
               setCurrentMapState={handleMapStateUpdate}
             />
             {pins && pins.map(showPin)}
+            {userLocation && showUserLocation(userLocation)}
             <img src={mapFilePath} alt="Trail Map" ref={mapReference} />
           </TransformComponent>
         </>

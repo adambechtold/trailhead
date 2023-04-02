@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
@@ -6,15 +6,13 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import MapStateTracker from './map-state-tracker';
 import styles from '@/components/map.module.css';
 
-const mapFilePath = '/images/trail-map-smaller.jpeg';
-
 
 
 function getWidthRatio(mapWidth, viewportWidth) {
   return viewportWidth / mapWidth;
 }
 
-export default function Map({ mapPosition, setMapPosition, pins, userLocation }) {  
+export default function Map({ mapFile, pins, userLocation, mapPosition, setMapPosition }) {  
 
   // get the current centerpoint of the map
   // Example State
@@ -87,7 +85,7 @@ export default function Map({ mapPosition, setMapPosition, pins, userLocation })
             />
             {pins && pins.map(showPin)}
             {userLocation && showUserLocation(userLocation)}
-            <img src={mapFilePath} alt="Trail Map" ref={mapReference} />
+            <img src={mapFile} alt="Trail Map" ref={mapReference} />
           </TransformComponent>
         </>
       )}

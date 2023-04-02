@@ -11,6 +11,12 @@ const Map = dynamic(() => import('@/components/map'), {
   ssr: false
 });
 
+const maps = [
+  '/images/trail-map-smaller.jpeg',
+  '/images/bartlett-neighborhood.jpeg',
+  '/images/bartlett-closeup.jpeg',
+];
+
 export default function App() {
   const [isSettingLocation, setIsSettingLocation] = useState(false);
   const [crosshairsPosition, setCrosshairsPosition] = useState({ x: 0, y: 0 });
@@ -19,6 +25,19 @@ export default function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
   const [debugMessage, setDebugMessage] = useState('');
+  const [mapFile, setMapFile] = useState(maps[0]);
+
+  const changeToNextMap = () => {
+    const index = maps.indexOf(mapFile);
+    if (index === maps.length - 1) {
+      setMapFile(maps[0]);
+    } else {
+      setMapFile(maps[index + 1]);
+    }
+    setPins([]);
+    setUserLocation(null);
+    setIsSettingLocation(false);
+  };
 
   const updateUserLocation = ({ callback, pins }) => {
     setIsUpdatingLocation(true);
@@ -100,9 +119,6 @@ export default function App() {
     return { left: x, top: y };
   }
 
-  console.log("pins", pins);
-  console.log("userLocation", userLocation);
-
   // ======================= TESTING =======================
   // parking lot
   // 41.336736849249846, -72.68162289645365
@@ -170,6 +186,7 @@ export default function App() {
       </Head>
       {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
       <Map
+        mapFile={mapFile}
         pins={pins}
         setMapPosition={setMapPosition}
         mapPosition={mapPosition}
@@ -186,6 +203,7 @@ export default function App() {
         updateUserLocation={updateUserLocation}
         isUpdatingLocation={isUpdatingLocation}
         debugMessage={debugMessage}
+        changeToNextMap={changeToNextMap}
       />
     </>
   );

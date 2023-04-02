@@ -6,29 +6,30 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
   };
 
-  const handleConfirmLocation = () => {
-    addPin();
-    toggleIsSettingLocation();
-  };
-
-  const updateUserLocation = () => {
+  const updateUserLocation = ({ callback }) => {
+    setIsUpdatingLocation(true);
     navigator.geolocation.getCurrentPosition((position) => {
       setLatitude(position.coords.latitude);
       setLongitude(position.coords.longitude);
+      setIsUpdatingLocation(false);
+      if (callback) callback({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
     }, (error) => {
       console.log(error);
+      setIsUpdatingLocation(false);
     });
-}
+  }
 
-  const addPin = () => {
+  const addPin = ({ latitude, longitude }) => {
     const { scale } = mapPosition;
-
-    updateUserLocation();
 
     setPins([
       ...pins,
@@ -42,6 +43,13 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
     ]);
   };
 
+  const handleConfirmLocation = () => {
+    updateUserLocation({
+      callback: addPin
+    })
+    toggleIsSettingLocation();
+  };
+
   return (
     <div className={styles.container}>
       {isSettingLocation && <button onClick={handleConfirmLocation}>Confirm</button>}
@@ -50,8 +58,8 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
       {!isSettingLocation && <button onClick={toggleIsSettingLocation} >
         {!pins.length ? "Set Location" : "Set Another Location"}
       </button>}
-      
-      <button onClick={updateUserLocation} >Update Location | latitude: {latitude}, longitude{longitude}</button>
+
+      <button onClick={updateUserLocation} >Update Location | latitude: {latitude}, longitude{longitude} | updating? {isUpdatingLocation ? "yes" : "no"}</button>
     </div>
   );
 }

@@ -1,8 +1,6 @@
-import { useState } from 'react';
-
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage}) {
+export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap }) {
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
@@ -36,17 +34,20 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
 
   return (
     <div className={styles.container}>
-      {debugMessage && <div>{debugMessage}</div>}
-      {isSettingLocation && <button onClick={handleConfirmLocation}>Confirm</button>}
-      {isSettingLocation && <button onClick={toggleIsSettingLocation} >Cancel</button>}
+      <div className={styles.manageLocation}>
+        {debugMessage && <div>{debugMessage}</div>}
+        {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
+        {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >Cancel</button>}
 
-      {!isSettingLocation && <button onClick={toggleIsSettingLocation} >
-        {!pins.length ? "Set Location" : "Set Another Location"}
-      </button>}
+        {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
+          {!pins.length ? "Set Location" : "Set Another Location"}
+        </button>}
 
-      <button onClick={handleUpdateLocation} >Update Location</button>
-      {userLocation && <div>latitude: {userLocation && userLocation.latitude}, longitude{userLocation.longitude}</div>}
-      <div>updating? {isUpdatingLocation ? "yes" : "no"}</div>
+        <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
+        {userLocation && <div>latitude: {userLocation && userLocation.latitude}, longitude{userLocation.longitude}</div>}
+        <div>updating? {isUpdatingLocation ? "yes" : "no"}</div>
+      </div>
+      <button className={styles.button} onClick={changeToNextMap}>Next Map</button>
     </div>
   );
 }

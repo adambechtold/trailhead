@@ -72,7 +72,7 @@ export default function Map({ mapPosition, setMapPosition, pins }) {
             <MapStateTracker
               setCurrentMapState={handleMapStateUpdate}
             />
-            {pins && pins.map((pin, index) => showPin(pin))}
+            {pins && pins.map(showPin)}
             <img src={mapFilePath} alt="Trail Map" ref={mapReference} />
           </TransformComponent>
         </>

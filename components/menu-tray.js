@@ -4,7 +4,12 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
-  }
+  };
+
+  const handleConfirmLocation = () => {
+    addPin();
+    toggleIsSettingLocation();
+  };
 
   const addPin = () => {
     const { scale } = mapPosition;
@@ -17,14 +22,16 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
         index: pins.length
       }
     ]);
-  }
+  };
 
   return (
     <div className={styles.container}>
-      {isSettingLocation && <button onClick={addPin}>Confirm</button>}
+      {isSettingLocation && <button onClick={handleConfirmLocation}>Confirm</button>}
       {isSettingLocation && <button onClick={toggleIsSettingLocation} >Cancel</button>}
 
-      {!isSettingLocation && <button onClick={toggleIsSettingLocation} >Set Location</button>}
+      {!isSettingLocation && <button onClick={toggleIsSettingLocation} >
+        {!pins.length ? "Set Location" : "Set Another Location"}
+      </button>}
     </div>
-  )
+  );
 }

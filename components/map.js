@@ -68,34 +68,6 @@ export default function Map({ mapPosition, setMapPosition, pins }) {
     >
       {({ zoomIn, zoomOut, setTransform, ...rest }) => (
         <>
-          <button onClick={() => setTransform(
-            -252,
-            -543,
-            1
-          )}
-            style={{ position: 'fixed', top: '100px', left: '100px', zIndex: '1000' }}
-          >Go To Point</button>
-          <button onClick={() => setTransform(
-            0,
-            0,
-            1
-          )}
-            style={{ position: 'fixed', top: '80px', left: '100px', zIndex: '1000' }}
-          >Go To Scale 1, position (0,0)</button>
-          <button onClick={() => setTransform(
-            0,
-            0,
-            2
-          )}
-            style={{ position: 'fixed', top: '120px', left: '100px', zIndex: '1000' }}
-          >Go To Scale 2, position (0,0)</button>
-          <button onClick={() => setTransform(
-            0,
-            0,
-            3
-          )}
-            style={{ position: 'fixed', top: '140px', left: '100px', zIndex: '1000' }}
-          >Go To Scale 3, position (0,0)</button>
           <TransformComponent>
             <MapStateTracker
               setCurrentMapState={handleMapStateUpdate}

@@ -6,7 +6,7 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
     setIsSettingLocation(!isSettingLocation);
   };
 
-  const addPin = ({ latitude, longitude }) => {
+  const addPin = ({ latitude, longitude, accuracy }) => {
     const { scale } = mapPosition;
 
     setPins([
@@ -16,7 +16,8 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
         top: (crosshairsPosition.y - mapPosition.y) / scale,
         index: pins.length,
         latitude,
-        longitude
+        longitude,
+        accuracy
       }
     ]);
   };
@@ -44,7 +45,7 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
         </button>}
 
         <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
-        {userLocation && <div>latitude: {userLocation && userLocation.latitude}, longitude{userLocation.longitude}</div>}
+        {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
         <div>updating? {isUpdatingLocation ? "yes" : "no"}</div>
       </div>
       <button className={styles.button} onClick={changeToNextMap}>Next Map</button>

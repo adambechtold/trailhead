@@ -42,6 +42,7 @@ export default function App() {
   const updateUserLocation = ({ callback, pins }) => {
     setIsUpdatingLocation(true);
     navigator.geolocation.getCurrentPosition((position) => {
+      console.log('position', position);
       
       const { top, left } = (pins && pins.length >= 2) ?
         convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })
@@ -51,12 +52,14 @@ export default function App() {
         top,
         left,
         latitude: position.coords.latitude,
-        longitude: position.coords.longitude
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy
       });
       setIsUpdatingLocation(false);
       if (callback) callback({
         latitude: position.coords.latitude,
-        longitude: position.coords.longitude
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy
       });
     }, (error) => {
       console.log(error);

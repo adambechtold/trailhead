@@ -1,123 +1,210 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from 'next/head';
+// TODO: Make the menu tray ssr. It doesn't need to be client-side rendered.
+// It is that way now for debugging.
+import MenuTray from '@/components/menu-tray';
+import Crosshairs from '@/components/crosshairs';
+import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ['latin'] })
+import { useState } from 'react';
 
-export default function Home() {
+const Map = dynamic(() => import('@/components/map'), {
+  ssr: false
+});
+
+const maps = [
+  '/images/trail-map-smaller.jpeg',
+  '/images/bartlett-neighborhood.jpeg',
+  '/images/bartlett-closeup.jpeg',
+];
+
+export default function App() {
+  const [isSettingLocation, setIsSettingLocation] = useState(false);
+  const [crosshairsPosition, setCrosshairsPosition] = useState({ x: 0, y: 0 });
+  const [mapPosition, setMapPosition] = useState({ x: 0, y: 0, scale: 0.4 }); // TODO: calculate initial scale
+  const [pins, setPins] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
+  const [debugMessage, setDebugMessage] = useState('');
+  const [mapFile, setMapFile] = useState(maps[0]);
+
+  const changeToNextMap = () => {
+    const index = maps.indexOf(mapFile);
+    if (index === maps.length - 1) {
+      setMapFile(maps[0]);
+    } else {
+      setMapFile(maps[index + 1]);
+    }
+    setPins([]);
+    setUserLocation(null);
+    setIsSettingLocation(false);
+  };
+
+  const updateUserLocation = ({ callback, pins }) => {
+    setIsUpdatingLocation(true);
+    navigator.geolocation.getCurrentPosition((position) => {
+      
+      const { top, left } = (pins && pins.length >= 2) ?
+        convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })
+        : { top: null, left: null };
+
+      setUserLocation({
+        top,
+        left,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+      setIsUpdatingLocation(false);
+      if (callback) callback({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      });
+    }, (error) => {
+      console.log(error);
+      setIsUpdatingLocation(false);
+    }, { enableHighAccuracy: true, maximumAge: 300 });
+  }
+
+
+  // returns Top and Left of the User
+  function convertUserLocationToMapPosition({ pins, latitude, longitude }) {
+    const empty = () => ({ top: null, left: null });
+
+    if (pins.length < 2) {
+      return empty();
+    };
+
+    // TODO: Use more than 2 pins
+    const pin1 = pins[0];
+    const pin2 = pins[1];
+
+    if (pin1.latitude === pin2.latitude || pin1.longitude === pin2.longitude) {
+      console.log('reset and move');
+      setDebugMessage('lat and long are the same; reset and move; for now, adjusting so you can see something');
+      // for debugging
+      pin1.latitude = pin2.latitude + 0.000002;
+      pin1.longitude = pin2.longitude + 0.000002;
+      // return empty();
+    };
+
+    const offsetX = -1 * ((pin1.left * pin2.latitude) - (pin2.left * pin1.latitude)) / (pin1.latitude - pin2.latitude);
+    const offsetY = -1 * ((pin1.top * pin2.longitude) - (pin2.top * pin1.longitude)) / (pin1.longitude - pin2.longitude);
+
+    const scalerX = ((pin1.left - offsetX) / pin1.latitude);
+    const scalerY = ((pin1.top - offsetY) / pin1.longitude);
+
+    if (isNaN(offsetX) || isNaN(offsetY) || isNaN(scalerX) || isNaN(scalerY)) {
+      console.log('offset or scaler is NaN');
+      setDebugMessage('offset or scaler is NaN');
+      return empty();
+    }
+
+    if (offsetX === 0 || offsetY === 0 || scalerX === 0 || scalerY === 0) {
+      console.log('offset or scaler is 0');
+      setDebugMessage('offset or scaler is 0');
+      return empty();
+    }
+
+    if (offsetX === Infinity || offsetY === Infinity || scalerX === Infinity || scalerY === Infinity) {
+      console.log('offset or scaler is Infinity');
+      setDebugMessage('offset or scaler is Infinity');
+      return empty();
+    }
+
+    console.log('offsetX', offsetX, 'scaleX', scalerX);
+    console.log('offsetY', offsetY, 'scaleY', scalerY);
+
+    const x = (latitude * scalerX) + offsetX;
+    const y = (longitude * scalerY) + offsetY;
+
+    return { left: x, top: y };
+  }
+
+  // ======================= TESTING =======================
+  // parking lot
+  // 41.336736849249846, -72.68162289645365
+
+  // lookout
+  // 41.33830117867603, -72.68210606267384
+
+  // in between parking lot and lookout
+  // 41.33736535834985, -72.68212145013308
+
+  // top left corner of lake
+  // 41.34219478336026, -72.68409832212741
+
+  const locationBetweenLookoutAndParkingLot = {
+    latitude: 41.33736535834985,
+    longitude: -72.68212145013308
+  }
+
+  const locationUpperLeftCorner = {
+    latitude: 41.34219478336026,
+    //longitude: -72.68409832212741
+    longitude: -72.6835
+  }
+
+  // const [pins, setPins] = useState([
+  //   // parking lot
+  //   {
+  //     index: 0,
+  //     left: 445.977,
+  //     top: 918.485,
+  //     latitude: 41.336736849249846,
+  //     longitude: -72.68162289645365,
+  //   },
+  //   // lookout
+  //   {
+  //     index: 1,
+  //     left: 421.052,
+  //     top: 842.589,
+  //     latitude: 41.33830117867603,
+  //     longitude: -72.68210606267384,
+  //   },
+  //   // in between parking lot and lookout (actual)
+  //   {
+  //     index: 3,
+  //     left: 423,
+  //     top: 878,
+  //     latitude: 41.33736535834985,
+  //     longitude: -72.68212145013308
+  //   },
+  //   // top left corner of lake (actual)
+  //   {
+  //     index: 4,
+  //     left: 335,
+  //     top: 630,
+  //     latitude: 41.34219478336026,
+  //     longitude: -72.68409832212741
+  //   }
+  // ]);
+
   return (
     <>
       <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="Generated by create next app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+      {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
+      <Map
+        mapFile={mapFile}
+        pins={pins}
+        setMapPosition={setMapPosition}
+        mapPosition={mapPosition}
+        userLocation={userLocation}
+      />
+      <MenuTray
+        isSettingLocation={isSettingLocation}
+        setIsSettingLocation={setIsSettingLocation}
+        pins={pins}
+        setPins={setPins}
+        crosshairsPosition={crosshairsPosition}
+        mapPosition={mapPosition}
+        userLocation={userLocation}
+        updateUserLocation={updateUserLocation}
+        isUpdatingLocation={isUpdatingLocation}
+        debugMessage={debugMessage}
+        changeToNextMap={changeToNextMap}
+      />
     </>
-  )
+  );
 }

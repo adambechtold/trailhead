@@ -41,6 +41,7 @@ export default function App() {
     setPins([]);
     setUserLocation(null);
     setIsSettingLocation(false);
+    setDebugMessage('');
   }
 
   const updateUserLocation = ({ callback, pins }) => {

@@ -1,11 +1,11 @@
+import { useState } from 'react';
+
 import Head from 'next/head';
-// TODO: Make the menu tray ssr. It doesn't need to be client-side rendered.
-// It is that way now for debugging.
-import MenuTray from '@/components/menu-tray';
-import Crosshairs from '@/components/crosshairs';
 import dynamic from 'next/dynamic';
 
-import { useState } from 'react';
+import MenuTray from '@/components/menu-tray';
+import Crosshairs from '@/components/crosshairs';
+import styles from '@/styles/index.module.css'
 
 const Map = dynamic(() => import('@/components/map'), {
   ssr: false
@@ -34,10 +34,14 @@ export default function App() {
     } else {
       setMapFile(maps[index + 1]);
     }
+    resetCurrentMap();
+  };
+
+  const resetCurrentMap = () => {
     setPins([]);
     setUserLocation(null);
     setIsSettingLocation(false);
-  };
+  }
 
   const updateUserLocation = ({ callback, pins }) => {
     setIsUpdatingLocation(true);
@@ -187,6 +191,7 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {pins.length > 0 && <button className={styles.resetButton} onClick={resetCurrentMap}>Reset Pins</button>}
       {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
       <Map
         mapFile={mapFile}

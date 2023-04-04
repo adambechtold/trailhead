@@ -186,13 +186,26 @@ export default function App() {
   //   }
   // ]);
 
+  const upperMenu = () => {
+    if (pins.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className={styles.upperMenuContainer}>
+        <button onClick={resetCurrentMap}>Reset Pins</button>
+        <button onClick={() => console.log('inspect')}>Inspect Pins</button>
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {pins.length > 0 && <button className={styles.resetButton} onClick={resetCurrentMap}>Reset Pins</button>}
+      {upperMenu()}
       {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
       <Map
         mapFile={mapFile}
@@ -212,7 +225,6 @@ export default function App() {
         updateUserLocation={updateUserLocation}
         isUpdatingLocation={isUpdatingLocation}
         debugMessage={debugMessage}
-        changeToNextMap={changeToNextMap}
       />
     </>
   );

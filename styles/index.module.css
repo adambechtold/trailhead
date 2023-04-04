@@ -1,6 +1,21 @@
-.resetButton {
+.upperMenuContainer {
+  /* Color */
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.6);
+
+  /* Size and Shape */
+  width: 100%;
+  border-radius: 0 0 1rem 1rem ;
+  
+  /* Position */
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 0px;
+  left: 0px;
   z-index: 3;
+
+  /* Content */
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

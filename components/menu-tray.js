@@ -8,18 +8,18 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
 
   const addPin = ({ latitude, longitude, accuracy }) => {
     const { scale } = mapPosition;
-
-    setPins([
-      ...pins,
-      {
-        left: (crosshairsPosition.x - mapPosition.x) / scale,
-        top: (crosshairsPosition.y - mapPosition.y) / scale,
-        index: pins.length,
-        latitude,
-        longitude,
-        accuracy
-      }
-    ]);
+    const newPin = {
+      left: (crosshairsPosition.x - mapPosition.x) / scale,
+      top: (crosshairsPosition.y - mapPosition.y) / scale,
+      index: pins.length,
+      latitude,
+      longitude,
+      accuracy
+    };
+    const newPins = [...pins, newPin];
+    
+    setPins(newPins);
+    localStorage.setItem('pins', JSON.stringify(newPins));
   };
 
   const handleConfirmLocation = () => {

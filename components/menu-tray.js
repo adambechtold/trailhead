@@ -34,23 +34,32 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
   }
 
   const showLoadingBar = () => {
-    if (isUpdatingLocation) {
-      return (
-        <div className={styles.loadingBarContainer} >
-          <div className={styles.loadingBar} />
-        </div>  
-      )
-    } else if (updatingLocationFailed) {
-      return (
-        <div className={styles.loadingBarContainer} >
+    const loadingZoneContent = () => {
+      if (isUpdatingLocation) {
+        return (
+          <>
+            <>🤳</>
+            <div className={styles.loadingBarBackground} >
+              <div className={styles.loadingBar} />
+            </div>
+            <>🛰</>
+          </>
+        )
+      } else if (updatingLocationFailed) {
+        return (
           <div className={styles.failureBar} >
             Poor GPS signal. Try again.
           </div>
-        </div>  
-      )
-    } else {
-      return <div className={styles.loadingBarContainerPlaceholder} />
-    }
+        )
+      }
+      return null;
+    };
+
+    return (
+      <div className={styles.loadingZoneContainer}>
+        {loadingZoneContent()}
+      </div>
+    )
   };
 
   return (

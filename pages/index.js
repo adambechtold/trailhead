@@ -80,7 +80,7 @@ export default function App() {
         : { top: null, left: null };
 
       if (position.coords.accuracy > 5) { // accuracy is too low (must be updated to trial on desktop)
-        setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1000);
+        setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1300);
         return;
       } else {
         setUserLocation({

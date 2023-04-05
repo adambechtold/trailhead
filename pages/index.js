@@ -79,7 +79,7 @@ export default function App() {
         convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })
         : { top: null, left: null };
 
-      if (position.coords.accuracy > 10) { // accuracy is too low (must be updated to trial on desktop)
+      if (position.coords.accuracy > 5) { // accuracy is too low (must be updated to trial on desktop)
         setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1000);
         return;
       } else {

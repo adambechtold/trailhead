@@ -58,31 +58,47 @@ export default function App() {
     setDebugMessage('');
   }
 
-  const updateUserLocation = ({ callback, pins }) => {
+  const updateUserLocation = ({ callback, pins, startUpdatingTime }) => {
     setIsUpdatingLocation(true);
+    const now = new Date();
+    if (startUpdatingTime === undefined) {
+      startUpdatingTime = now;
+    } else {
+      const differenceInTime = now.getTime() - startUpdatingTime.getTime();
+      if (differenceInTime > 6000) {
+        // TODO: Make it clear to the user that the operation failed
+        setIsUpdatingLocation(false);
+        return;
+      }
+    }
+
     navigator.geolocation.getCurrentPosition((position) => {
-      
       const { top, left } = (pins && pins.length >= 2) ?
         convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })
         : { top: null, left: null };
 
-      setUserLocation({
-        top,
-        left,
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        accuracy: position.coords.accuracy
-      });
-      setIsUpdatingLocation(false);
-      if (callback) callback({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        accuracy: position.coords.accuracy
-      });
+      if (position.coords.accuracy > 10) { // accuracy is too low (must be updated to trial on desktop)
+        setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1000);
+        return;
+      } else {
+        setUserLocation({
+          top,
+          left,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        });
+        setIsUpdatingLocation(false);
+        if (callback) callback({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        });
+      }
     }, (error) => {
       console.log(error);
       setIsUpdatingLocation(false);
-    }, { enableHighAccuracy: true, maximumAge: 300 });
+    }, { enableHighAccuracy: true, maximumAge: 100 });
   }
 
 

@@ -72,6 +72,22 @@
   animation: move 1.3s infinite alternate ease-in-out;
 }
 
+.loadingBarGreen {
+  background-color: rgba(38, 140, 4, 0.484);
+}
+
+.loadingBarYellow {
+  background-color: rgba(191, 205, 0, 0.724);
+}
+
+.loadingBarOrange {
+  background-color: rgba(205, 144, 0, 0.601);
+}
+
+.loadingBarRed {
+  background-color: rgba(205, 65, 0, 0.801);
+}
+
 .failureBar {
   height: 1.2rem;
   width: 100%;

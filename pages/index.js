@@ -24,6 +24,7 @@ export default function App() {
   const [pins, setPins] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
+  const [locationAccuracy, setLocationAccuracy] = useState(100); // in meters
   const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
   const [debugMessage, setDebugMessage] = useState('');
   const [mapFile, setMapFile] = useState(maps[0]);
@@ -66,7 +67,7 @@ export default function App() {
       startUpdatingTime = now;
     } else {
       const differenceInTime = now.getTime() - startUpdatingTime.getTime();
-      if (differenceInTime > 5000) {
+      if (differenceInTime > 10000) {
         setIsUpdatingLocation(false);
         setUpdatingLocationFailed(true);
         setTimeout(() => setUpdatingLocationFailed(false), 4000);
@@ -78,6 +79,8 @@ export default function App() {
       const { top, left } = (pins && pins.length >= 2) ?
         convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })
         : { top: null, left: null };
+
+      setLocationAccuracy(position.coords.accuracy);
 
       if (position.coords.accuracy > 5) { // accuracy is too low (must be updated to trial on desktop)
         setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1300);
@@ -246,6 +249,7 @@ export default function App() {
         changeToNextMap={changeToNextMap}
         updatingLocationFailed={updatingLocationFailed}
         setUpdatingLocationFailed={setUpdatingLocationFailed}
+        locationAccuracy={locationAccuracy}
       />
     </>
   );

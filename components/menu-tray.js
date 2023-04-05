@@ -17,7 +17,7 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
       accuracy
     };
     const newPins = [...pins, newPin];
-    
+
     setPins(newPins);
     localStorage.setItem('pins', JSON.stringify(newPins));
   };
@@ -33,22 +33,36 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
     updateUserLocation({ pins });
   }
 
+  const showLoadingBar = () => {
+    if (isUpdatingLocation) {
+      return (
+        <div className={styles.loadingBarContainer} >
+          <div className={styles.loadingBar} />
+        </div>  
+      )
+    } else {
+      return <div className={styles.loadingBarContainerPlaceholder} />
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.manageLocation}>
-        {debugMessage && <div>{debugMessage}</div>}
-        {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
-        {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >Cancel</button>}
+      {showLoadingBar()}
+      <div className={styles.buttonsContainer}>
+        <div className={styles.manageLocation}>
+          {debugMessage && <div>{debugMessage}</div>}
+          {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
+          {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >Cancel</button>}
 
-        {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
-          {!pins.length ? "Set Location" : "Set Another Location"}
-        </button>}
+          {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
+            {!pins.length ? "Set Location" : "Set Another Location"}
+          </button>}
 
-        <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
-        {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
-        <div>updating? {isUpdatingLocation ? "yes" : "no"}</div>
+          <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
+          {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
+        </div>
+        <button className={styles.button} onClick={changeToNextMap}>Next Map</button>
       </div>
-      <button className={styles.button} onClick={changeToNextMap}>Next Map</button>
     </div>
   );
 }

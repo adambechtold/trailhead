@@ -1,6 +1,6 @@
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap }) {
+export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap, updatingLocationFailed, setUpdatingLocationFailed }) {
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
@@ -38,6 +38,14 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
       return (
         <div className={styles.loadingBarContainer} >
           <div className={styles.loadingBar} />
+        </div>  
+      )
+    } else if (updatingLocationFailed) {
+      return (
+        <div className={styles.loadingBarContainer} >
+          <div className={styles.failureBar} >
+            Poor GPS signal. Try again.
+          </div>
         </div>  
       )
     } else {

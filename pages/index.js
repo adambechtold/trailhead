@@ -24,6 +24,7 @@ export default function App() {
   const [pins, setPins] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
+  const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
   const [debugMessage, setDebugMessage] = useState('');
   const [mapFile, setMapFile] = useState(maps[0]);
 
@@ -65,9 +66,10 @@ export default function App() {
       startUpdatingTime = now;
     } else {
       const differenceInTime = now.getTime() - startUpdatingTime.getTime();
-      if (differenceInTime > 6000) {
-        // TODO: Make it clear to the user that the operation failed
+      if (differenceInTime > 5000) {
         setIsUpdatingLocation(false);
+        setUpdatingLocationFailed(true);
+        setTimeout(() => setUpdatingLocationFailed(false), 4000);
         return;
       }
     }
@@ -242,6 +244,8 @@ export default function App() {
         isUpdatingLocation={isUpdatingLocation}
         debugMessage={debugMessage}
         changeToNextMap={changeToNextMap}
+        updatingLocationFailed={updatingLocationFailed}
+        setUpdatingLocationFailed={setUpdatingLocationFailed}
       />
     </>
   );

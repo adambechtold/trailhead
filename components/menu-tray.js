@@ -1,6 +1,6 @@
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap, updatingLocationFailed, setUpdatingLocationFailed }) {
+export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap, updatingLocationFailed, locationAccuracy }) {
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
@@ -34,13 +34,25 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
   }
 
   const showLoadingBar = () => {
+    const getLoadingBarClass = () => {
+      if (locationAccuracy < 5) {
+        return styles.loadingBarGreen;
+      } else if (locationAccuracy < 10) {
+        return styles.loadingBarYellow;
+      } else if (locationAccuracy < 20) {
+        return styles.loadingBarOrange;
+      } else {
+        return styles.loadingBarRed;
+      }
+    }
+    
     const loadingZoneContent = () => {
       if (isUpdatingLocation) {
         return (
           <>
             <>🤳</>
             <div className={styles.loadingBarBackground} >
-              <div className={styles.loadingBar} />
+              <div className={`${styles.loadingBar} ${getLoadingBarClass()}` } />
             </div>
             <>🛰</>
           </>

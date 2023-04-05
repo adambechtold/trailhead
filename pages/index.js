@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
@@ -27,6 +27,20 @@ export default function App() {
   const [debugMessage, setDebugMessage] = useState('');
   const [mapFile, setMapFile] = useState(maps[0]);
 
+  // Update Pins
+  useEffect(() => {
+    const pinsFromStorage = JSON.parse(localStorage.getItem('pins'));
+    if (pinsFromStorage) {
+      setPins(pinsFromStorage);
+    } 
+  }, []);
+
+  const resetPins = () => {
+    setPins([]);
+    localStorage.setItem('pins', JSON.stringify([]));
+  };
+
+  // Next Map
   const changeToNextMap = () => {
     const index = maps.indexOf(mapFile);
     if (index === maps.length - 1) {
@@ -38,7 +52,7 @@ export default function App() {
   };
 
   const resetCurrentMap = () => {
-    setPins([]);
+    resetPins();
     setUserLocation(null);
     setIsSettingLocation(false);
     setDebugMessage('');
@@ -47,7 +61,6 @@ export default function App() {
   const updateUserLocation = ({ callback, pins }) => {
     setIsUpdatingLocation(true);
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log('position', position);
       
       const { top, left } = (pins && pins.length >= 2) ?
         convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })

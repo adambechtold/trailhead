@@ -38,25 +38,29 @@
   margin: 10px;
 }
 
-.loadingBarContainer {
-  height: 0.3rem;
+.loadingZoneContainer {
   width: 50%;
-  background-color: rgba(255, 255, 255, 0.3);
-  /* background-color: rgba(0, 0, 0, 0.3); */
-  /* background-color: red; */
-  border-radius: 0.3rem;
-
-  /* Position */
   position: relative;
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
+  height: 1.2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
 }
 
-/* TODO: I'm sure there's a better way to represent this */
-.loadingBarContainerPlaceholder {
+.loadingBarBackground {
   height: 0.3rem;
-  position: relative;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 0.3rem;
+
+  /* Position */
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .loadingBar {
@@ -65,11 +69,11 @@
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 0.3rem;
   position: relative;
-  animation: move 1.5s infinite alternate ease-in-out;
+  animation: move 1.3s infinite alternate ease-in-out;
 }
 
 .failureBar {
-  height: 400%;
+  height: 1.2rem;
   width: 100%;
   background-color: rgba(199, 0, 0, 0.693);
   border-radius: 0.5rem;

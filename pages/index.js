@@ -109,9 +109,9 @@ export default function App() {
 
   // returns Top and Left of the User
   function convertUserLocationToMapPosition({ pins, latitude, longitude }) {
-    const empty = () => ({ top: null, left: null });
-
+    
     if (pins.length < 2) {
+      const empty = () => ({ top: null, left: null });
       return empty();
     };
 

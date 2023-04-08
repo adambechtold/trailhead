@@ -9,12 +9,16 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
   const addPin = ({ latitude, longitude, accuracy }) => {
     const { scale } = mapPosition;
     const newPin = {
+      index: pins.length,
+
+      // Position on the user-provided picture
       left: (crosshairsPosition.x - mapPosition.x) / scale,
       top: (crosshairsPosition.y - mapPosition.y) / scale,
-      index: pins.length,
+
+      // Position in the real world
       latitude,
       longitude,
-      accuracy
+      accuracy // in meters
     };
     const newPins = [...pins, newPin];
 

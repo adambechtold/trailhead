@@ -1,6 +1,6 @@
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap, updatingLocationFailed, locationAccuracy }) {
+export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, updatingLocationFailed, locationAccuracy }) {
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
@@ -94,7 +94,6 @@ export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins
           <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
           {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
         </div>
-        <button className={styles.button} onClick={changeToNextMap}>Next Map</button>
       </div>
     </div>
   );

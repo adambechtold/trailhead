@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 import MenuTray from '@/components/menu-tray';
 import Crosshairs from '@/components/crosshairs';
-import styles from '@/styles/index.module.css'
+import Toolbar from '@/components/toolbar';
 
 const Map = dynamic(() => import('@/components/map'), {
   ssr: false
@@ -82,7 +82,7 @@ export default function App() {
 
       setLocationAccuracy(position.coords.accuracy);
 
-      if (position.coords.accuracy > 5) { // accuracy is too low (must be updated to trial on desktop)
+      if (position.coords.accuracy > 1000) { // accuracy is too low (must be updated to trial on desktop)
         setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1300);
         return;
       } else {
@@ -226,7 +226,11 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {pins.length > 0 && <button className={styles.resetButton} onClick={resetCurrentMap}>Reset Pins</button>}
+      <Toolbar 
+        changeToNextMap={changeToNextMap}
+        pins={pins}
+        resetCurrentMap={resetCurrentMap}
+      />
       {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
       <Map
         mapFile={mapFile}
@@ -246,7 +250,6 @@ export default function App() {
         updateUserLocation={updateUserLocation}
         isUpdatingLocation={isUpdatingLocation}
         debugMessage={debugMessage}
-        changeToNextMap={changeToNextMap}
         updatingLocationFailed={updatingLocationFailed}
         setUpdatingLocationFailed={setUpdatingLocationFailed}
         locationAccuracy={locationAccuracy}

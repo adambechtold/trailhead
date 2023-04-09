@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import ManageMap from '@/components/ManageMap';
+import ManageMap from './ManageMap';
 import DisplayMapData from '@/components/debug/DisplayMapData';
 import Console from '@/components/debug/Console';
 

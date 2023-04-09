@@ -24,9 +24,8 @@
 }
 
 .inspectDataButton {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  position: absolute;
+  bottom: 1rem;
   left: 20px;
 }
 

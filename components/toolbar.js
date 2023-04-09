@@ -8,7 +8,7 @@ export default function Toolbar({
 }) {
   return (
     <div className={styles.toolbarContainer}>
-        {pins.length > 0 && <button onClick={resetCurrentMap}>Reset Pins</button>}
+        {pins.length > 0 ? <button onClick={resetCurrentMap}>Reset Pins</button> : <div></div>}     
         <button onClick={changeToNextMap}>Next Map</button>
     </div>
   )

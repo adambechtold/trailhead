@@ -17,7 +17,8 @@ export default function MenuTray({
   updatingLocationFailed,
   locationAccuracy,
   showDebuggingContent,
-  setShowDebuggingContent
+  setShowDebuggingContent,
+  mapFunctionParameters
 }) {
 
   return (
@@ -39,6 +40,7 @@ export default function MenuTray({
       {showDebuggingContent && <DisplayMapData 
         pins={pins}
         userLocation={userLocation}
+        mapFunctionParameters={mapFunctionParameters}
       />}
     </div>
   );

@@ -23,9 +23,18 @@
   height: 10rem;
 }
 
+.debugContainer {
+  margin: 15px;
+}
+
 .inspectDataButton {
   position: absolute;
   bottom: 1rem;
   left: 20px;
 }
 
+.consoleButton {
+  position: absolute;
+  bottom: 1rem;
+  right: 20px;
+}

@@ -26,8 +26,9 @@ export default function App() {
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
   const [locationAccuracy, setLocationAccuracy] = useState(100); // in meters
   const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
-  const [debugMessage, setDebugMessage] = useState('');
   const [mapFile, setMapFile] = useState(maps[0]);
+  const [debugMessage, setDebugMessage] = useState('');
+  const [showDebuggingContent, setShowDebuggingContent] = useState(false);
 
   // Update Pins
   useEffect(() => {
@@ -253,6 +254,8 @@ export default function App() {
         updatingLocationFailed={updatingLocationFailed}
         setUpdatingLocationFailed={setUpdatingLocationFailed}
         locationAccuracy={locationAccuracy}
+        showDebuggingContent={showDebuggingContent}
+        setShowDebuggingContent={setShowDebuggingContent}
       />
     </>
   );

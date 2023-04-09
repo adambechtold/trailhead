@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import styles from '@/components/crosshairs.module.css';
+import styles from '@/components/Crosshairs.module.css';
 
 export default function Crosshairs({ setCrosshairsPosition }) {
   

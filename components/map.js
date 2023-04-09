@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
-import MapStateTracker from './map-state-tracker';
-import styles from '@/components/map.module.css';
+import MapStateTracker from './MapStateTracker.js';
+import styles from '@/components/Map.module.css';
 
 
 

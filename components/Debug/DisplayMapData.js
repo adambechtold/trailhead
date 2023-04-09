@@ -27,7 +27,7 @@ export default function DisplayMapData({
     <div className={styles.container}>
       {pins[0] && displayObject(pins[0], "Pin 1")}
       {pins[1] && displayObject(pins[1], "Pin 2")}
-      {/* {displayObject(mapFunctionParameters, "Map Function")} */}
+      {mapFunctionParameters &&  displayObject(mapFunctionParameters, "Map Function")}
       {userLocation && displayObject(userLocation, "User Location")}
     </div>
   );

@@ -29,6 +29,7 @@ export default function App() {
   const [mapFile, setMapFile] = useState(maps[0]);
   const [debugMessage, setDebugMessage] = useState('');
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
+  const [mapFunctionParameters, setMapFunctionParameters] = useState(null);
 
   // Update Pins
   useEffect(() => {
@@ -134,6 +135,8 @@ export default function App() {
 
     const scalerX = ((pin1.left - offsetX) / pin1.latitude);
     const scalerY = ((pin1.top - offsetY) / pin1.longitude);
+
+    setMapFunctionParameters({ offsetX, offsetY, scalerX, scalerY });
 
     if (isNaN(offsetX) || isNaN(offsetY) || isNaN(scalerX) || isNaN(scalerY)) {
       console.log('offset or scaler is NaN');
@@ -256,6 +259,7 @@ export default function App() {
         locationAccuracy={locationAccuracy}
         showDebuggingContent={showDebuggingContent}
         setShowDebuggingContent={setShowDebuggingContent}
+        mapFunctionParameters={mapFunctionParameters}
       />
     </>
   );

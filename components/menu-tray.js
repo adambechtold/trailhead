@@ -1,4 +1,5 @@
 import ManageMap from '@/components/manageMap';
+import DisplayMapData from '@/components/Debug/DisplayMapData';
 
 import styles from '@/components/menu-tray.module.css';
 
@@ -35,6 +36,10 @@ export default function MenuTray({
           isUpdatingLocation={isUpdatingLocation}
           updatingLocationFailed={updatingLocationFailed}
         />}
+      {showDebuggingContent && <DisplayMapData 
+        pins={pins}
+        userLocation={userLocation}
+      />}
     </div>
   );
 }

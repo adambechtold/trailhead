@@ -29,7 +29,6 @@ export default function MenuTray({
         setPins={setPins}
         crosshairsPosition={crosshairsPosition} 
         mapPosition={mapPosition}
-        userLocation={userLocation}
         locationAccuracy={locationAccuracy}
         updateUserLocation={updateUserLocation}
         isUpdatingLocation={isUpdatingLocation}

@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import ManageMap from '@/components/manageMap';
 import DisplayMapData from '@/components/Debug/DisplayMapData';
+import Console from '@/components/Debug/Console';
 
 import styles from '@/components/menu-tray.module.css';
 
@@ -13,13 +16,16 @@ export default function MenuTray({
   userLocation,
   updateUserLocation,
   isUpdatingLocation,
-  debugMessage,
   updatingLocationFailed,
   locationAccuracy,
   showDebuggingContent,
   setShowDebuggingContent,
-  mapFunctionParameters
+  mapFunctionParameters,
+  debugStatements,
 }) {
+
+  const [showConsole, setShowConsole] = useState(false);
+  const toggleConsole = () => { setShowConsole(!showConsole) };
 
   return (
     <div className={`${styles.container} ${showDebuggingContent ? styles.expanded : styles.contracted}`}>
@@ -37,11 +43,17 @@ export default function MenuTray({
           isUpdatingLocation={isUpdatingLocation}
           updatingLocationFailed={updatingLocationFailed}
         />}
-      {showDebuggingContent && <DisplayMapData 
-        pins={pins}
-        userLocation={userLocation}
-        mapFunctionParameters={mapFunctionParameters}
-      />}
+      {showDebuggingContent &&
+        <div className={styles.debugContainer}>
+          {!showConsole && <DisplayMapData
+            pins={pins}
+            userLocation={userLocation}
+            mapFunctionParameters={mapFunctionParameters}
+          />}
+          {showConsole && <Console debugStatements={debugStatements} />}
+          {showDebuggingContent && <button onClick={toggleConsole} className={styles.consoleButton}>Console</button>}
+        </div>}
+
     </div>
   );
 }

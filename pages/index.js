@@ -27,7 +27,12 @@ export default function App() {
   const [locationAccuracy, setLocationAccuracy] = useState(100); // in meters
   const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
   const [mapFile, setMapFile] = useState(maps[0]);
-  const [debugMessage, setDebugMessage] = useState('');
+  const [debugStatements, setDebugStatements] = useState([]); // [{ message: '', time: new Date() }]
+  const addDebugStatement = (message) => {
+    const newDebugStatements = [...debugStatements];
+    newDebugStatements.push({ message, time: new Date() });
+    setDebugStatements(newDebugStatements);
+  };
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
   const [mapFunctionParameters, setMapFunctionParameters] = useState(null);
 
@@ -59,7 +64,6 @@ export default function App() {
     resetPins();
     setUserLocation(null);
     setIsSettingLocation(false);
-    setDebugMessage('');
   }
 
   const updateUserLocation = ({ callback, pins, startUpdatingTime }) => {
@@ -123,7 +127,7 @@ export default function App() {
 
     if (pin1.latitude === pin2.latitude || pin1.longitude === pin2.longitude) {
       console.log('reset and move');
-      setDebugMessage('lat and long are the same; reset and move; for now, adjusting so you can see something');
+      addDebugStatement('lat and long are the same; reset and move; for now, adjusting so you can see something');
       // for debugging
       pin1.latitude = pin2.latitude + 0.000002;
       pin1.longitude = pin2.longitude + 0.000002;
@@ -140,19 +144,19 @@ export default function App() {
 
     if (isNaN(offsetX) || isNaN(offsetY) || isNaN(scalerX) || isNaN(scalerY)) {
       console.log('offset or scaler is NaN');
-      setDebugMessage('offset or scaler is NaN');
+      addDebugStatement('offset or scaler is NaN');
       return empty();
     }
 
     if (offsetX === 0 || offsetY === 0 || scalerX === 0 || scalerY === 0) {
       console.log('offset or scaler is 0');
-      setDebugMessage('offset or scaler is 0');
+      addDebugStatement('offset or scaler is 0');
       return empty();
     }
 
     if (offsetX === Infinity || offsetY === Infinity || scalerX === Infinity || scalerY === Infinity) {
       console.log('offset or scaler is Infinity');
-      setDebugMessage('offset or scaler is Infinity');
+      addDebugStatement('offset or scaler is Infinity');
       return empty();
     }
 
@@ -253,13 +257,13 @@ export default function App() {
         userLocation={userLocation}
         updateUserLocation={updateUserLocation}
         isUpdatingLocation={isUpdatingLocation}
-        debugMessage={debugMessage}
         updatingLocationFailed={updatingLocationFailed}
         setUpdatingLocationFailed={setUpdatingLocationFailed}
         locationAccuracy={locationAccuracy}
         showDebuggingContent={showDebuggingContent}
         setShowDebuggingContent={setShowDebuggingContent}
         mapFunctionParameters={mapFunctionParameters}
+        debugStatements={debugStatements}
       />
     </>
   );

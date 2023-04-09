@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import ManageMap from '@/components/manageMap';
+import ManageMap from '@/components/ManageMap';
 import DisplayMapData from '@/components/Debug/DisplayMapData';
 import Console from '@/components/Debug/Console';
 
-import styles from '@/components/menu-tray.module.css';
+import styles from '@/components/MenuTray.module.css';
 
 export default function MenuTray({
   isSettingLocation,

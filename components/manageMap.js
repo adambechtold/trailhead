@@ -1,5 +1,5 @@
 
-import styles from '@/components/manageMap.module.css';
+import styles from '@/components/ManageMap.module.css';
 
 export default function ManageMap({
   isSettingLocation,

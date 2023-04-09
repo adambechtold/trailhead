@@ -1,5 +1,5 @@
 
-import styles from '@/components/toolbar.module.css';
+import styles from '@/components/Toolbar.module.css';
 
 export default function Toolbar({
   changeToNextMap,

@@ -1,101 +1,59 @@
+import { useState } from 'react';
+
+import ManageMap from '@/components/manageMap';
+import DisplayMapData from '@/components/Debug/DisplayMapData';
+import Console from '@/components/Debug/Console';
+
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, changeToNextMap, updatingLocationFailed, locationAccuracy }) {
+export default function MenuTray({
+  isSettingLocation,
+  setIsSettingLocation,
+  pins,
+  setPins,
+  crosshairsPosition,
+  mapPosition,
+  userLocation,
+  updateUserLocation,
+  isUpdatingLocation,
+  updatingLocationFailed,
+  locationAccuracy,
+  showDebuggingContent,
+  setShowDebuggingContent,
+  mapFunctionParameters,
+  debugStatements,
+}) {
 
-  const toggleIsSettingLocation = () => {
-    setIsSettingLocation(!isSettingLocation);
-  };
-
-  const addPin = ({ latitude, longitude, accuracy }) => {
-    const { scale } = mapPosition;
-    const newPin = {
-      index: pins.length,
-
-      // Position on the user-provided picture
-      left: (crosshairsPosition.x - mapPosition.x) / scale,
-      top: (crosshairsPosition.y - mapPosition.y) / scale,
-
-      // Position in the real world
-      latitude,
-      longitude,
-      accuracy // in meters
-    };
-    const newPins = [...pins, newPin];
-
-    setPins(newPins);
-    localStorage.setItem('pins', JSON.stringify(newPins));
-  };
-
-  const handleConfirmLocation = () => {
-    updateUserLocation({
-      callback: addPin
-    })
-    toggleIsSettingLocation();
-  };
-
-  const handleUpdateLocation = () => {
-    updateUserLocation({ pins });
-  }
-
-  const showLoadingBar = () => {
-    const getLoadingBarClass = () => {
-      if (locationAccuracy < 5) {
-        return styles.loadingBarGreen;
-      } else if (locationAccuracy < 10) {
-        return styles.loadingBarYellow;
-      } else if (locationAccuracy < 20) {
-        return styles.loadingBarOrange;
-      } else {
-        return styles.loadingBarRed;
-      }
-    }
-    
-    const loadingZoneContent = () => {
-      if (isUpdatingLocation) {
-        return (
-          <>
-            <>🤳</>
-            <div className={styles.loadingBarBackground} >
-              <div className={`${styles.loadingBar} ${getLoadingBarClass()}` } />
-            </div>
-            <>🛰</>
-          </>
-        )
-      } else if (updatingLocationFailed) {
-        return (
-          <div className={styles.failureBar} >
-            Poor GPS signal. Try again.
-          </div>
-        )
-      }
-      return null;
-    };
-
-    return (
-      <div className={styles.loadingZoneContainer}>
-        {loadingZoneContent()}
-      </div>
-    )
-  };
+  const [showConsole, setShowConsole] = useState(false);
+  const toggleConsole = () => { setShowConsole(!showConsole) };
 
   return (
-    <div className={styles.container}>
-      {showLoadingBar()}
-      <div className={styles.buttonsContainer}>
-        <div className={styles.manageLocation}>
-          {debugMessage && <div>{debugMessage}</div>}
-          {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
-          {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >Cancel</button>}
+    <div className={`${styles.container} ${showDebuggingContent ? styles.expanded : styles.contracted}`}>
+      <button onClick={() => setShowDebuggingContent(!showDebuggingContent)} className={styles.inspectDataButton}>Inspect Data</button>
+      {!showDebuggingContent &&
+        <ManageMap
+          isSettingLocation={isSettingLocation}
+          setIsSettingLocation={setIsSettingLocation}
+          pins={pins}
+          setPins={setPins}
+          crosshairsPosition={crosshairsPosition}
+          mapPosition={mapPosition}
+          locationAccuracy={locationAccuracy}
+          updateUserLocation={updateUserLocation}
+          isUpdatingLocation={isUpdatingLocation}
+          updatingLocationFailed={updatingLocationFailed}
+        />}
+      {showDebuggingContent &&
+        <div className={styles.debugContainer}>
+          {!showConsole && <DisplayMapData
+            pins={pins}
+            userLocation={userLocation}
+            mapFunctionParameters={mapFunctionParameters}
+          />}
+          {showConsole && <Console debugStatements={debugStatements} />}
+          {showDebuggingContent && <button onClick={toggleConsole} className={styles.consoleButton}>Console</button>}
+        </div>}
 
-          {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
-            {!pins.length ? "Set Location" : "Set Another Location"}
-          </button>}
-
-          <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
-          {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
-        </div>
-        <button className={styles.button} onClick={changeToNextMap}>Next Map</button>
-      </div>
     </div>
   );
 }

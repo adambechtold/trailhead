@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 import MenuTray from '@/components/menu-tray';
 import Crosshairs from '@/components/crosshairs';
-import styles from '@/styles/index.module.css'
+import Toolbar from '@/components/toolbar';
 
 const Map = dynamic(() => import('@/components/map'), {
   ssr: false
@@ -26,8 +26,15 @@ export default function App() {
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
   const [locationAccuracy, setLocationAccuracy] = useState(100); // in meters
   const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
-  const [debugMessage, setDebugMessage] = useState('');
   const [mapFile, setMapFile] = useState(maps[0]);
+  const [debugStatements, setDebugStatements] = useState([]); // [{ message: '', time: new Date() }]
+  const addDebugStatement = (message) => {
+    const newDebugStatements = [...debugStatements];
+    newDebugStatements.push({ message, time: new Date() });
+    setDebugStatements(newDebugStatements);
+  };
+  const [showDebuggingContent, setShowDebuggingContent] = useState(false);
+  const [mapFunctionParameters, setMapFunctionParameters] = useState(null);
 
   // Update Pins
   useEffect(() => {
@@ -57,7 +64,6 @@ export default function App() {
     resetPins();
     setUserLocation(null);
     setIsSettingLocation(false);
-    setDebugMessage('');
   }
 
   const updateUserLocation = ({ callback, pins, startUpdatingTime }) => {
@@ -82,7 +88,7 @@ export default function App() {
 
       setLocationAccuracy(position.coords.accuracy);
 
-      if (position.coords.accuracy > 5) { // accuracy is too low (must be updated to trial on desktop)
+      if (position.coords.accuracy > 1000) { // accuracy is too low (must be updated to trial on desktop)
         setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1300);
         return;
       } else {
@@ -121,7 +127,7 @@ export default function App() {
 
     if (pin1.latitude === pin2.latitude || pin1.longitude === pin2.longitude) {
       console.log('reset and move');
-      setDebugMessage('lat and long are the same; reset and move; for now, adjusting so you can see something');
+      addDebugStatement('lat and long are the same; reset and move; for now, adjusting so you can see something');
       // for debugging
       pin1.latitude = pin2.latitude + 0.000002;
       pin1.longitude = pin2.longitude + 0.000002;
@@ -134,21 +140,23 @@ export default function App() {
     const scalerX = ((pin1.left - offsetX) / pin1.latitude);
     const scalerY = ((pin1.top - offsetY) / pin1.longitude);
 
+    setMapFunctionParameters({ offsetX, offsetY, scalerX, scalerY });
+
     if (isNaN(offsetX) || isNaN(offsetY) || isNaN(scalerX) || isNaN(scalerY)) {
       console.log('offset or scaler is NaN');
-      setDebugMessage('offset or scaler is NaN');
+      addDebugStatement('offset or scaler is NaN');
       return empty();
     }
 
     if (offsetX === 0 || offsetY === 0 || scalerX === 0 || scalerY === 0) {
       console.log('offset or scaler is 0');
-      setDebugMessage('offset or scaler is 0');
+      addDebugStatement('offset or scaler is 0');
       return empty();
     }
 
     if (offsetX === Infinity || offsetY === Infinity || scalerX === Infinity || scalerY === Infinity) {
       console.log('offset or scaler is Infinity');
-      setDebugMessage('offset or scaler is Infinity');
+      addDebugStatement('offset or scaler is Infinity');
       return empty();
     }
 
@@ -226,7 +234,11 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {pins.length > 0 && <button className={styles.resetButton} onClick={resetCurrentMap}>Reset Pins</button>}
+      <Toolbar 
+        changeToNextMap={changeToNextMap}
+        pins={pins}
+        resetCurrentMap={resetCurrentMap}
+      />
       {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
       <Map
         mapFile={mapFile}
@@ -245,11 +257,13 @@ export default function App() {
         userLocation={userLocation}
         updateUserLocation={updateUserLocation}
         isUpdatingLocation={isUpdatingLocation}
-        debugMessage={debugMessage}
-        changeToNextMap={changeToNextMap}
         updatingLocationFailed={updatingLocationFailed}
         setUpdatingLocationFailed={setUpdatingLocationFailed}
         locationAccuracy={locationAccuracy}
+        showDebuggingContent={showDebuggingContent}
+        setShowDebuggingContent={setShowDebuggingContent}
+        mapFunctionParameters={mapFunctionParameters}
+        debugStatements={debugStatements}
       />
     </>
   );

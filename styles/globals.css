@@ -86,7 +86,8 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  /* color: rgb(var(--foreground-rgb)); */
+  font-family: 'Inter', sans-serif;
   background: linear-gradient(
       to bottom,
       transparent,
@@ -102,6 +103,6 @@ a {
 
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    /* color-scheme: dark; */
   }
 }

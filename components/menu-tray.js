@@ -1,100 +1,40 @@
+import ManageMap from '@/components/manageMap';
+
 import styles from '@/components/menu-tray.module.css';
 
-export default function MenuTray({ isSettingLocation, setIsSettingLocation, pins, setPins, crosshairsPosition, mapPosition, userLocation, updateUserLocation, isUpdatingLocation, debugMessage, updatingLocationFailed, locationAccuracy }) {
-
-  const toggleIsSettingLocation = () => {
-    setIsSettingLocation(!isSettingLocation);
-  };
-
-  const addPin = ({ latitude, longitude, accuracy }) => {
-    const { scale } = mapPosition;
-    const newPin = {
-      index: pins.length,
-
-      // Position on the user-provided picture
-      left: (crosshairsPosition.x - mapPosition.x) / scale,
-      top: (crosshairsPosition.y - mapPosition.y) / scale,
-
-      // Position in the real world
-      latitude,
-      longitude,
-      accuracy // in meters
-    };
-    const newPins = [...pins, newPin];
-
-    setPins(newPins);
-    localStorage.setItem('pins', JSON.stringify(newPins));
-  };
-
-  const handleConfirmLocation = () => {
-    updateUserLocation({
-      callback: addPin
-    })
-    toggleIsSettingLocation();
-  };
-
-  const handleUpdateLocation = () => {
-    updateUserLocation({ pins });
-  }
-
-  const showLoadingBar = () => {
-    const getLoadingBarClass = () => {
-      if (locationAccuracy < 5) {
-        return styles.loadingBarGreen;
-      } else if (locationAccuracy < 10) {
-        return styles.loadingBarYellow;
-      } else if (locationAccuracy < 20) {
-        return styles.loadingBarOrange;
-      } else {
-        return styles.loadingBarRed;
-      }
-    }
-    
-    const loadingZoneContent = () => {
-      if (isUpdatingLocation) {
-        return (
-          <>
-            <>🤳</>
-            <div className={styles.loadingBarBackground} >
-              <div className={`${styles.loadingBar} ${getLoadingBarClass()}` } />
-            </div>
-            <>🛰</>
-          </>
-        )
-      } else if (updatingLocationFailed) {
-        return (
-          <div className={styles.failureBar} >
-            Poor GPS signal. Try again.
-          </div>
-        )
-      }
-      return null;
-    };
-
-    return (
-      <div className={styles.loadingZoneContainer}>
-        {loadingZoneContent()}
-      </div>
-    )
-  };
+export default function MenuTray({ 
+  isSettingLocation, 
+  setIsSettingLocation, 
+  pins, 
+  setPins, 
+  crosshairsPosition, 
+  mapPosition, 
+  userLocation, 
+  updateUserLocation, 
+  isUpdatingLocation, 
+  debugMessage, 
+  updatingLocationFailed, 
+  locationAccuracy,
+  showDebuggingContent,
+  setShowDebuggingContent
+}) {
 
   return (
-    <div className={styles.container}>
-      {showLoadingBar()}
-      <div className={styles.buttonsContainer}>
-        <div className={styles.manageLocation}>
-          {debugMessage && <div>{debugMessage}</div>}
-          {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
-          {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >Cancel</button>}
-
-          {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
-            {!pins.length ? "Set Location" : "Set Another Location"}
-          </button>}
-
-          <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
-          {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
-        </div>
-      </div>
+    <div className={`${styles.container} ${showDebuggingContent ? styles.expanded : styles.contracted}`}>
+      <button onClick={() => setShowDebuggingContent(!showDebuggingContent)} className={styles.inspectDataButton}>Inspect Data</button>
+      <ManageMap 
+        isSettingLocation={isSettingLocation}
+        setIsSettingLocation={setIsSettingLocation}
+        pins={pins}
+        setPins={setPins}
+        crosshairsPosition={crosshairsPosition} 
+        mapPosition={mapPosition}
+        userLocation={userLocation}
+        locationAccuracy={locationAccuracy}
+        updateUserLocation={updateUserLocation}
+        isUpdatingLocation={isUpdatingLocation}
+        updatingLocationFailed={updatingLocationFailed}
+      />
     </div>
   );
 }

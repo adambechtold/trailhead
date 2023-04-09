@@ -8,7 +8,6 @@ export default function ManageMap({
   setPins,
   crosshairsPosition,
   mapPosition,
-  userLocation,
   locationAccuracy,
   updateUserLocation,
   isUpdatingLocation,
@@ -107,7 +106,6 @@ export default function ManageMap({
             </button>}
 
             <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
-            {userLocation && <div>latitude: {userLocation && userLocation.latitude}<br />longitude:{userLocation.longitude} <br /> accuracy: {userLocation.accuracy}</div>}
           </div>
         </div>
     </>

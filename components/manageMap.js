@@ -62,14 +62,14 @@ export default function ManageMap({
         return styles.loadingBarRed;
       }
     }
-    
+
     const loadingZoneContent = () => {
       if (isUpdatingLocation) {
         return (
           <>
             <>🤳</>
             <div className={styles.loadingBarBackground} >
-              <div className={`${styles.loadingBar} ${getLoadingBarClass()}` } />
+              <div className={`${styles.loadingBar} ${getLoadingBarClass()}`} />
             </div>
             <>🛰</>
           </>
@@ -91,24 +91,20 @@ export default function ManageMap({
     )
   };
 
-
-
   return (
     <>
       {showGPSStatusBar()}
-        <div className={styles.container}>
-          <div className={styles.manageLocation}>
-            {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
-            {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >Cancel</button>}
+      <div className={styles.container}>
+        <div className={styles.manageLocation}>
+          {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
+          {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation}>Cancel</button>}
 
-            {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
-              {!pins.length ? "Set Location" : "Set Another Location"}
-            </button>}
-
-            <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
-          </div>
+          {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
+            {!pins.length ? "Set Location" : "Set Another Location"}
+          </button>}
+          <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
         </div>
+      </div>
     </>
-    
-  )
+  );
 }

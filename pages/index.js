@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 
-import MenuTray from '@/components/menu-tray';
-import Crosshairs from '@/components/crosshairs';
-import Toolbar from '@/components/toolbar';
+import MenuTray from '@/components/MenuTray';
+import Crosshairs from '@/components/Crosshairs';
+import Toolbar from '@/components/Toolbar';
 
-const Map = dynamic(() => import('@/components/map'), {
+const Map = dynamic(() => import('@/components/Map'), {
   ssr: false
 });
 

@@ -14,8 +14,8 @@ export default function Test() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
       <div className={styles.container}>
-        <Plot />
-        <Plot />
+        <Plot name='Input Coordinates' />
+        <Plot name='Output' />
       </div>
     </>
   );

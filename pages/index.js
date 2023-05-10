@@ -91,6 +91,7 @@ export default function App() {
       const miniumumAccuracy = 5; // change minium accuracy based on device
 
       if (position.coords.accuracy > miniumumAccuracy) { // accuracy is too low (must be updated to trial on desktop)
+        addDebugStatement(`accuracy is too low: ${position.coords.accuracy} > ${miniumumAccuracy}`);
         setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1300);
         return;
       } else {

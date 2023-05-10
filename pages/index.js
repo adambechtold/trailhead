@@ -76,7 +76,7 @@ export default function App() {
 
   async function updateUserLocation({ callback, pins }) {
     setIsUpdatingLocation(true);
-    const numberOfRetries = 5;
+    const numberOfRetries = 10;
 
     for (let i = 0; i < numberOfRetries; i++) {
       const position = await getCurrentPosition();
@@ -85,10 +85,12 @@ export default function App() {
       const miniumumAccuracy = 5; // change minium accuracy based on device
 
       if (position.coords.accuracy > miniumumAccuracy) { // accuracy is too low (must be updated to trial on desktop)
-        const message = `accuracy is too low. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
+        const message = `Retry Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
         addDebugStatement(message);
         await delay(1300);
       } else {
+        const message = `Use Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
+        addDebugStatement(message);
         setUserLocation({
           top,
           left,

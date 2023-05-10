@@ -1,9 +1,15 @@
 
 import styles from '@/components/Plot.module.css';
 
-export default function TestMap() {
+export default function TestMap({
+  name
+}) {
 
   return (
-    <div className={styles.container}></div>
+    <div className={styles.container}>
+      <div className={styles.plot}></div>
+      <p>{name}</p>
+    </div>
+
   )
 }

@@ -1,7 +1,19 @@
 
 .container {
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container > * {
+  margin: 16px 0;
+}
+
+.plot {
   background-color: black;
   border: 2px solid white;
-  width: 40%;
-  padding-top: 40%;
+  width: 40vw;
+  padding-top: 40vw;
 }

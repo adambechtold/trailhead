@@ -1,15 +1,15 @@
 
 export default function Console({ debugStatements }) {
 
-  const printStatement = (statement) => {
+  const printStatement = (statement, index) => {
     return (
-      <div key={`${statement.message}-${statement.time}`}>{statement.message}</div>
+      <div key={`message-${index}`}>{statement.message}</div>
     )
   }
 
   return (
     <div>
-      {debugStatements.map((statement) => printStatement(statement))}
+      {debugStatements.map((statement, index) => printStatement(statement, index))}
     </div>
   );
 }

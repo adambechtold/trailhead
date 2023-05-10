@@ -51,7 +51,11 @@ export default function MenuTray({
             mapFunctionParameters={mapFunctionParameters}
           />}
           {showConsole && <Console debugStatements={debugStatements} />}
-          {showDebuggingContent && <button onClick={toggleConsole} className={styles.consoleButton}>Console</button>}
+          {showDebuggingContent && <button onClick={toggleConsole} className={styles.consoleButton}>
+            {!showConsole && 'Show Console'}
+            {showConsole && 'Hide Console'}
+            </button>
+          }
         </div>}
 
     </div>

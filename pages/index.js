@@ -29,9 +29,7 @@ export default function App() {
   const [mapFile, setMapFile] = useState(maps[0]);
   const [debugStatements, setDebugStatements] = useState([]); // [{ message: '', time: new Date() }]
   const addDebugStatement = (message) => {
-    const newDebugStatements = [...debugStatements];
-    newDebugStatements.push({ message, time: new Date() });
-    setDebugStatements(newDebugStatements);
+    setDebugStatements(debugStatements => [...debugStatements, { message, time: new Date() }]);
   };
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
   const [mapFunctionParameters, setMapFunctionParameters] = useState(null);
@@ -66,34 +64,33 @@ export default function App() {
     setIsSettingLocation(false);
   }
 
-  const updateUserLocation = ({ callback, pins, startUpdatingTime }) => {
+  function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
+
+  async function getCurrentPosition() {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, maximumAge: 100 });
+    });
+  }
+
+  async function updateUserLocation({ callback, pins }) {
     setIsUpdatingLocation(true);
-    const now = new Date();
-    if (startUpdatingTime === undefined) {
-      startUpdatingTime = now;
-    } else {
-      const differenceInTime = now.getTime() - startUpdatingTime.getTime();
-      if (differenceInTime > 10000) {
-        setIsUpdatingLocation(false);
-        setUpdatingLocationFailed(true);
-        setTimeout(() => setUpdatingLocationFailed(false), 4000);
-        return;
-      }
-    }
+    const numberOfRetries = 10;
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { top, left } = (pins && pins.length >= 2) ?
-        convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude })
-        : { top: null, left: null };
-
+    for (let i = 0; i < numberOfRetries; i++) {
+      const position = await getCurrentPosition();
+      const { top, left } = convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude });
       setLocationAccuracy(position.coords.accuracy);
-
       const miniumumAccuracy = 5; // change minium accuracy based on device
 
       if (position.coords.accuracy > miniumumAccuracy) { // accuracy is too low (must be updated to trial on desktop)
-        setTimeout(() => updateUserLocation({ callback, pins, startUpdatingTime }), 1300);
-        return;
+        const message = `Retry Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
+        addDebugStatement(message);
+        await delay(1300);
       } else {
+        const message = `Use Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
+        addDebugStatement(message);
         setUserLocation({
           top,
           left,
@@ -107,13 +104,11 @@ export default function App() {
           longitude: position.coords.longitude,
           accuracy: position.coords.accuracy
         });
-      }
-    }, (error) => {
-      console.log(error);
-      setIsUpdatingLocation(false);
-    }, { enableHighAccuracy: true, maximumAge: 100 });
+        return;
+      } 
+    }
+    setIsUpdatingLocation(false);
   }
-
 
   // returns Top and Left of the User
   function convertUserLocationToMapPosition({ pins, latitude, longitude }) {

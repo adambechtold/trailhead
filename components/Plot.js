@@ -4,7 +4,8 @@ import L from 'leaflet';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-import { getLineOfPins, createMapIcon } from '@/utils/plot';
+import { getLineOfPins } from '@/utils/plot';
+import { createMapIcon } from '@/components/MapIcon';
 
 export default function Plot() {
 

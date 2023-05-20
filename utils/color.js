@@ -32,6 +32,26 @@ export const calculateGradient = ({
     const b = Math.round(startRgb[2] + stepSize[2] * i);
     gradient.push(rgbToHex([r, g, b]));
   }
-  console.log('gradient', gradient);
   return gradient;
+}
+
+// Interact with Arc Browser
+const getArcCSSVariable = (variableName, defaultValue) => {
+  const rootStyle = getComputedStyle(document.documentElement);
+  const arcValue = rootStyle.getPropertyValue(variableName);
+  if (!arcValue) {
+    console.warn(`Arc Browser: CSS variable ${variableName} not found`);
+    return defaultValue;
+  }
+  return arcValue;
+}
+
+export const getGradientStart = () => {
+  const arcValue = getArcCSSVariable('--arc-background-gradient-color0', '#FF0000');
+  return arcValue.substring(1);
+}
+
+export const getGradientEnd = () => {
+  const arcValue = getArcCSSVariable('--arc-background-gradient-overlay-color1', '#0000FF');
+  return arcValue.substring(1);
 }

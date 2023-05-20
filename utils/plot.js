@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { calculateGradient } from '@/utils/color';
+import { calculateGradient, getGradientStart, getGradientEnd } from '@/utils/color';
 
 function createIconUrl(color) {
   const svgString = 
@@ -16,7 +16,7 @@ export function createMapIcon(color) {
   return L.icon({
     iconUrl: createIconUrl(color),
     iconSize: [32, 32],
-    iconAnchor: [16, 32],
+    iconAnchor: [16, 16],
     popupAnchor: [0, -32],
   });
 };
@@ -26,8 +26,8 @@ export const getLineOfPins = ({
   endPosition,
   numberOfPins,
 }) => {
-  const startColor = 'ff0000';
-  const endColor = '00ff00';
+  const startColor = getGradientStart();
+  const endColor = getGradientEnd();
   const gradient = calculateGradient({
     startColor,
     endColor,

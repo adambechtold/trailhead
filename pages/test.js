@@ -12,9 +12,6 @@ export default function Test() {
       <div className={styles.plot}>
         <Plot />
       </div>
-      <div className={styles.plot}>
-        <Plot />
-      </div>
     </div>
   );
 }

@@ -1,19 +1,11 @@
 
 .container {
-  min-width: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.container > * {
-  margin: 16px 0;
+  width: 400px;
+  height: 400px;
+  background-color: red;
 }
 
 .plot {
-  background-color: black;
-  border: 2px solid white;
-  width: 40vw;
-  padding-top: 40vw;
+  width: 30rem;
+  height: 40rem;
 }

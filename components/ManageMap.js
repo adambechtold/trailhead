@@ -85,8 +85,11 @@ export default function ManageMap({
     };
 
     return (
-      <div className={styles.loadingZoneContainer}>
-        {loadingZoneContent()}
+      <div className={styles.updateLocationContainer}>
+        <div className={styles.visualizeTransmissionContainer}>
+          {loadingZoneContent()}
+        </div>
+        {isUpdatingLocation ? locationAccuracy.toFixed(1) + 'm' : null}
       </div>
     )
   };

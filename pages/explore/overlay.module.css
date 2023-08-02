@@ -1,0 +1,13 @@
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+}
+
+.plot {
+  width: 60vw;
+  height: 60vw;
+  max-height: 80vh;
+}

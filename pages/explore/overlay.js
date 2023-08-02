@@ -10,7 +10,9 @@ export default function ExploreOverlay() {
   return (
     <div className={styles.container}>
       <div className={styles.plot}>
-        <Plot showOverlay={true}/>
+        <Plot 
+          showOverlay={true}
+        />
       </div>
     </div>
   );

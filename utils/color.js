@@ -37,6 +37,11 @@ export const calculateGradient = ({
 
 // Interact with Arc Browser
 const getArcCSSVariable = (variableName, defaultValue) => {
+
+  if (typeof window === 'undefined') {
+    return defaultValue;
+  }
+  
   const rootStyle = getComputedStyle(document.documentElement);
   const arcValue = rootStyle.getPropertyValue(variableName);
   if (!arcValue) {

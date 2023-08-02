@@ -16,16 +16,6 @@ const initialPins = [{
   longitude: -72.68334
 }];
 
-const getAveragePosition = (pins) => {
-  let lat = 0;
-  let long = 0;
-  pins.forEach((pin) => {
-    lat += pin.latitude;
-    long += pin.longitude;
-  });
-  return [lat / pins.length, long / pins.length];
-};
-
 const pins = getLineOfPins({
   startPosition: initialPins[0],
   endPosition: initialPins[1],
@@ -38,7 +28,6 @@ export default function Test() {
       <div className={styles.plot}>
         <Plot
           pins={pins}
-          center={getAveragePosition(pins)}
         />
       </div>
     </div>

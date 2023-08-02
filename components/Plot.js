@@ -3,7 +3,6 @@ import styles from '@/components/Plot.module.css';
 
 import { MapContainer, TileLayer, Marker, Popup, ImageOverlay } from 'react-leaflet';
 
-import { getLineOfPins } from '@/utils/plot';
 import { createMapIcon } from '@/components/MapIcon';
 
 export default function Plot({

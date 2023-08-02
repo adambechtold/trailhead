@@ -31,3 +31,19 @@ export const getLineOfPins = ({
 
   return line;
 };
+
+const exampleInitialPins = [{
+  index: 1,
+  latitude: 41.33673,
+  longitude: -72.68157,
+}, {
+  index: 2,
+  latitude: 41.3398,
+  longitude: -72.68334
+}];
+
+export const getExamplePins = () => getLineOfPins({
+  startPosition: exampleInitialPins[0],
+  endPosition: exampleInitialPins[1],
+  numberOfPins: 8
+});

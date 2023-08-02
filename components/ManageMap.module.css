@@ -20,12 +20,16 @@
   margin: 10px;
 }
 
-.loadingZoneContainer {
+.updateLocationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.visualizeTransmissionContainer {
   width: 50%;
-  position: relative;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 10px;
   height: 1.2rem;
 
   display: flex;

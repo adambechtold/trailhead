@@ -9,11 +9,11 @@ const Plot = dynamic(() => import('@/components/Plot'), {
 export default function Test() {
   return (
     <div className={styles.container}>
-      <div className={styles.plot}>
-        <Plot
-          pins={getExamplePins()}
-        />
-      </div>
+      <Plot
+        className={styles.plot}
+        pins={getExamplePins()}
+        showOverlay={true}
+      />
     </div>
   );
 }

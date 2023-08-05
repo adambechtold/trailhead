@@ -9,11 +9,20 @@ const Plot = dynamic(() => import('@/components/Plot'), {
 export default function Test() {
   return (
     <div className={styles.container}>
-      <Plot
-        className={styles.plot}
-        pins={getExamplePins()}
-        showOverlay={true}
-      />
+      <div className={styles.plot}>
+        <Plot
+          className={styles.plot}
+          pins={getExamplePins()}
+          showOverlay={true}
+        />
+      </div>
+      <div className={styles.plot}>
+        <Plot
+          className={styles.plot}
+          pins={getExamplePins()}
+          showOverlay={true}
+        />
+      </div>
     </div>
   );
 }

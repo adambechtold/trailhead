@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic';
 import styles from './overlay.module.css';
-import { getExamplePins } from '@/utils/plot';
+import { getExamplePins } from '@/utils/map';
 
-const Plot = dynamic(() => import('@/components/Plot'), {
+const LeafletMap = dynamic(() => import('@/components/LeafletMap'), {
   ssr: false
 });
 
@@ -10,7 +10,7 @@ export default function ExploreOverlay() {
   return (
     <div className={styles.container}>
       <div className={styles.plot}>
-        <Plot 
+        <LeafletMap 
           showOverlay={true}
           pins={getExamplePins()}
         />

@@ -1,12 +1,12 @@
 import 'leaflet/dist/leaflet.css';
-import styles from '@/components/Plot.module.css';
+import styles from '@/components/LeafletMap.module.css';
 
 import { MapContainer, TileLayer, Marker, Popup, ImageOverlay } from 'react-leaflet';
 
 import { createMapIcon } from '@/components/MapIcon';
-import { exampleOverlays } from '@/utils/plot';
+import { exampleOverlays } from '@/utils/map';
 
-export default function Plot({
+export default function LeaftletMap({
   pins,
   showOverlay,
 }) {

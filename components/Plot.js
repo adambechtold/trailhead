@@ -34,7 +34,7 @@ export default function Plot({
     }
   ];
 
-  const OVERLAY_INDEX = 0;
+  const OVERLAY_INDEX = 1;
   const trailURL = overlays[OVERLAY_INDEX].url;
   const trailBounds = overlays[OVERLAY_INDEX].trailBounds;
 

@@ -7,10 +7,6 @@ const inter = Inter({ subsets: ['latin'] })
 
 import dynamic from 'next/dynamic';
 
-const Plot = dynamic(() => import('@/components/Plot'), {
-  ssr: false
-});
-
 export default function Home() {
   return (
     <>
@@ -44,8 +40,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-
-        <Plot />
 
         <div className={styles.center}>
           <Image

@@ -1,4 +1,5 @@
 import { calculateGradient, getGradientStart, getGradientEnd } from '@/utils/color';
+import { averageArray } from '@/utils/math';
 
 export const getLineOfPins = ({
   startPosition,
@@ -41,6 +42,24 @@ const exampleInitialPins = [{
   latitude: 41.3398,
   longitude: -72.68334
 }];
+
+export const exampleOverlays = [
+  {
+    url: '../images/trailmap-timberlands-precise-1.jpeg',
+    bounds: [[41.3545, -72.6965], [41.3289, -72.6666]],
+  },
+  {
+    url: '../images/trailmap-timberlands-precise-2.jpeg',      
+    bounds: [[41.35422, -72.6926], [41.328, -72.66833]],
+  }
+];
+
+exampleOverlays.forEach((overlay) => {
+  overlay.center = [
+    averageArray(overlay.bounds.map(coord => coord[0])),
+    averageArray(overlay.bounds.map(coord => coord[1])),
+  ];
+});
 
 export const getExamplePins = () => getLineOfPins({
   startPosition: exampleInitialPins[0],

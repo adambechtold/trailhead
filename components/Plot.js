@@ -4,6 +4,7 @@ import styles from '@/components/Plot.module.css';
 import { MapContainer, TileLayer, Marker, Popup, ImageOverlay } from 'react-leaflet';
 
 import { createMapIcon } from '@/components/MapIcon';
+import { exampleOverlays } from '@/utils/plot';
 
 export default function Plot({
   pins,
@@ -23,30 +24,10 @@ export default function Plot({
   };
 
   // OVERLAYS
-  const overlays = [
-    {
-      url: '../images/trailmap-timberlands-precise-1.jpeg',
-      trailBounds: [[41.3545, -72.6965], [41.3289, -72.6666]],
-    },
-    {
-      url: '../images/trailmap-timberlands-precise-2.jpeg',      
-      trailBounds: [[41.35422, -72.6926], [41.328, -72.66833]],
-    }
-  ];
-
   const OVERLAY_INDEX = 1;
-  const trailURL = overlays[OVERLAY_INDEX].url;
-  const trailBounds = overlays[OVERLAY_INDEX].trailBounds;
-
-  const averageArray = (numbers) => {
-    const sum = numbers.reduce((acc, curr) => acc + curr, 0);
-    return sum / numbers.length;
-  };
-
-  const overlayCenter = [
-    averageArray(trailBounds.map(coord => coord[0])),
-    averageArray(trailBounds.map(coord => coord[1]))
-  ];
+  const overlayURL = exampleOverlays[OVERLAY_INDEX].url;
+  const overlayBounds = exampleOverlays[OVERLAY_INDEX].bounds;
+  const overlayCenter = exampleOverlays[OVERLAY_INDEX].center;
  
   // Calculate Center
   const getAveragePosition = (pins) => {
@@ -77,8 +58,8 @@ export default function Plot({
       {pins && pins.map(placePin)}
       {showOverlay &&
         <ImageOverlay
-          url={trailURL}
-          bounds={trailBounds}
+          url={overlayURL}
+          bounds={overlayBounds}
           opacity={0.9}
           zIndex={10}
         />}

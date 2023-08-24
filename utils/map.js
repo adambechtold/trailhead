@@ -37,10 +37,14 @@ const exampleInitialPins = [{
   index: 1,
   latitude: 41.33673,
   longitude: -72.68157,
+  left: 445.977,
+  top: 918.485,
 }, {
   index: 2,
   latitude: 41.3398,
-  longitude: -72.68334
+  longitude: -72.68334,
+  left: 421.052,
+  top: 842.589,
 }];
 
 export const exampleOverlays = [

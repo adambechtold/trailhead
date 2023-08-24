@@ -13,12 +13,17 @@ export default function LeaftletMap({
 
   const placePin = (pin) => {
     return (
-      <Marker position={[pin.latitude, pin.longitude]} icon={createMapIcon(pin.color)} key={`pin-${pin.index}}`}>
+      <Marker 
+        position={[pin.latitude, pin.longitude]} 
+        icon={createMapIcon(pin.color)} 
+        key={`pin-${pin.index}}`}>
+
         <Popup>
           Pin {pin.index} <br />
           Longitude: {pin.longitude} <br />
           Latitude: {pin.latitude}
         </Popup>
+        
       </Marker>
     )
   };

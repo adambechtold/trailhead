@@ -9,4 +9,6 @@
 .plot {
   width: 45vw;
   height: 45vw;
+  border: 1px solid red;
 }
+ 

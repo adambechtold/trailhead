@@ -12,6 +12,7 @@ Just a few setup steps:
 
 ### Demo
 
+<img src="public/demo.gif" width="300" alt="demonstration of trailhead" />
 
 ## Roadmap
 

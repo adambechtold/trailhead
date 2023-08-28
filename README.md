@@ -12,7 +12,6 @@ Just a few setup steps:
 
 ### Demo
 
-![](./public/demo.gif)
 
 ## Roadmap
 

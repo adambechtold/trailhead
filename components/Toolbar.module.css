@@ -1,4 +1,3 @@
-
 .toolbarContainer {
   /* Position */
   position: fixed;
@@ -9,7 +8,7 @@
   width: 100%;
   padding: 20px;
 
-  /* Content */  
+  /* Content */
   display: flex;
   flex-direction: row;
   justify-content: space-between;

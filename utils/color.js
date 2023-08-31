@@ -7,17 +7,13 @@ function hexToRgb(hex) {
 }
 
 function rgbToHex(rgb) {
-  const r = rgb[0].toString(16).padStart(2, '0');
-  const g = rgb[1].toString(16).padStart(2, '0');
-  const b = rgb[2].toString(16).padStart(2, '0');
+  const r = rgb[0].toString(16).padStart(2, "0");
+  const g = rgb[1].toString(16).padStart(2, "0");
+  const b = rgb[2].toString(16).padStart(2, "0");
   return `${r}${g}${b}`;
 }
 
-export const calculateGradient = ({ 
-  startColor, 
-  endColor, 
-  steps 
-}) => {
+export const calculateGradient = ({ startColor, endColor, steps }) => {
   const startRgb = hexToRgb(startColor);
   const endRgb = hexToRgb(endColor);
   const stepSize = [
@@ -33,15 +29,14 @@ export const calculateGradient = ({
     gradient.push(rgbToHex([r, g, b]));
   }
   return gradient;
-}
+};
 
 // Interact with Arc Browser
 const getArcCSSVariable = (variableName, defaultValue) => {
-
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return defaultValue;
   }
-  
+
   const rootStyle = getComputedStyle(document.documentElement);
   const arcValue = rootStyle.getPropertyValue(variableName);
   if (!arcValue) {
@@ -49,14 +44,20 @@ const getArcCSSVariable = (variableName, defaultValue) => {
     return defaultValue;
   }
   return arcValue;
-}
+};
 
 export const getGradientStart = () => {
-  const arcValue = getArcCSSVariable('--arc-background-gradient-color0', '#FF0000');
+  const arcValue = getArcCSSVariable(
+    "--arc-background-gradient-color0",
+    "#FF0000",
+  );
   return arcValue.substring(1);
-}
+};
 
 export const getGradientEnd = () => {
-  const arcValue = getArcCSSVariable('--arc-background-gradient-overlay-color1', '#0000FF');
+  const arcValue = getArcCSSVariable(
+    "--arc-background-gradient-overlay-color1",
+    "#0000FF",
+  );
   return arcValue.substring(1);
-}
+};

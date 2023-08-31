@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import Head from 'next/head';
-import dynamic from 'next/dynamic';
+import Head from "next/head";
+import dynamic from "next/dynamic";
 
-import MenuTray from '@/components/MenuTray';
-import Crosshairs from '@/components/Crosshairs';
-import Toolbar from '@/components/Toolbar';
+import MenuTray from "@/components/MenuTray";
+import Crosshairs from "@/components/Crosshairs";
+import Toolbar from "@/components/Toolbar";
 
-const Map = dynamic(() => import('@/components/Map'), {
-  ssr: false
+const Map = dynamic(() => import("@/components/Map"), {
+  ssr: false,
 });
 
 const maps = [
-  '/images/trail-map-smaller.jpeg',
-  '/images/bartlett-neighborhood.jpeg',
-  '/images/bartlett-closeup.jpeg',
+  "/images/trail-map-smaller.jpeg",
+  "/images/bartlett-neighborhood.jpeg",
+  "/images/bartlett-closeup.jpeg",
 ];
 
 export default function App() {
@@ -29,22 +29,25 @@ export default function App() {
   const [mapFile, setMapFile] = useState(maps[0]);
   const [debugStatements, setDebugStatements] = useState([]); // [{ message: '', time: new Date() }]
   const addDebugStatement = (message) => {
-    setDebugStatements(debugStatements => [...debugStatements, { message, time: new Date() }]);
+    setDebugStatements((debugStatements) => [
+      ...debugStatements,
+      { message, time: new Date() },
+    ]);
   };
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
   const [mapFunctionParameters, setMapFunctionParameters] = useState(null);
 
   // Update Pins
   useEffect(() => {
-    const pinsFromStorage = JSON.parse(localStorage.getItem('pins'));
+    const pinsFromStorage = JSON.parse(localStorage.getItem("pins"));
     if (pinsFromStorage) {
       setPins(pinsFromStorage);
-    } 
+    }
   }, []);
 
   const resetPins = () => {
     setPins([]);
-    localStorage.setItem('pins', JSON.stringify([]));
+    localStorage.setItem("pins", JSON.stringify([]));
   };
 
   // Next Map
@@ -62,15 +65,18 @@ export default function App() {
     resetPins();
     setUserLocation(null);
     setIsSettingLocation(false);
-  }
+  };
 
   function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
+    return new Promise((resolve) => setTimeout(resolve, time));
   }
 
   async function getCurrentPosition() {
     return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, maximumAge: 100 });
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        maximumAge: 100,
+      });
     });
   }
 
@@ -80,11 +86,16 @@ export default function App() {
 
     for (let i = 0; i < numberOfRetries; i++) {
       const position = await getCurrentPosition();
-      const { top, left } = convertUserLocationToMapPosition({ pins, latitude: position.coords.latitude, longitude: position.coords.longitude });
+      const { top, left } = convertUserLocationToMapPosition({
+        pins,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
       setLocationAccuracy(position.coords.accuracy);
       const miniumumAccuracy = 5; // change minium accuracy based on device
 
-      if (position.coords.accuracy > miniumumAccuracy) { // accuracy is too low (must be updated to trial on desktop)
+      if (position.coords.accuracy > miniumumAccuracy) {
+        // accuracy is too low (must be updated to trial on desktop)
         const message = `Retry Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
         addDebugStatement(message);
         await delay(1300);
@@ -96,72 +107,83 @@ export default function App() {
           left,
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy
+          accuracy: position.coords.accuracy,
         });
         setIsUpdatingLocation(false);
-        if (callback) callback({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy
-        });
+        if (callback)
+          callback({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+          });
         return;
-      } 
+      }
     }
     setIsUpdatingLocation(false);
   }
 
   // returns Top and Left of the User
   function convertUserLocationToMapPosition({ pins, latitude, longitude }) {
-    
     if (pins.length < 2) {
       const empty = () => ({ top: null, left: null });
       return empty();
-    };
+    }
 
     // TODO: Use more than 2 pins
     const pin1 = pins[0];
     const pin2 = pins[1];
 
     if (pin1.latitude === pin2.latitude || pin1.longitude === pin2.longitude) {
-      console.log('reset and move');
-      addDebugStatement('lat and long are the same; reset and move; for now, adjusting so you can see something');
+      console.log("reset and move");
+      addDebugStatement(
+        "lat and long are the same; reset and move; for now, adjusting so you can see something",
+      );
       // for debugging
       pin1.latitude = pin2.latitude + 0.000002;
       pin1.longitude = pin2.longitude + 0.000002;
       // return empty();
-    };
+    }
 
-    const offsetX = -1 * ((pin1.left * pin2.latitude) - (pin2.left * pin1.latitude)) / (pin1.latitude - pin2.latitude);
-    const offsetY = -1 * ((pin1.top * pin2.longitude) - (pin2.top * pin1.longitude)) / (pin1.longitude - pin2.longitude);
+    const offsetX =
+      (-1 * (pin1.left * pin2.latitude - pin2.left * pin1.latitude)) /
+      (pin1.latitude - pin2.latitude);
+    const offsetY =
+      (-1 * (pin1.top * pin2.longitude - pin2.top * pin1.longitude)) /
+      (pin1.longitude - pin2.longitude);
 
-    const scalerX = ((pin1.left - offsetX) / pin1.latitude);
-    const scalerY = ((pin1.top - offsetY) / pin1.longitude);
+    const scalerX = (pin1.left - offsetX) / pin1.latitude;
+    const scalerY = (pin1.top - offsetY) / pin1.longitude;
 
     setMapFunctionParameters({ offsetX, offsetY, scalerX, scalerY });
 
     if (isNaN(offsetX) || isNaN(offsetY) || isNaN(scalerX) || isNaN(scalerY)) {
-      console.log('offset or scaler is NaN');
-      addDebugStatement('offset or scaler is NaN');
+      console.log("offset or scaler is NaN");
+      addDebugStatement("offset or scaler is NaN");
       return empty();
     }
 
     if (offsetX === 0 || offsetY === 0 || scalerX === 0 || scalerY === 0) {
-      console.log('offset or scaler is 0');
-      addDebugStatement('offset or scaler is 0');
+      console.log("offset or scaler is 0");
+      addDebugStatement("offset or scaler is 0");
       return empty();
     }
 
-    if (offsetX === Infinity || offsetY === Infinity || scalerX === Infinity || scalerY === Infinity) {
-      console.log('offset or scaler is Infinity');
-      addDebugStatement('offset or scaler is Infinity');
+    if (
+      offsetX === Infinity ||
+      offsetY === Infinity ||
+      scalerX === Infinity ||
+      scalerY === Infinity
+    ) {
+      console.log("offset or scaler is Infinity");
+      addDebugStatement("offset or scaler is Infinity");
       return empty();
     }
 
-    console.log('offsetX', offsetX, 'scaleX', scalerX);
-    console.log('offsetY', offsetY, 'scaleY', scalerY);
+    console.log("offsetX", offsetX, "scaleX", scalerX);
+    console.log("offsetY", offsetY, "scaleY", scalerY);
 
-    const x = (latitude * scalerX) + offsetX;
-    const y = (longitude * scalerY) + offsetY;
+    const x = latitude * scalerX + offsetX;
+    const y = longitude * scalerY + offsetY;
 
     return { left: x, top: y };
   }
@@ -181,14 +203,14 @@ export default function App() {
 
   const locationBetweenLookoutAndParkingLot = {
     latitude: 41.33736535834985,
-    longitude: -72.68212145013308
-  }
+    longitude: -72.68212145013308,
+  };
 
   const locationUpperLeftCorner = {
     latitude: 41.34219478336026,
     //longitude: -72.68409832212741
-    longitude: -72.6835
-  }
+    longitude: -72.6835,
+  };
 
   // const [pins, setPins] = useState([
   //   // parking lot
@@ -231,12 +253,14 @@ export default function App() {
         <title>wander: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Toolbar 
+      <Toolbar
         changeToNextMap={changeToNextMap}
         pins={pins}
         resetCurrentMap={resetCurrentMap}
       />
-      {isSettingLocation && <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />}
+      {isSettingLocation && (
+        <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />
+      )}
       <Map
         mapFile={mapFile}
         pins={pins}

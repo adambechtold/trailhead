@@ -1,19 +1,22 @@
-import { useState, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import { useState, useRef } from "react";
+import ReactDOM from "react-dom";
 
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-import MapStateTracker from './MapStateTracker.js';
-import styles from '@/components/Map.module.css';
-
-
+import MapStateTracker from "./MapStateTracker.js";
+import styles from "@/components/Map.module.css";
 
 function getWidthRatio(mapWidth, viewportWidth) {
   return viewportWidth / mapWidth;
 }
 
-export default function Map({ mapFile, pins, userLocation, mapPosition, setMapPosition }) {  
-
+export default function Map({
+  mapFile,
+  pins,
+  userLocation,
+  mapPosition,
+  setMapPosition,
+}) {
   // get the current centerpoint of the map
   // Example State
   // {
@@ -36,34 +39,34 @@ export default function Map({ mapFile, pins, userLocation, mapPosition, setMapPo
     setMapPosition({
       x: mapRect.left,
       y: mapRect.top,
-      scale
+      scale,
     });
   };
 
   const showPin = (pin) => {
     return (
       <img
-        src='map-x.svg'
-        alt='Map Pin'
+        src="map-x.svg"
+        alt="Map Pin"
         className={styles.mapPin}
         style={{
           top: pin.top,
-          left: pin.left
+          left: pin.left,
         }}
         key={`pin-${pin.index}}`}
       />
-    )
+    );
   };
 
   const showUserLocation = (location) => {
     return (
-      <img 
-        src='user-location.svg'
-        alt='User Location'
+      <img
+        src="user-location.svg"
+        alt="User Location"
         className={styles.mapPin}
         style={{
           top: location.top,
-          left: location.left
+          left: location.left,
         }}
         key={`user-location`}
       />
@@ -75,14 +78,12 @@ export default function Map({ mapFile, pins, userLocation, mapPosition, setMapPo
       limitToBounds={false}
       initialScale={mapPosition.scale}
       minScale={0.3} // TODO: Calculate from image size
-      maxScale={20}  // TODO: Calculate from image size
+      maxScale={20} // TODO: Calculate from image size
     >
       {({ zoomIn, zoomOut, setTransform, ...rest }) => (
         <>
           <TransformComponent>
-            <MapStateTracker
-              setCurrentMapState={handleMapStateUpdate}
-            />
+            <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
             {pins && pins.map(showPin)}
             {userLocation && showUserLocation(userLocation)}
             <img src={mapFile} alt="Trail Map" ref={mapReference} />
@@ -90,5 +91,5 @@ export default function Map({ mapFile, pins, userLocation, mapPosition, setMapPo
         </>
       )}
     </TransformWrapper>
-  )
+  );
 }

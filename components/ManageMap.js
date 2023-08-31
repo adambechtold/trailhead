@@ -1,5 +1,4 @@
-
-import styles from '@/components/ManageMap.module.css';
+import styles from "@/components/ManageMap.module.css";
 
 export default function ManageMap({
   isSettingLocation,
@@ -13,7 +12,6 @@ export default function ManageMap({
   isUpdatingLocation,
   updatingLocationFailed,
 }) {
-
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
   };
@@ -30,25 +28,24 @@ export default function ManageMap({
       // Position in the real world
       latitude,
       longitude,
-      accuracy // in meters
+      accuracy, // in meters
     };
     const newPins = [...pins, newPin];
 
     setPins(newPins);
-    localStorage.setItem('pins', JSON.stringify(newPins));
+    localStorage.setItem("pins", JSON.stringify(newPins));
   };
 
   const handleConfirmLocation = () => {
     updateUserLocation({
-      callback: addPin
-    })
+      callback: addPin,
+    });
     toggleIsSettingLocation();
   };
 
   const handleUpdateLocation = () => {
     updateUserLocation({ pins });
-  }
-
+  };
 
   const showGPSStatusBar = () => {
     const getLoadingBarClass = () => {
@@ -61,25 +58,23 @@ export default function ManageMap({
       } else {
         return styles.loadingBarRed;
       }
-    }
+    };
 
     const loadingZoneContent = () => {
       if (isUpdatingLocation) {
         return (
           <>
             <>🤳</>
-            <div className={styles.loadingBarBackground} >
+            <div className={styles.loadingBarBackground}>
               <div className={`${styles.loadingBar} ${getLoadingBarClass()}`} />
             </div>
             <>🛰</>
           </>
-        )
+        );
       } else if (updatingLocationFailed) {
         return (
-          <div className={styles.failureBar} >
-            Poor GPS signal. Try again.
-          </div>
-        )
+          <div className={styles.failureBar}>Poor GPS signal. Try again.</div>
+        );
       }
       return null;
     };
@@ -89,9 +84,9 @@ export default function ManageMap({
         <div className={styles.visualizeTransmissionContainer}>
           {loadingZoneContent()}
         </div>
-        {isUpdatingLocation ? locationAccuracy.toFixed(1) + 'm' : null}
+        {isUpdatingLocation ? locationAccuracy.toFixed(1) + "m" : null}
       </div>
-    )
+    );
   };
 
   return (
@@ -99,13 +94,25 @@ export default function ManageMap({
       {showGPSStatusBar()}
       <div className={styles.container}>
         <div className={styles.manageLocation}>
-          {isSettingLocation && <button className={styles.button} onClick={handleConfirmLocation}>Confirm</button>}
-          {isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation}>Cancel</button>}
+          {isSettingLocation && (
+            <button className={styles.button} onClick={handleConfirmLocation}>
+              Confirm
+            </button>
+          )}
+          {isSettingLocation && (
+            <button className={styles.button} onClick={toggleIsSettingLocation}>
+              Cancel
+            </button>
+          )}
 
-          {!isSettingLocation && <button className={styles.button} onClick={toggleIsSettingLocation} >
-            {!pins.length ? "Set Location" : "Set Another Location"}
-          </button>}
-          <button className={styles.button} onClick={handleUpdateLocation} >Update Location</button>
+          {!isSettingLocation && (
+            <button className={styles.button} onClick={toggleIsSettingLocation}>
+              {!pins.length ? "Set Location" : "Set Another Location"}
+            </button>
+          )}
+          <button className={styles.button} onClick={handleUpdateLocation}>
+            Update Location
+          </button>
         </div>
       </div>
     </>

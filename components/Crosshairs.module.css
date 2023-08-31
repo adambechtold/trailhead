@@ -12,7 +12,7 @@
   left: 0;
   height: 2px;
   transform: translateY(-50%);
-  background-color: #FF5714;
+  background-color: #ff5714;
 }
 
 .verticalLine {
@@ -22,7 +22,7 @@
   top: 0;
   width: 2px;
   height: 100%;
-  background-color: #FF5714;
+  background-color: #ff5714;
 }
 
 .centerPoint {
@@ -32,6 +32,6 @@
   transform: translate(-50%, -50%);
   width: 5px;
   height: 5px;
-  background-color: #FF5714;
+  background-color: #ff5714;
   border-radius: 50%;
 }

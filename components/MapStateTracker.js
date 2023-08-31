@@ -2,7 +2,6 @@
 import { useTransformEffect, useTransformInit } from "react-zoom-pan-pinch";
 
 export default function MapStateTracker({ setCurrentMapState }) {
-  
   useTransformEffect(({ state, instance }) => {
     setCurrentMapState(state);
   });
@@ -11,7 +10,5 @@ export default function MapStateTracker({ setCurrentMapState }) {
     setCurrentMapState(state);
   });
 
-  return (
-    <></>
-  )
+  return <></>;
 }

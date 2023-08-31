@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-import styles from '@/components/Crosshairs.module.css';
+import styles from "@/components/Crosshairs.module.css";
 
 export default function Crosshairs({ setCrosshairsPosition }) {
-  
   const centerPointReference = useRef(null);
 
   function getCenter(centerPointReference) {
@@ -14,10 +13,10 @@ export default function Crosshairs({ setCrosshairsPosition }) {
   }
 
   useEffect(() => {
-    const {x, y, width, height } = getCenter(centerPointReference);
+    const { x, y, width, height } = getCenter(centerPointReference);
     setCrosshairsPosition({
       x: x + width / 2,
-      y: y + height / 2
+      y: y + height / 2,
     });
   }, [centerPointReference]);
 
@@ -27,5 +26,5 @@ export default function Crosshairs({ setCrosshairsPosition }) {
       <div className={styles.horizontalLine} />
       <div className={styles.verticalLine} />
     </div>
-  )
+  );
 }

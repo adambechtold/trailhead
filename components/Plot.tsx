@@ -1,7 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import styles from "@/components/Plot.module.css";
 
-import { getGradientStart } from "@/utils/color";
 import { Coordinates } from "@/types/Vector";
 import { Overlay } from "@/types/Overlay";
 
@@ -13,15 +12,20 @@ import {
   ImageOverlay,
 } from "react-leaflet";
 
+import { LatLngExpression, LatLngBounds } from "leaflet";
+
 import { createMapIcon } from "@/components/MapIcon";
 
 type Props = {
-  path: Coordinates[];
+  path?: Coordinates[];
   overlay?: Overlay;
 };
 
 export default function Plot(props: Props) {
-  const { path, overlay } = props;
+  let { path, overlay } = props;
+  if (!path) {
+    path = [];
+  }
   console.log("path", path);
 
   function addPointToMap(point: Coordinates, index: number) {
@@ -29,7 +33,7 @@ export default function Plot(props: Props) {
     return (
       <Marker
         position={[point.latitude, point.longitude]}
-        icon={createMapIcon("FF0000")} // this is throwing an error, but it works
+        icon={createMapIcon("FF0000")}
         key={`point-${index}}`}
       >
         <Popup>
@@ -55,19 +59,25 @@ export default function Plot(props: Props) {
     };
   };
 
-  const calculateCenter = (path: Coordinates[]): number[] => {
+  const calculateCenter = (path: Coordinates[]): LatLngExpression => {
     if (path) {
       const { latitude, longitude } = getAveragePosition(path);
       return [latitude, longitude];
     }
+    return overlay ? [overlay.center[0], overlay.center[1]] : [0, 0];
+  };
 
-    return overlay ? overlay.center : [0, 0];
+  const getLatLngBounds = (overlay: Overlay): LatLngBounds => {
+    return new LatLngBounds(
+      [overlay.bounds[0][0], overlay.bounds[0][1]],
+      [overlay.bounds[1][0], overlay.bounds[1][1]]
+    );
   };
 
   // Component
   return (
     <MapContainer
-      center={calculateCenter(path)} // this is throwing an error, but it works
+      center={calculateCenter(path)}
       zoom={15}
       scrollWheelZoom={true}
       className={styles.plot}
@@ -80,8 +90,8 @@ export default function Plot(props: Props) {
       {overlay && (
         <ImageOverlay
           url={overlay.url}
-          bounds={overlay.bounds}
-          opacity={0.8} // this is throwing an error, but it works
+          bounds={getLatLngBounds(overlay)}
+          opacity={0.8}
           zIndex={10}
         />
       )}

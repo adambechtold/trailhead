@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import ManageMap from "@/components/ManageMap";
-import DisplayMapData from "@/components/debug/DisplayMapData";
-import Console from "@/components/debug/Console";
+import DisplayMapData from "@/components/Debug/DisplayMapData";
+import Console from "@/components/Debug/Console";
 
 import styles from "@/components/MenuTray.module.css";
 

@@ -12,6 +12,7 @@ const Map = dynamic(() => import("@/components/Map"), {
 });
 
 const maps = [
+  "/images/trailmap-timberlands-precise-1.jpeg",
   "/images/trail-map-smaller.jpeg",
   "/images/bartlett-neighborhood.jpeg",
   "/images/bartlett-closeup.jpeg",
@@ -136,7 +137,7 @@ export default function App() {
     if (pin1.latitude === pin2.latitude || pin1.longitude === pin2.longitude) {
       console.log("reset and move");
       addDebugStatement(
-        "lat and long are the same; reset and move; for now, adjusting so you can see something",
+        "lat and long are the same; reset and move; for now, adjusting so you can see something"
       );
       // for debugging
       pin1.latitude = pin2.latitude + 0.000002;

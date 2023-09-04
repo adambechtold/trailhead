@@ -26,10 +26,8 @@ export default function Plot(props: Props) {
   if (!path) {
     path = [];
   }
-  console.log("path", path);
 
   function addPointToMap(point: Coordinates, index: number) {
-    console.log("point", point);
     return (
       <Marker
         position={[point.latitude, point.longitude]}

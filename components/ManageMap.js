@@ -38,6 +38,7 @@ export default function ManageMap({
 
   const handleConfirmLocation = () => {
     updateUserLocation({
+      pins,
       callback: addPin,
     });
     toggleIsSettingLocation();

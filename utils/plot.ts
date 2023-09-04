@@ -24,21 +24,22 @@ export const getLineOfCoordinates = (
   return line;
 };
 
-const initialCoordinates = [
-  {
-    latitude: 41.33673,
-    longitude: -72.68157,
-  },
-  {
-    latitude: 41.33866,
-    longitude: -72.6841,
-  },
-];
+const getExampleCoordinates1 = () =>
+  // short and stout, upwards
+  getLineOfCoordinates(
+    {
+      latitude: 41.33673,
+      longitude: -72.68157,
+    },
+    {
+      latitude: 41.33866,
+      longitude: -72.6841,
+    },
+    6
+  );
 
-export const getExampleCoordinates2 = () =>
-  getLineOfCoordinates(initialCoordinates[0], initialCoordinates[1], 6);
-
-export const getExampleCoordinates = () =>
+const getExampleCoordinates2 = () =>
+  // wide and tall, upwards
   getLineOfCoordinates(
     {
       latitude: 41.33125, //  top: 1045.019 → -y
@@ -50,3 +51,33 @@ export const getExampleCoordinates = () =>
     },
     6
   );
+
+const getExampleCoordinates3 = () =>
+  // wide and tall, downwards
+  getLineOfCoordinates(
+    {
+      latitude: 41.3473,
+      longitude: -72.67417,
+    },
+    {
+      latitude: 41.338,
+      longitude: -72.687,
+    },
+    6
+  );
+
+const getExampleCoordinates4 = () =>
+  // very narrow vertical, upwards
+  getLineOfCoordinates(
+    {
+      latitude: 41.3368, //   top: 323.424 → -y
+      longitude: -72.681, // left: 743.788 →  x
+    },
+    {
+      latitude: 41.34322, //    top: 742.867
+      longitude: -72.68266, // left: 315.211
+    },
+    6
+  );
+
+export const getExampleCoordinates = getExampleCoordinates4;

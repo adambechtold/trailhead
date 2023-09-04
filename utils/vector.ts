@@ -32,7 +32,31 @@ export function getUserPin(
   return userPin;
 }
 
-export function convertCoordinates(
+function getC2Vector(length: number, angleDegrees: number): Vector {
+  if (angleDegrees > 0 && angleDegrees <= 90) {
+    return new Vector(
+      length * Math.cos((angleDegrees * Math.PI) / 180),
+      length * Math.sin((angleDegrees * Math.PI) / 180)
+    );
+  } else if (angleDegrees > 90 && angleDegrees <= 180) {
+    return new Vector(
+      -length * Math.cos(((180 - angleDegrees) * Math.PI) / 180),
+      length * Math.sin(((180 - angleDegrees) * Math.PI) / 180)
+    );
+  } else if (angleDegrees > 180 && angleDegrees <= 270) {
+    return new Vector(
+      -length * Math.sin(((angleDegrees - 180) * Math.PI) / 180),
+      -length * Math.cos(((angleDegrees - 180) * Math.PI) / 180)
+    );
+  } else {
+    return new Vector(
+      length * Math.sin(((360 - angleDegrees) * Math.PI) / 180),
+      -length * Math.cos(((360 - angleDegrees) * Math.PI) / 180)
+    );
+  }
+}
+
+export function convertCoordinates2( //this doesn't seem to work :/
   A_C1: Point,
   A_C2: Point,
   B_C1: Point,
@@ -49,14 +73,36 @@ export function convertCoordinates(
 
   const length_AtoNew_C2 = length_AtoNew_C1 * (length_AB_C2 / length_AB_C1);
 
-  const vector_AtoNew_C2 = new Vector(
-    length_AtoNew_C2 * Math.cos(vector_AtoNew_C1.angleRadians),
-    length_AtoNew_C2 * Math.sin(vector_AtoNew_C1.angleRadians)
+  const vector_AtoNew_C2 = getC2Vector(
+    length_AtoNew_C2,
+    vector_AtoNew_C1.angleDegrees
   );
 
   const new_C2: Point = {
     x: A_C2.x + vector_AtoNew_C2.x,
     y: A_C2.y + vector_AtoNew_C2.y,
+  };
+
+  return new_C2;
+}
+
+export function convertCoordinates( // this seems to work, assuming that both coordinates systems are oriented in the same direction
+  A_C1: Point,
+  A_C2: Point,
+  B_C1: Point,
+  B_C2: Point,
+  new_C1: Point
+): Point {
+  const vector_AB_C1 = new Vector(B_C1.x - A_C1.x, B_C1.y - A_C1.y);
+  const vector_AB_C2 = new Vector(B_C2.x - A_C2.x, B_C2.y - A_C2.y);
+  const vector_AtoNew_C1 = new Vector(new_C1.x - A_C1.x, new_C1.y - A_C1.y);
+
+  const xScaler = vector_AB_C2.x / vector_AB_C1.x;
+  const yScaler = vector_AB_C2.y / vector_AB_C1.y;
+
+  const new_C2: Point = {
+    x: A_C2.x + vector_AtoNew_C1.x * xScaler,
+    y: A_C2.y + vector_AtoNew_C1.y * yScaler,
   };
 
   return new_C2;

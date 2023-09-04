@@ -35,5 +35,18 @@ const initialCoordinates = [
   },
 ];
 
-export const getExampleCoordinates = () =>
+export const getExampleCoordinates2 = () =>
   getLineOfCoordinates(initialCoordinates[0], initialCoordinates[1], 6);
+
+export const getExampleCoordinates = () =>
+  getLineOfCoordinates(
+    {
+      latitude: 41.33125, //  top: 1045.019 → -y
+      longitude: -72.6696, // left: 895.709 →  x
+    },
+    {
+      latitude: 41.348, //     top: 290.429
+      longitude: -72.6864, // left: 336.269
+    },
+    6
+  );

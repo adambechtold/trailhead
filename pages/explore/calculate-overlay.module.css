@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+}
+
+.plot {
+  width: 45vw;
+  height: 45vw;
+}

@@ -6,15 +6,20 @@
 
 import dynamic from "next/dynamic";
 import { InterpolateMap } from "@/components/InterpolateMap";
+import { Pin } from "@/types/Vector";
+import { configurations } from "./overlay.configurations";
 
 const InterpolateMapDynamic = dynamic(() => Promise.resolve(InterpolateMap), {
   ssr: false,
 });
 
 export default function ExploreInterpolatePosition() {
+  const start: Pin = configurations[0].start;
+  const end: Pin = configurations[0].end;
+
   return (
     <div>
-      <InterpolateMap />
+      <InterpolateMap start={start} end={end} />
     </div>
   );
 }

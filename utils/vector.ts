@@ -86,7 +86,9 @@ export function convertCoordinates2( //this doesn't seem to work :/
   return new_C2;
 }
 
-export function convertCoordinates( // this seems to work, assuming that both coordinates systems are oriented in the same direction
+export function convertCoordinates(
+  // this seems to work, assuming that both coordinates systems are
+  // oriented in the same direction
   A_C1: Point,
   A_C2: Point,
   B_C1: Point,

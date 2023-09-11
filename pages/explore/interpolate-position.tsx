@@ -6,20 +6,68 @@
 
 import dynamic from "next/dynamic";
 import { InterpolateMap } from "@/components/InterpolateMap";
-import { Pin } from "@/types/Vector";
+import { Pin, Coordinates } from "@/types/Vector";
 import { configurations } from "./overlay.configurations";
+import { useEffect, useState } from "react";
 
 const InterpolateMapDynamic = dynamic(() => Promise.resolve(InterpolateMap), {
   ssr: false,
 });
 
 export default function ExploreInterpolatePosition() {
-  const start: Pin = configurations[0].start;
-  const end: Pin = configurations[0].end;
+  const configuration = configurations[0];
+  const start: Pin = configuration.start;
+  const end: Pin = configuration.end;
+
+  const [percentMovementLongitude, setPercentMovementLongitude] = useState(50);
+  const [percentMovementLatitude, setPercentMovementLatitude] = useState(50);
+  const [isIncrementing, setIsIncrementing] = useState(true);
+
+  // this isn't working, but that's fine
+  function updateMovement() {
+    console.log(percentMovementLatitude, { isIncrementing });
+    if (percentMovementLatitude > 99 && isIncrementing) {
+      setIsIncrementing((prev) => !prev);
+    } else if (percentMovementLatitude < 1 && !isIncrementing) {
+      setIsIncrementing((prev) => !prev);
+    }
+
+    setPercentMovementLongitude((prev) => {
+      return isIncrementing ? prev + 1 : prev - 1;
+    });
+    setPercentMovementLatitude((prev) => {
+      return isIncrementing ? prev + 1 : prev - 1;
+    });
+  }
+
+  useEffect(() => {
+    const intervalID = setInterval(() => {
+      updateMovement();
+    }, 100);
+
+    return () => clearInterval(intervalID);
+  }, [isIncrementing]);
+
+  const differenceLongitude =
+    end.coordinates.longitude - start.coordinates.longitude;
+  const differenceLatitude =
+    end.coordinates.latitude - start.coordinates.latitude;
+  const movementLongitude =
+    differenceLongitude * (percentMovementLongitude / 100);
+  const movementLatitude = differenceLatitude * (percentMovementLatitude / 100);
+
+  const currentUserLocation = {
+    longitude: start.coordinates.longitude + movementLongitude,
+    latitude: start.coordinates.latitude + movementLatitude,
+  };
 
   return (
     <div>
-      <InterpolateMap start={start} end={end} />
+      <InterpolateMap
+        start={start}
+        end={end}
+        userLocation={currentUserLocation}
+      />
     </div>
   );
 }

@@ -49,16 +49,16 @@ export default function ExploreInterpolatePosition() {
   }, [isIncrementing]);
 
   const differenceLongitude =
-    end.coordinates.longitude - start.coordinates.longitude;
+    end.location.coordinates.longitude - start.location.coordinates.longitude;
   const differenceLatitude =
-    end.coordinates.latitude - start.coordinates.latitude;
+    end.location.coordinates.latitude - start.location.coordinates.latitude;
   const movementLongitude =
     differenceLongitude * (percentMovementLongitude / 100);
   const movementLatitude = differenceLatitude * (percentMovementLatitude / 100);
 
   const currentUserLocation = {
-    longitude: start.coordinates.longitude + movementLongitude,
-    latitude: start.coordinates.latitude + movementLatitude,
+    longitude: start.location.coordinates.longitude + movementLongitude,
+    latitude: start.location.coordinates.latitude + movementLatitude,
   };
 
   return (

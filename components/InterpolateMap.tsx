@@ -49,12 +49,12 @@ export function InterpolateMap(props: Props) {
 
 function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
   const startCoordinatesPoint: Point = {
-    x: start.coordinates.longitude,
-    y: start.coordinates.latitude,
+    x: start.location.coordinates.longitude,
+    y: start.location.coordinates.latitude,
   };
   const endCoordinatesPoint: Point = {
-    x: end.coordinates.longitude,
-    y: end.coordinates.latitude,
+    x: end.location.coordinates.longitude,
+    y: end.location.coordinates.latitude,
   };
   const userLocationCoordinatesPoint: Point = {
     x: userLocation.longitude,
@@ -74,9 +74,11 @@ function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
       x,
       y,
     },
+    location: {
     coordinates: {
       longitude: userLocation.longitude,
       latitude: userLocation.latitude,
+      },
     },
   };
 

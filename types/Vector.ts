@@ -14,7 +14,7 @@ export type Point = {
 };
 
 export type Pin = {
-  mapPoint: Point;
+  mapPoint: Point; // x = left, y = -top TODO: Consider making this a Class
   location: Location;
   index?: number;
 };

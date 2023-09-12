@@ -14,8 +14,6 @@ export default function CurrentMap(props: Props) {
   const { mapURL } = useMapContext();
   const { start, end, userLocation } = props;
 
-  console.log("CurrentMap", { start, end, userLocation, mapURL });
-
   return (
     <InterpolateMap
       start={start}

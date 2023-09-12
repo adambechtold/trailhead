@@ -1,4 +1,10 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useReducer } from "react";
+import {
+  mapContextReducer,
+  INITIAL_STATE,
+  MAPS,
+  MapContextState,
+} from "./mapContextReducer";
 
 type ThemeContextProviderProps = {
   children: React.ReactNode;
@@ -9,28 +15,24 @@ type MapContext = {
   nextMap: () => void;
 };
 
-const MAPS = [
-  "/images/trailmap-timberlands-precise-1.jpeg",
-  "/images/trail-map-smaller.jpeg",
-  "/images/bartlett-neighborhood.jpeg",
-  "/images/bartlett-closeup.jpeg",
-];
-
 export const MapContext = createContext<MapContext | null>(null);
 
 export default function MapContextProvider({
   children,
 }: ThemeContextProviderProps) {
-  const [mapIndex, setMapIndex] = useState(0);
+  const [mapContextState, mapContextDispatch] = useReducer(
+    mapContextReducer,
+    INITIAL_STATE
+  );
 
   const nextMap = () => {
-    setMapIndex((mapIndex + 1) % MAPS.length);
+    mapContextDispatch({ type: "NEXT_MAP" });
   };
 
-  console.log("MapContextProvider", { mapIndex, mapURL: MAPS[mapIndex] });
+  const mapURL = MAPS[mapContextState.mapIndex];
 
   return (
-    <MapContext.Provider value={{ mapURL: MAPS[mapIndex], nextMap }}>
+    <MapContext.Provider value={{ mapURL, nextMap }}>
       {children}
     </MapContext.Provider>
   );

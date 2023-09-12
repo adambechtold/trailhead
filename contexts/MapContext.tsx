@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useLayoutEffect } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import { Pin } from "@/types/Vector";
 import { mapContextReducer, INITIAL_STATE, MAPS } from "./mapContextReducer";
 import { MapPosition } from "@/types/MapPosition";
@@ -30,7 +30,7 @@ export default function MapContextProvider({
   );
 
   // PINS FROM STORAGE (search for this in other files)
-  useLayoutEffect(() => {
+  useEffect(() => {
     const startFromStorage = localStorage.getItem("start");
     const endFromStorage = localStorage.getItem("end");
 

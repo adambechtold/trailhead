@@ -9,7 +9,13 @@ export type MapContextState = {
 };
 
 type Action = {
-  type: "NEXT_MAP" | "ADD_PIN" | "RESET_PINS" | "SET_MAP_POSITION";
+  type:
+    | "NEXT_MAP"
+    | "ADD_PIN"
+    | "RESET_PINS"
+    | "SET_MAP_POSITION"
+    | "SET_START"
+    | "SET_END";
   payload?: any;
 };
 
@@ -38,10 +44,24 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
       };
     case "ADD_PIN":
       return addPin(state, action.payload);
+    case "SET_START":
+      savePin("start", action.payload);
+      return {
+        ...state,
+        start: action.payload,
+      };
+    case "SET_END":
+      savePin("end", action.payload);
+      return {
+        ...state,
+        end: action.payload,
+      };
     case "RESET_PINS":
       const newState = { ...state };
       delete newState.start;
       delete newState.end;
+      localStorage.removeItem("start");
+      localStorage.removeItem("end");
       return newState;
     case "SET_MAP_POSITION":
       return {
@@ -55,11 +75,13 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
 
 const addPin = (state: MapContextState, pin: Pin): MapContextState => {
   if (!state.start) {
+    savePin("start", pin);
     return {
       ...state,
       start: pin,
     };
   } else if (!state.end) {
+    savePin("end", pin);
     return {
       ...state,
       end: pin,
@@ -69,10 +91,6 @@ const addPin = (state: MapContextState, pin: Pin): MapContextState => {
   }
 };
 
-// PINS FROM STORAGE
-//  const resetPins = () => {
-//    setPins([]);
-//    localStorage.setItem("pins", JSON.stringify([]));
-//  };
-// Put into storage
-// localStorage.setItem("pins", JSON.stringify(newPins));
+const savePin = (name: string, pin: Pin) => {
+  localStorage.setItem(name, JSON.stringify(pin));
+};

@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useLayoutEffect } from "react";
 import { Pin } from "@/types/Vector";
 import { mapContextReducer, INITIAL_STATE, MAPS } from "./mapContextReducer";
 import { MapPosition } from "@/types/MapPosition";
@@ -30,13 +30,19 @@ export default function MapContextProvider({
   );
 
   // PINS FROM STORAGE (search for this in other files)
-  // TODO: Initialize pins from local storage
-  // useEffect(() => {
-  //   const pinsFromStorage = JSON.parse(localStorage.getItem("pins"));
-  //   if (pinsFromStorage) {
-  //     setPins(pinsFromStorage);
-  //   }
-  // }, []);
+  useLayoutEffect(() => {
+    const startFromStorage = localStorage.getItem("start");
+    const endFromStorage = localStorage.getItem("end");
+
+    if (startFromStorage) {
+      const start = JSON.parse(startFromStorage);
+      mapContextDispatch({ type: "SET_START", payload: start });
+    }
+    if (endFromStorage) {
+      const end = JSON.parse(endFromStorage);
+      mapContextDispatch({ type: "SET_END", payload: end });
+    }
+  }, []);
 
   const mapURL = MAPS[mapContextState.mapIndex];
   const { start, end, mapPosition } = mapContextState;

@@ -36,7 +36,6 @@ export default function App() {
     ]);
   };
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
-  const [mapFunctionParameters, setMapFunctionParameters] = useState(null);
 
   // Update Pins
   useEffect(() => {
@@ -284,7 +283,6 @@ export default function App() {
         locationAccuracy={locationAccuracy}
         showDebuggingContent={showDebuggingContent}
         setShowDebuggingContent={setShowDebuggingContent}
-        mapFunctionParameters={mapFunctionParameters}
         debugStatements={debugStatements}
       />
     </>

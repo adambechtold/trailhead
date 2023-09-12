@@ -20,7 +20,6 @@ export default function MenuTray({
   locationAccuracy,
   showDebuggingContent,
   setShowDebuggingContent,
-  mapFunctionParameters,
   debugStatements,
 }) {
   const [showConsole, setShowConsole] = useState(false);
@@ -57,11 +56,7 @@ export default function MenuTray({
       {showDebuggingContent && (
         <div className={styles.debugContainer}>
           {!showConsole && (
-            <DisplayMapData
-              pins={pins}
-              userLocation={userLocation}
-              mapFunctionParameters={mapFunctionParameters}
-            />
+            <DisplayMapData pins={pins} userLocation={userLocation} />
           )}
           {showConsole && <Console debugStatements={debugStatements} />}
           {showDebuggingContent && (

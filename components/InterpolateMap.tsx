@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import { Pin, Coordinates, Point } from "@/types/Vector";
+import { Pin, Location, Point } from "@/types/Vector";
 import { convertCoordinates } from "@/utils/vector";
 import styles from "@/components/Map.module.css";
 
@@ -10,16 +10,17 @@ import styles from "@/components/Map.module.css";
 //  - UserPath
 
 type Props = {
-  start: Pin;
-  end: Pin;
-  userLocation?: Coordinates;
+  start?: Pin;
+  end?: Pin;
+  userLocation?: Location;
+  mapURL: string;
 };
 
-const MAP_URL = "/images/trailmap-timberlands-precise-1.jpeg";
-
 export function InterpolateMap(props: Props) {
-  const { start, end, userLocation } = props;
+  const { start, end, userLocation, mapURL } = props;
   const mapReference = useRef(null);
+
+  const canFindUserLocation = !!start && !!end && !!userLocation;
 
   return (
     <TransformWrapper
@@ -31,15 +32,15 @@ export function InterpolateMap(props: Props) {
       {() => (
         <>
           <TransformComponent>
-            <PinComponent pin={start} type={"PIN"} />
-            <PinComponent pin={end} type={"PIN"} />
-            {userLocation && (
+            {start && <PinComponent pin={start} type={"PIN"} />}
+            {end && <PinComponent pin={end} type={"PIN"} />}
+            {canFindUserLocation && (
               <PinComponent
                 pin={getUserPin(start, end, userLocation)}
                 type={"USER"}
               />
             )}
-            <img src={MAP_URL} alt="Trail Map" ref={mapReference} />
+            <img src={mapURL} alt="Trail Map" ref={mapReference} />
           </TransformComponent>
         </>
       )}
@@ -47,7 +48,7 @@ export function InterpolateMap(props: Props) {
   );
 }
 
-function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
+function getUserPin(start: Pin, end: Pin, userLocation: Location) {
   const startCoordinatesPoint: Point = {
     x: start.location.coordinates.longitude,
     y: start.location.coordinates.latitude,
@@ -57,8 +58,8 @@ function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
     y: end.location.coordinates.latitude,
   };
   const userLocationCoordinatesPoint: Point = {
-    x: userLocation.longitude,
-    y: userLocation.latitude,
+    x: userLocation.coordinates.longitude,
+    y: userLocation.coordinates.latitude,
   };
 
   const { x, y } = convertCoordinates(
@@ -75,9 +76,9 @@ function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
       y,
     },
     location: {
-    coordinates: {
-      longitude: userLocation.longitude,
-      latitude: userLocation.latitude,
+      coordinates: {
+        longitude: userLocation.coordinates.longitude,
+        latitude: userLocation.coordinates.latitude,
       },
     },
   };

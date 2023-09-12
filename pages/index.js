@@ -1,22 +1,16 @@
 import { useState, useEffect } from "react";
 
 import Head from "next/head";
+import MapContextProvider from "@/contexts/MapContext";
 import dynamic from "next/dynamic";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
 import Toolbar from "@/components/Toolbar";
 
-const Map = dynamic(() => import("@/components/Map"), {
+const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
   ssr: false,
 });
-
-const maps = [
-  "/images/trailmap-timberlands-precise-1.jpeg",
-  "/images/trail-map-smaller.jpeg",
-  "/images/bartlett-neighborhood.jpeg",
-  "/images/bartlett-closeup.jpeg",
-];
 
 export default function App() {
   const [isSettingLocation, setIsSettingLocation] = useState(false);
@@ -27,7 +21,6 @@ export default function App() {
   const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
   const [locationAccuracy, setLocationAccuracy] = useState(100); // in meters
   const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
-  const [mapFile, setMapFile] = useState(maps[0]);
 
   // Update Pins
   useEffect(() => {
@@ -40,17 +33,6 @@ export default function App() {
   const resetPins = () => {
     setPins([]);
     localStorage.setItem("pins", JSON.stringify([]));
-  };
-
-  // Next Map
-  const changeToNextMap = () => {
-    const index = maps.indexOf(mapFile);
-    if (index === maps.length - 1) {
-      setMapFile(maps[0]);
-    } else {
-      setMapFile(maps[index + 1]);
-    }
-    resetCurrentMap();
   };
 
   const resetCurrentMap = () => {
@@ -73,6 +55,8 @@ export default function App() {
   }
 
   async function updateUserLocation({ callback, pins }) {
+    // TODO: let's move this into a Context object
+    // Position: This should only get the current position in long/lat
     setIsUpdatingLocation(true);
     const numberOfRetries = 10;
 
@@ -120,35 +104,37 @@ export default function App() {
         <title>Trailhead: Always Find Your Way</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Toolbar
-        changeToNextMap={changeToNextMap}
-        pins={pins}
-        resetCurrentMap={resetCurrentMap}
-      />
-      {isSettingLocation && (
-        <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />
-      )}
-      <Map
-        mapFile={mapFile}
-        pins={pins}
-        setMapPosition={setMapPosition}
-        mapPosition={mapPosition}
-        userLocation={userLocation}
-      />
-      <MenuTray
-        isSettingLocation={isSettingLocation}
-        setIsSettingLocation={setIsSettingLocation}
-        pins={pins}
-        setPins={setPins}
-        crosshairsPosition={crosshairsPosition}
-        mapPosition={mapPosition}
-        userLocation={userLocation}
-        updateUserLocation={updateUserLocation}
-        isUpdatingLocation={isUpdatingLocation}
-        updatingLocationFailed={updatingLocationFailed}
-        setUpdatingLocationFailed={setUpdatingLocationFailed}
-        locationAccuracy={locationAccuracy}
-      />
+      <MapContextProvider>
+        <Toolbar pins={pins} resetCurrentMap={resetCurrentMap} />
+        {isSettingLocation && (
+          <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />
+        )}
+        {/* <Map
+          mapFile={mapFile}
+          pins={pins}
+          setMapPosition={setMapPosition}
+          mapPosition={mapPosition}
+          userLocation={userLocation}
+        /> */}
+        <CurrentMap
+          start={pins.length > 0 ? pins[0] : null}
+          end={pins.length > 1 ? pins[1] : null}
+        />
+        <MenuTray
+          isSettingLocation={isSettingLocation}
+          setIsSettingLocation={setIsSettingLocation}
+          pins={pins}
+          setPins={setPins}
+          crosshairsPosition={crosshairsPosition}
+          mapPosition={mapPosition}
+          userLocation={userLocation}
+          updateUserLocation={updateUserLocation}
+          isUpdatingLocation={isUpdatingLocation}
+          updatingLocationFailed={updatingLocationFailed}
+          setUpdatingLocationFailed={setUpdatingLocationFailed}
+          locationAccuracy={locationAccuracy}
+        />
+      </MapContextProvider>
     </>
   );
 }

@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import ManageMap from "@/components/ManageMap";
 import DisplayMapData from "@/components/Debug/DisplayMapData";
-import Console from "@/components/Debug/Console";
 
 import styles from "@/components/MenuTray.module.css";
 
@@ -18,14 +17,8 @@ export default function MenuTray({
   isUpdatingLocation,
   updatingLocationFailed,
   locationAccuracy,
-  showDebuggingContent,
-  setShowDebuggingContent,
-  debugStatements,
 }) {
-  const [showConsole, setShowConsole] = useState(false);
-  const toggleConsole = () => {
-    setShowConsole(!showConsole);
-  };
+  const [showDebuggingContent, setShowDebuggingContent] = useState(false);
 
   return (
     <div
@@ -55,16 +48,7 @@ export default function MenuTray({
       )}
       {showDebuggingContent && (
         <div className={styles.debugContainer}>
-          {!showConsole && (
-            <DisplayMapData pins={pins} userLocation={userLocation} />
-          )}
-          {showConsole && <Console debugStatements={debugStatements} />}
-          {showDebuggingContent && (
-            <button onClick={toggleConsole} className={styles.consoleButton}>
-              {!showConsole && "Show Console"}
-              {showConsole && "Hide Console"}
-            </button>
-          )}
+          <DisplayMapData pins={pins} userLocation={userLocation} />
         </div>
       )}
     </div>

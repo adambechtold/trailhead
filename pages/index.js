@@ -28,14 +28,6 @@ export default function App() {
   const [locationAccuracy, setLocationAccuracy] = useState(100); // in meters
   const [updatingLocationFailed, setUpdatingLocationFailed] = useState(false);
   const [mapFile, setMapFile] = useState(maps[0]);
-  const [debugStatements, setDebugStatements] = useState([]); // [{ message: '', time: new Date() }]
-  const addDebugStatement = (message) => {
-    setDebugStatements((debugStatements) => [
-      ...debugStatements,
-      { message, time: new Date() },
-    ]);
-  };
-  const [showDebuggingContent, setShowDebuggingContent] = useState(false);
 
   // Update Pins
   useEffect(() => {
@@ -97,11 +89,11 @@ export default function App() {
       if (position.coords.accuracy > miniumumAccuracy) {
         // accuracy is too low (must be updated to trial on desktop)
         const message = `Retry Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
-        addDebugStatement(message);
+        console.log(message);
         await delay(1300);
       } else {
         const message = `Use Accuracy. \t\t\tRecorded accuracy: ${position.coords.accuracy} > \t\t\t Minimum Accuracy: ${miniumumAccuracy}`;
-        addDebugStatement(message);
+        console.log(message);
         setUserLocation({
           top,
           left,
@@ -281,9 +273,6 @@ export default function App() {
         updatingLocationFailed={updatingLocationFailed}
         setUpdatingLocationFailed={setUpdatingLocationFailed}
         locationAccuracy={locationAccuracy}
-        showDebuggingContent={showDebuggingContent}
-        setShowDebuggingContent={setShowDebuggingContent}
-        debugStatements={debugStatements}
       />
     </>
   );

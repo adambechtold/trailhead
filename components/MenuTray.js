@@ -8,10 +8,7 @@ import styles from "@/components/MenuTray.module.css";
 export default function MenuTray({
   isSettingLocation,
   setIsSettingLocation,
-  pins,
-  setPins,
   crosshairsPosition,
-  mapPosition,
   userLocation,
   updateUserLocation,
   isUpdatingLocation,
@@ -36,10 +33,7 @@ export default function MenuTray({
         <ManageMap
           isSettingLocation={isSettingLocation}
           setIsSettingLocation={setIsSettingLocation}
-          pins={pins}
-          setPins={setPins}
           crosshairsPosition={crosshairsPosition}
-          mapPosition={mapPosition}
           locationAccuracy={locationAccuracy}
           updateUserLocation={updateUserLocation}
           isUpdatingLocation={isUpdatingLocation}

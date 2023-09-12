@@ -1,7 +1,13 @@
 import React, { useRef } from "react";
+import ReactDOM from "react-dom";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+
+import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
+
 import { Pin, Location, Point } from "@/types/Vector";
 import { convertCoordinates } from "@/utils/vector";
+import { MapPosition } from "@/types/MapPosition";
+
 import styles from "@/components/Map.module.css";
 
 // INPUT
@@ -14,24 +20,49 @@ type Props = {
   end?: Pin;
   userLocation?: Location;
   mapURL: string;
+  scale?: number;
+  onMapStateUpdate?: (mapPosition: MapPosition) => void;
 };
 
 export function InterpolateMap(props: Props) {
-  const { start, end, userLocation, mapURL } = props;
-  const mapReference = useRef(null);
+  const { start, end, userLocation, mapURL, scale, onMapStateUpdate } = props;
+  const mapReference = useRef<HTMLImageElement>(null);
 
   const canFindUserLocation = !!start && !!end && !!userLocation;
+
+  const handleMapStateUpdate = ({ scale }: { scale: number }) => {
+    if (!mapReference.current) return;
+
+    const mapNode = ReactDOM.findDOMNode(mapReference.current);
+
+    if (!mapNode) return;
+    type Tmp = {
+      // it's not clear why Typescript isn't letting me use getBoundingClientRect() directly
+      left: number;
+      top: number;
+    };
+    const mapRect = mapNode.getBoundingClientRect() as Tmp;
+
+    if (onMapStateUpdate) {
+      onMapStateUpdate({
+        scale,
+        x: mapRect.left,
+        y: mapRect.top,
+      });
+    }
+  };
 
   return (
     <TransformWrapper
       limitToBounds={false}
-      initialScale={0.4}
+      initialScale={scale || 0.4}
       minScale={0.3}
       maxScale={20}
     >
       {() => (
         <>
           <TransformComponent>
+            <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
             {start && <PinComponent pin={start} type={"PIN"} />}
             {end && <PinComponent pin={end} type={"PIN"} />}
             {canFindUserLocation && (

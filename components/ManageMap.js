@@ -1,51 +1,54 @@
 import styles from "@/components/ManageMap.module.css";
 
+import { useMapContext } from "@/contexts/MapContext";
+
 export default function ManageMap({
   isSettingLocation,
   setIsSettingLocation,
-  pins,
-  setPins,
   crosshairsPosition,
-  mapPosition,
   locationAccuracy,
   updateUserLocation,
   isUpdatingLocation,
   updatingLocationFailed,
 }) {
+  const { start, end, addPin, mapPosition } = useMapContext();
+
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
   };
 
-  const addPin = ({ latitude, longitude, accuracy }) => {
+  const handleAddPin = ({ coordinates, accuracy }) => {
+    const { latitude, longitude } = coordinates;
     const { scale } = mapPosition;
+
     const newPin = {
-      index: pins.length,
-
-      // Position on the user-provided picture
-      left: (crosshairsPosition.x - mapPosition.x) / scale,
-      top: (crosshairsPosition.y - mapPosition.y) / scale,
-
-      // Position in the real world
-      latitude,
-      longitude,
-      accuracy, // in meters
+      mapPoint: {
+        x: (crosshairsPosition.x - mapPosition.x) / scale,
+        y: -(crosshairsPosition.y - mapPosition.y) / scale,
+      },
+      location: {
+        coordinates: {
+          latitude,
+          longitude,
+        },
+        accuracy,
+      },
     };
-    const newPins = [...pins, newPin];
 
-    setPins(newPins);
-    localStorage.setItem("pins", JSON.stringify(newPins));
+    addPin(newPin);
   };
 
   const handleConfirmLocation = () => {
     updateUserLocation({
-      pins,
-      callback: addPin,
+      callback: handleAddPin,
     });
     toggleIsSettingLocation();
   };
 
   const handleUpdateLocation = () => {
-    updateUserLocation({ pins });
+    updateUserLocation({
+      callback: (location) => {}, // remove this callback
+    });
   };
 
   const showGPSStatusBar = () => {
@@ -90,6 +93,17 @@ export default function ManageMap({
     );
   };
 
+  const getLocationButtonText = () => {
+    if (!start) return "Set Location";
+    if (!end) return "Set Another Location";
+    return;
+  };
+
+  const displaySetLocationButton = () => {
+    if (isSettingLocation) return false;
+    if (!start || !end) return true;
+  };
+
   return (
     <>
       {showGPSStatusBar()}
@@ -106,9 +120,9 @@ export default function ManageMap({
             </button>
           )}
 
-          {!isSettingLocation && (
+          {displaySetLocationButton() && (
             <button className={styles.button} onClick={toggleIsSettingLocation}>
-              {!pins.length ? "Set Location" : "Set Another Location"}
+              {getLocationButtonText()}
             </button>
           )}
           <button className={styles.button} onClick={handleUpdateLocation}>

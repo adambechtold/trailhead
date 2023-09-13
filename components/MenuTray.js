@@ -9,11 +9,6 @@ export default function MenuTray({
   isSettingLocation,
   setIsSettingLocation,
   crosshairsPosition,
-  userLocation,
-  updateUserLocation,
-  isUpdatingLocation,
-  updatingLocationFailed,
-  locationAccuracy,
 }) {
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
 
@@ -34,15 +29,11 @@ export default function MenuTray({
           isSettingLocation={isSettingLocation}
           setIsSettingLocation={setIsSettingLocation}
           crosshairsPosition={crosshairsPosition}
-          locationAccuracy={locationAccuracy}
-          updateUserLocation={updateUserLocation}
-          isUpdatingLocation={isUpdatingLocation}
-          updatingLocationFailed={updatingLocationFailed}
         />
       )}
       {showDebuggingContent && (
         <div className={styles.debugContainer}>
-          <DisplayMapData pins={pins} userLocation={userLocation} />
+          <DisplayMapData />
         </div>
       )}
     </div>

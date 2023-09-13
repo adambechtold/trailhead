@@ -1,17 +1,15 @@
 import styles from "@/components/ManageMap.module.css";
 
 import { useMapContext } from "@/contexts/MapContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 export default function ManageMap({
   isSettingLocation,
   setIsSettingLocation,
   crosshairsPosition,
-  locationAccuracy,
-  updateUserLocation,
-  isUpdatingLocation,
-  updatingLocationFailed,
 }) {
   const { start, end, addPin, mapPosition } = useMapContext();
+  const { updateStatus, updateUserLocation } = useUserLocationContext();
 
   const toggleIsSettingLocation = () => {
     setIsSettingLocation(!isSettingLocation);
@@ -38,26 +36,29 @@ export default function ManageMap({
     addPin(newPin);
   };
 
-  const handleConfirmLocation = () => {
-    updateUserLocation({
-      callback: handleAddPin,
-    });
+  const handleConfirmLocation = async () => {
+    const result = await updateUserLocation();
+    if (result.updateStatus.success) {
+      const location = result.userLocation;
+      handleAddPin(location);
+    }
     toggleIsSettingLocation();
   };
 
-  const handleUpdateLocation = () => {
-    updateUserLocation({
-      callback: (location) => {}, // remove this callback
-    });
+  const handleUpdateLocation = async () => {
+    await updateUserLocation();
   };
 
-  const showGPSStatusBar = () => {
-    const getLoadingBarClass = () => {
-      if (locationAccuracy < 5) {
+  const showGPSStatusBar = (updateStatus) => {
+    const { isUpdating, pendingLocation, error } = updateStatus;
+    const accuracy = pendingLocation?.accuracy || 100;
+
+    const getLoadingBarClass = (accuracy) => {
+      if (accuracy < 5) {
         return styles.loadingBarGreen;
-      } else if (locationAccuracy < 10) {
+      } else if (accuracy < 10) {
         return styles.loadingBarYellow;
-      } else if (locationAccuracy < 20) {
+      } else if (accuracy < 20) {
         return styles.loadingBarOrange;
       } else {
         return styles.loadingBarRed;
@@ -65,17 +66,21 @@ export default function ManageMap({
     };
 
     const loadingZoneContent = () => {
-      if (isUpdatingLocation) {
+      if (isUpdating) {
         return (
           <>
             <>🤳</>
             <div className={styles.loadingBarBackground}>
-              <div className={`${styles.loadingBar} ${getLoadingBarClass()}`} />
+              <div
+                className={`${styles.loadingBar} ${getLoadingBarClass(
+                  accuracy
+                )}`}
+              />
             </div>
             <>🛰</>
           </>
         );
-      } else if (updatingLocationFailed) {
+      } else if (error) {
         return (
           <div className={styles.failureBar}>Poor GPS signal. Try again.</div>
         );
@@ -88,7 +93,7 @@ export default function ManageMap({
         <div className={styles.visualizeTransmissionContainer}>
           {loadingZoneContent()}
         </div>
-        {isUpdatingLocation ? locationAccuracy.toFixed(1) + "m" : null}
+        {isUpdating ? accuracy.toFixed(1) + "m" : null}
       </div>
     );
   };
@@ -106,7 +111,7 @@ export default function ManageMap({
 
   return (
     <>
-      {showGPSStatusBar()}
+      {showGPSStatusBar(updateStatus)}
       <div className={styles.container}>
         <div className={styles.manageLocation}>
           {isSettingLocation && (

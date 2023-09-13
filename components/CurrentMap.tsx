@@ -1,17 +1,13 @@
 // this components job is just to pass the state into one of the stateless options
 // Consider renaming it to MapDisplay or Map
-import { Location } from "@/types/Vector";
 import { useMapContext } from "@/contexts/MapContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import { InterpolateMap } from "@/components/InterpolateMap";
 import { MapPosition } from "@/types/MapPosition";
 
-type Props = {
-  userLocation?: Location;
-};
-
-export default function CurrentMap(props: Props) {
+export default function CurrentMap() {
   const { mapURL, start, end, mapPosition, setMapPosition } = useMapContext();
-  const { userLocation } = props;
+  const { userLocation } = useUserLocationContext();
 
   const scale = mapPosition?.scale || 0.4;
 

@@ -6,7 +6,7 @@
 
 import { InterpolateMap } from "@/components/InterpolateMap";
 import { Pin } from "@/types/Vector";
-import { configurations } from "./overlay.configurations";
+import { configurations } from "../../types/overlay.configurations";
 import { useEffect, useState } from "react";
 
 export default function ExploreInterpolatePosition() {

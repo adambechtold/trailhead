@@ -4,7 +4,7 @@ import { Overlay } from "@/types/Overlay";
 import { Pin, Point, Coordinates } from "@/types/Vector";
 import { convertCoordinates } from "@/utils/vector";
 
-import { configurations, Configuration } from "./overlay.configurations";
+import { configurations, Configuration } from "@/types/overlay.configurations";
 
 const Plot = dynamic(() => import("@/components/Plot"), {
   ssr: false,

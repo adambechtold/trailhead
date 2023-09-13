@@ -31,17 +31,14 @@ export function InterpolateMap(props: Props) {
   const canFindUserLocation = !!start && !!end && !!userLocation;
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
+    // every time to map updates, let's track that.
+    // This is useful when we need to create pins
     if (!mapReference.current) return;
 
     const mapNode = ReactDOM.findDOMNode(mapReference.current);
 
-    if (!mapNode) return;
-    type Tmp = {
-      // it's not clear why Typescript isn't letting me use getBoundingClientRect() directly
-      left: number;
-      top: number;
-    };
-    const mapRect = mapNode.getBoundingClientRect() as Tmp;
+    if (!mapNode || !(mapNode instanceof HTMLElement)) return;
+    const mapRect = mapNode.getBoundingClientRect();
 
     if (onMapStateUpdate) {
       onMapStateUpdate({

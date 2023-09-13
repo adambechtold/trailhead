@@ -1,10 +1,27 @@
 import styles from "@/components/Toolbar.module.css";
 
-export default function Toolbar({ changeToNextMap, pins, resetCurrentMap }) {
+import { useMapContext } from "@/contexts/MapContext";
+import { useCreatePinContext } from "@/contexts/CreatePinContext";
+
+export default function Toolbar() {
+  const { nextMap, start, end, resetPins } = useMapContext();
+  const { endCreatePin } = useCreatePinContext();
+
+  // Next Map
+  const changeToNextMap = () => {
+    nextMap();
+    endCreatePin();
+  };
+
+  const handleMapReset = () => {
+    resetPins();
+    endCreatePin();
+  };
+
   return (
     <div className={styles.toolbarContainer}>
-      {pins.length > 0 ? (
-        <button onClick={resetCurrentMap}>Reset Pins</button>
+      {start || end ? (
+        <button onClick={handleMapReset}>Reset Pins</button>
       ) : (
         <div></div>
       )}

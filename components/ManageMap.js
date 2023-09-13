@@ -1,60 +1,74 @@
 import styles from "@/components/ManageMap.module.css";
 
-export default function ManageMap({
-  isSettingLocation,
-  setIsSettingLocation,
-  pins,
-  setPins,
-  crosshairsPosition,
-  mapPosition,
-  locationAccuracy,
-  updateUserLocation,
-  isUpdatingLocation,
-  updatingLocationFailed,
-}) {
-  const toggleIsSettingLocation = () => {
-    setIsSettingLocation(!isSettingLocation);
+import { useMapContext } from "@/contexts/MapContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import { useCreatePinContext } from "@/contexts/CreatePinContext";
+
+export default function ManageMap() {
+  const { start, end, addPin, mapPosition } = useMapContext();
+  const { updateStatus: updateUserLocationStatus, updateUserLocation } =
+    useUserLocationContext();
+
+  const {
+    startCreatePin,
+    endCreatePin,
+    inProgress: isCreatingPin,
+    getSelectedPosition,
+  } = useCreatePinContext();
+
+  const toggleIsCreatingPin = () => {
+    if (isCreatingPin) {
+      endCreatePin();
+    } else {
+      startCreatePin();
+    }
   };
 
-  const addPin = ({ latitude, longitude, accuracy }) => {
+  const handleAddPin = ({ coordinates, accuracy }) => {
+    const { latitude, longitude } = coordinates;
     const { scale } = mapPosition;
+    const { x: selectedX, y: selectedY } = getSelectedPosition();
+
     const newPin = {
-      index: pins.length,
-
-      // Position on the user-provided picture
-      left: (crosshairsPosition.x - mapPosition.x) / scale,
-      top: (crosshairsPosition.y - mapPosition.y) / scale,
-
-      // Position in the real world
-      latitude,
-      longitude,
-      accuracy, // in meters
+      mapPoint: {
+        x: (selectedX - mapPosition.x) / scale,
+        y: -(selectedY - mapPosition.y) / scale, // TODO adjust functionality so y is not inverted
+      },
+      location: {
+        coordinates: {
+          latitude,
+          longitude,
+        },
+        accuracy,
+      },
     };
-    const newPins = [...pins, newPin];
 
-    setPins(newPins);
-    localStorage.setItem("pins", JSON.stringify(newPins));
+    addPin(newPin);
   };
 
-  const handleConfirmLocation = () => {
-    updateUserLocation({
-      pins,
-      callback: addPin,
-    });
-    toggleIsSettingLocation();
+  const handleConfirmLocation = async () => {
+    const result = await updateUserLocation();
+    if (result && result.updateStatus.success) {
+      const location = result.userLocation;
+      handleAddPin(location);
+    }
+    toggleIsCreatingPin();
   };
 
-  const handleUpdateLocation = () => {
-    updateUserLocation({ pins });
+  const handleUpdateLocation = async () => {
+    await updateUserLocation();
   };
 
-  const showGPSStatusBar = () => {
-    const getLoadingBarClass = () => {
-      if (locationAccuracy < 5) {
+  const showGPSStatusBar = (updateUserLocationStatus) => {
+    const { isUpdating, pendingLocation, error } = updateUserLocationStatus;
+    const accuracy = pendingLocation?.accuracy || 100;
+
+    const getLoadingBarClass = (accuracy) => {
+      if (accuracy < 5) {
         return styles.loadingBarGreen;
-      } else if (locationAccuracy < 10) {
+      } else if (accuracy < 10) {
         return styles.loadingBarYellow;
-      } else if (locationAccuracy < 20) {
+      } else if (accuracy < 20) {
         return styles.loadingBarOrange;
       } else {
         return styles.loadingBarRed;
@@ -62,17 +76,21 @@ export default function ManageMap({
     };
 
     const loadingZoneContent = () => {
-      if (isUpdatingLocation) {
+      if (isUpdating) {
         return (
           <>
             <>🤳</>
             <div className={styles.loadingBarBackground}>
-              <div className={`${styles.loadingBar} ${getLoadingBarClass()}`} />
+              <div
+                className={`${styles.loadingBar} ${getLoadingBarClass(
+                  accuracy
+                )}`}
+              />
             </div>
             <>🛰</>
           </>
         );
-      } else if (updatingLocationFailed) {
+      } else if (error) {
         return (
           <div className={styles.failureBar}>Poor GPS signal. Try again.</div>
         );
@@ -85,30 +103,41 @@ export default function ManageMap({
         <div className={styles.visualizeTransmissionContainer}>
           {loadingZoneContent()}
         </div>
-        {isUpdatingLocation ? locationAccuracy.toFixed(1) + "m" : null}
+        {isUpdating ? accuracy.toFixed(1) + "m" : null}
       </div>
     );
   };
 
+  const getLocationButtonText = () => {
+    if (!start) return "Set Location";
+    if (!end) return "Set Another Location";
+    return;
+  };
+
+  const displaySetLocationButton = () => {
+    if (isCreatingPin) return false;
+    if (!start || !end) return true;
+  };
+
   return (
     <>
-      {showGPSStatusBar()}
+      {showGPSStatusBar(updateUserLocationStatus)}
       <div className={styles.container}>
         <div className={styles.manageLocation}>
-          {isSettingLocation && (
+          {isCreatingPin && (
             <button className={styles.button} onClick={handleConfirmLocation}>
               Confirm
             </button>
           )}
-          {isSettingLocation && (
-            <button className={styles.button} onClick={toggleIsSettingLocation}>
+          {isCreatingPin && (
+            <button className={styles.button} onClick={toggleIsCreatingPin}>
               Cancel
             </button>
           )}
 
-          {!isSettingLocation && (
-            <button className={styles.button} onClick={toggleIsSettingLocation}>
-              {!pins.length ? "Set Location" : "Set Another Location"}
+          {displaySetLocationButton() && (
+            <button className={styles.button} onClick={toggleIsCreatingPin}>
+              {getLocationButtonText()}
             </button>
           )}
           <button className={styles.button} onClick={handleUpdateLocation}>

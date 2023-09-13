@@ -4,15 +4,10 @@
 // the entire page is a map that we can pinch and zoom and drag
 // we can add x markers for pins and a path of the user
 
-import dynamic from "next/dynamic";
 import { InterpolateMap } from "@/components/InterpolateMap";
-import { Pin, Coordinates } from "@/types/Vector";
-import { configurations } from "./overlay.configurations";
+import { Pin } from "@/types/Vector";
+import { configurations } from "../../types/overlay.configurations";
 import { useEffect, useState } from "react";
-
-const InterpolateMapDynamic = dynamic(() => Promise.resolve(InterpolateMap), {
-  ssr: false,
-});
 
 export default function ExploreInterpolatePosition() {
   const configuration = configurations[0];
@@ -25,7 +20,6 @@ export default function ExploreInterpolatePosition() {
 
   // this isn't working, but that's fine
   function updateMovement() {
-    console.log(percentMovementLatitude, { isIncrementing });
     if (percentMovementLatitude > 99 && isIncrementing) {
       setIsIncrementing((prev) => !prev);
     } else if (percentMovementLatitude < 1 && !isIncrementing) {
@@ -49,17 +43,21 @@ export default function ExploreInterpolatePosition() {
   }, [isIncrementing]);
 
   const differenceLongitude =
-    end.coordinates.longitude - start.coordinates.longitude;
+    end.location.coordinates.longitude - start.location.coordinates.longitude;
   const differenceLatitude =
-    end.coordinates.latitude - start.coordinates.latitude;
+    end.location.coordinates.latitude - start.location.coordinates.latitude;
   const movementLongitude =
     differenceLongitude * (percentMovementLongitude / 100);
   const movementLatitude = differenceLatitude * (percentMovementLatitude / 100);
 
   const currentUserLocation = {
-    longitude: start.coordinates.longitude + movementLongitude,
-    latitude: start.coordinates.latitude + movementLatitude,
+    coordinates: {
+      longitude: start.location.coordinates.longitude + movementLongitude,
+      latitude: start.location.coordinates.latitude + movementLatitude,
+    },
   };
+
+  const MAP_URL = "/images/trailmap-timberlands-precise-1.jpeg";
 
   return (
     <div>
@@ -67,6 +65,7 @@ export default function ExploreInterpolatePosition() {
         start={start}
         end={end}
         userLocation={currentUserLocation}
+        mapURL={MAP_URL}
       />
     </div>
   );

@@ -3,14 +3,19 @@ export type Coordinates = {
   latitude: number;
 };
 
+export type Location = {
+  coordinates: Coordinates;
+  accuracy?: number; // if not provided, assume perfect accuracy
+};
+
 export type Point = {
   x: number;
   y: number;
 };
 
 export type Pin = {
-  mapPoint: Point;
-  coordinates: Coordinates;
+  mapPoint: Point; // x = left, y = -top TODO: Consider making this a Class
+  location: Location;
   index?: number;
 };
 

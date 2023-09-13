@@ -4,7 +4,7 @@ import { Overlay } from "@/types/Overlay";
 import { Pin, Point, Coordinates } from "@/types/Vector";
 import { convertCoordinates } from "@/utils/vector";
 
-import { configurations, Configuration } from "./overlay.configurations";
+import { configurations, Configuration } from "@/types/overlay.configurations";
 
 const Plot = dynamic(() => import("@/components/Plot"), {
   ssr: false,
@@ -23,48 +23,58 @@ function createOverlay(start: Pin, end: Pin, overlayURL: string): Overlay {
   let { x, y } = convertCoordinates(
     start.mapPoint,
     {
-      x: start.coordinates.longitude,
-      y: start.coordinates.latitude,
+      x: start.location.coordinates.longitude,
+      y: start.location.coordinates.latitude,
     },
     end.mapPoint,
     {
-      x: end.coordinates.longitude,
-      y: end.coordinates.latitude,
+      x: end.location.coordinates.longitude,
+      y: end.location.coordinates.latitude,
     },
     upperLeftMapPoint
   );
   const upperLeft: Pin = {
     mapPoint: upperLeftMapPoint,
-    coordinates: {
-      longitude: x,
-      latitude: y,
+    location: {
+      coordinates: {
+        longitude: x,
+        latitude: y,
+      },
     },
   };
 
   ({ x, y } = convertCoordinates(
     start.mapPoint,
     {
-      x: start.coordinates.longitude,
-      y: start.coordinates.latitude,
+      x: start.location.coordinates.longitude,
+      y: start.location.coordinates.latitude,
     },
     end.mapPoint,
     {
-      x: end.coordinates.longitude,
-      y: end.coordinates.latitude,
+      x: end.location.coordinates.longitude,
+      y: end.location.coordinates.latitude,
     },
     lowerRightMapPoint
   ));
   const lowerRight: Pin = {
     mapPoint: lowerRightMapPoint,
-    coordinates: {
-      longitude: x,
-      latitude: y,
+    location: {
+      coordinates: {
+        longitude: x,
+        latitude: y,
+      },
     },
   };
 
   const overlay = new Overlay(overlayURL, [
-    [upperLeft.coordinates.latitude, upperLeft.coordinates.longitude],
-    [lowerRight.coordinates.latitude, lowerRight.coordinates.longitude],
+    [
+      upperLeft.location.coordinates.latitude,
+      upperLeft.location.coordinates.longitude,
+    ],
+    [
+      lowerRight.location.coordinates.latitude,
+      lowerRight.location.coordinates.longitude,
+    ],
   ]);
 
   return overlay;
@@ -78,12 +88,12 @@ function generatePath(configuration: Configuration): Path {
 
   return [
     {
-      latitude: start.coordinates.latitude,
-      longitude: start.coordinates.longitude,
+      latitude: start.location.coordinates.latitude,
+      longitude: start.location.coordinates.longitude,
     },
     {
-      latitude: end.coordinates.latitude,
-      longitude: end.coordinates.longitude,
+      latitude: end.location.coordinates.latitude,
+      longitude: end.location.coordinates.longitude,
     },
     {
       latitude: overlay.bounds[0][0],

@@ -1,7 +1,13 @@
 import React, { useRef } from "react";
+import ReactDOM from "react-dom";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import { Pin, Coordinates, Point } from "@/types/Vector";
+
+import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
+
+import { Pin, Location, Point } from "@/types/Vector";
 import { convertCoordinates } from "@/utils/vector";
+import { MapPosition } from "@/types/MapPosition";
+
 import styles from "@/components/Map.module.css";
 
 // INPUT
@@ -10,36 +16,59 @@ import styles from "@/components/Map.module.css";
 //  - UserPath
 
 type Props = {
-  start: Pin;
-  end: Pin;
-  userLocation?: Coordinates;
+  start?: Pin;
+  end?: Pin;
+  userLocation?: Location;
+  mapURL: string;
+  scale?: number;
+  onMapStateUpdate?: (mapPosition: MapPosition) => void;
 };
 
-const MAP_URL = "/images/trailmap-timberlands-precise-1.jpeg";
-
 export function InterpolateMap(props: Props) {
-  const { start, end, userLocation } = props;
-  const mapReference = useRef(null);
+  const { start, end, userLocation, mapURL, scale, onMapStateUpdate } = props;
+  const mapReference = useRef<HTMLImageElement>(null);
+
+  const canFindUserLocation = !!start && !!end && !!userLocation;
+
+  const handleMapStateUpdate = ({ scale }: { scale: number }) => {
+    // every time to map updates, let's track that.
+    // This is useful when we need to create pins
+    if (!mapReference.current) return;
+
+    const mapNode = ReactDOM.findDOMNode(mapReference.current);
+
+    if (!mapNode || !(mapNode instanceof HTMLElement)) return;
+    const mapRect = mapNode.getBoundingClientRect();
+
+    if (onMapStateUpdate) {
+      onMapStateUpdate({
+        scale,
+        x: mapRect.left,
+        y: mapRect.top,
+      });
+    }
+  };
 
   return (
     <TransformWrapper
       limitToBounds={false}
-      initialScale={0.4}
+      initialScale={scale || 0.4}
       minScale={0.3}
       maxScale={20}
     >
       {() => (
         <>
           <TransformComponent>
-            <PinComponent pin={start} type={"PIN"} />
-            <PinComponent pin={end} type={"PIN"} />
-            {userLocation && (
+            <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
+            {start && <PinComponent pin={start} type={"PIN"} />}
+            {end && <PinComponent pin={end} type={"PIN"} />}
+            {canFindUserLocation && (
               <PinComponent
                 pin={getUserPin(start, end, userLocation)}
                 type={"USER"}
               />
             )}
-            <img src={MAP_URL} alt="Trail Map" ref={mapReference} />
+            <img src={mapURL} alt="Trail Map" ref={mapReference} />
           </TransformComponent>
         </>
       )}
@@ -47,18 +76,18 @@ export function InterpolateMap(props: Props) {
   );
 }
 
-function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
+function getUserPin(start: Pin, end: Pin, userLocation: Location) {
   const startCoordinatesPoint: Point = {
-    x: start.coordinates.longitude,
-    y: start.coordinates.latitude,
+    x: start.location.coordinates.longitude,
+    y: start.location.coordinates.latitude,
   };
   const endCoordinatesPoint: Point = {
-    x: end.coordinates.longitude,
-    y: end.coordinates.latitude,
+    x: end.location.coordinates.longitude,
+    y: end.location.coordinates.latitude,
   };
   const userLocationCoordinatesPoint: Point = {
-    x: userLocation.longitude,
-    y: userLocation.latitude,
+    x: userLocation.coordinates.longitude,
+    y: userLocation.coordinates.latitude,
   };
 
   const { x, y } = convertCoordinates(
@@ -74,9 +103,11 @@ function getUserPin(start: Pin, end: Pin, userLocation: Coordinates) {
       x,
       y,
     },
-    coordinates: {
-      longitude: userLocation.longitude,
-      latitude: userLocation.latitude,
+    location: {
+      coordinates: {
+        longitude: userLocation.coordinates.longitude,
+        latitude: userLocation.coordinates.latitude,
+      },
     },
   };
 

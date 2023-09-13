@@ -2,31 +2,11 @@ import { useState } from "react";
 
 import ManageMap from "@/components/ManageMap";
 import DisplayMapData from "@/components/Debug/DisplayMapData";
-import Console from "@/components/Debug/Console";
 
 import styles from "@/components/MenuTray.module.css";
 
-export default function MenuTray({
-  isSettingLocation,
-  setIsSettingLocation,
-  pins,
-  setPins,
-  crosshairsPosition,
-  mapPosition,
-  userLocation,
-  updateUserLocation,
-  isUpdatingLocation,
-  updatingLocationFailed,
-  locationAccuracy,
-  showDebuggingContent,
-  setShowDebuggingContent,
-  mapFunctionParameters,
-  debugStatements,
-}) {
-  const [showConsole, setShowConsole] = useState(false);
-  const toggleConsole = () => {
-    setShowConsole(!showConsole);
-  };
+export default function MenuTray() {
+  const [showDebuggingContent, setShowDebuggingContent] = useState(false);
 
   return (
     <div
@@ -40,36 +20,10 @@ export default function MenuTray({
       >
         Inspect Data
       </button>
-      {!showDebuggingContent && (
-        <ManageMap
-          isSettingLocation={isSettingLocation}
-          setIsSettingLocation={setIsSettingLocation}
-          pins={pins}
-          setPins={setPins}
-          crosshairsPosition={crosshairsPosition}
-          mapPosition={mapPosition}
-          locationAccuracy={locationAccuracy}
-          updateUserLocation={updateUserLocation}
-          isUpdatingLocation={isUpdatingLocation}
-          updatingLocationFailed={updatingLocationFailed}
-        />
-      )}
+      {!showDebuggingContent && <ManageMap />}
       {showDebuggingContent && (
         <div className={styles.debugContainer}>
-          {!showConsole && (
-            <DisplayMapData
-              pins={pins}
-              userLocation={userLocation}
-              mapFunctionParameters={mapFunctionParameters}
-            />
-          )}
-          {showConsole && <Console debugStatements={debugStatements} />}
-          {showDebuggingContent && (
-            <button onClick={toggleConsole} className={styles.consoleButton}>
-              {!showConsole && "Show Console"}
-              {showConsole && "Hide Console"}
-            </button>
-          )}
+          <DisplayMapData />
         </div>
       )}
     </div>

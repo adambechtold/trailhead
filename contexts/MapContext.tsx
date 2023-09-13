@@ -1,9 +1,9 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useContext } from "react";
 import { Pin } from "@/types/Vector";
 import { mapContextReducer, INITIAL_STATE, MAPS } from "./mapContextReducer";
 import { MapPosition } from "@/types/MapPosition";
 
-type ThemeContextProviderProps = {
+type MapContextProviderProps = {
   children: React.ReactNode;
 };
 
@@ -22,7 +22,7 @@ export const MapContext = createContext<MapContext | null>(null);
 
 export default function MapContextProvider({
   children,
-}: ThemeContextProviderProps) {
+}: MapContextProviderProps) {
   // ====== STATE ======
   const [mapContextState, mapContextDispatch] = useReducer(
     mapContextReducer,
@@ -78,7 +78,7 @@ export default function MapContextProvider({
 }
 
 export function useMapContext() {
-  const context = React.useContext(MapContext);
+  const context = useContext(MapContext);
   if (!context) {
     throw new Error("useMapContext must be used within a MapContextProvider");
   }

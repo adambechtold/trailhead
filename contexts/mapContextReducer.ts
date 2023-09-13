@@ -26,7 +26,7 @@ export const MAPS = [
   "/images/bartlett-closeup.jpeg",
 ];
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: MapContextState = {
   mapIndex: 0,
   mapPosition: {
     x: 0,

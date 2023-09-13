@@ -1,8 +1,6 @@
 import Navigate from "@/components/Navigate";
 
-// TODO route the user based on what's stored locally.
-
-export default function App() {
+export default function NavigatePage() {
   return (
     <>
       <Navigate />

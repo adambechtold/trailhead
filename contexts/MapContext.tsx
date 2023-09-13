@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useEffect, useContext } from "react";
 import { Pin } from "@/types/Vector";
-import { mapContextReducer, INITIAL_STATE, MAPS } from "./mapContextReducer";
+import { mapContextReducer, INITIAL_STATE } from "./mapContextReducer";
 import { MapPosition } from "@/types/MapPosition";
 
 type MapContextProviderProps = {
@@ -9,6 +9,7 @@ type MapContextProviderProps = {
 
 type MapContext = {
   mapURL: string;
+  addMap: (mapURL: string) => void;
   nextMap: () => void;
   start?: Pin;
   end?: Pin;
@@ -44,12 +45,18 @@ export default function MapContextProvider({
     }
   }, []);
 
-  const mapURL = MAPS[mapContextState.mapIndex];
+  const mapURL = mapContextState.mapList[mapContextState.mapIndex];
   const { start, end, mapPosition } = mapContextState;
 
   // ====== ACTIONS ======
+  const addMap = (mapURL: string) => {
+    mapContextDispatch({ type: "ADD_MAP", payload: mapURL });
+    mapContextDispatch({ type: "RESET_PINS" });
+  };
+
   const nextMap = () => {
     mapContextDispatch({ type: "NEXT_MAP" });
+    mapContextDispatch({ type: "RESET_PINS" });
   };
 
   const addPin = (pin: Pin) =>
@@ -63,6 +70,7 @@ export default function MapContextProvider({
     <MapContext.Provider
       value={{
         mapURL,
+        addMap,
         nextMap,
         start,
         end,

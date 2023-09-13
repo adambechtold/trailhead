@@ -66,7 +66,7 @@ export default function UserLocationContextProvider({
         return result;
       }
       const message = `Accuracy of ${position.coords.accuracy} is not good enough. Minimum accuracy: ${MINIMUM_ACCURACY} Retrying...`;
-      console.log(message);
+      console.log("Error: " + message);
       await delay(TIME_BETWEEN_RETRIES);
     }
   };

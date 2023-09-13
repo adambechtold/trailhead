@@ -3,6 +3,7 @@ import { Pin } from "@/types/Vector";
 
 export type MapContextState = {
   mapIndex: number;
+  mapList: string[];
   start?: Pin;
   end?: Pin;
   mapPosition?: MapPosition;
@@ -10,6 +11,7 @@ export type MapContextState = {
 
 type Action = {
   type:
+    | "ADD_MAP"
     | "NEXT_MAP"
     | "ADD_PIN"
     | "RESET_PINS"
@@ -28,6 +30,7 @@ export const MAPS = [
 
 export const INITIAL_STATE: MapContextState = {
   mapIndex: 0,
+  mapList: MAPS,
   mapPosition: {
     x: 0,
     y: 0,
@@ -37,6 +40,13 @@ export const INITIAL_STATE: MapContextState = {
 
 export const mapContextReducer = (state: MapContextState, action: Action) => {
   switch (action.type) {
+    case "ADD_MAP":
+      const newMapList = [...state.mapList];
+      newMapList.splice(state.mapIndex, 0, action.payload);
+      return {
+        ...state,
+        mapList: newMapList,
+      };
     case "NEXT_MAP":
       return {
         ...state,

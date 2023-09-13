@@ -1,15 +1,23 @@
-.toolbarContainer {
-  /* Position */
+.reset-container {
   position: fixed;
-  top: 0px;
   z-index: 3;
+  left: 0px;
+  top: 0px;
+  margin: 50px 20px;
+}
 
-  /* Size */
-  width: 100%;
-  padding: 20px;
-
-  /* Content */
+.map-options-container {
+  position: fixed;
+  z-index: 3;
+  right: 0px;
+  top: 0px;
+  margin: 20px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-options-container > * {
+  margin: 12px 0px;
 }

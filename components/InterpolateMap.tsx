@@ -53,7 +53,7 @@ export function InterpolateMap(props: Props) {
     <TransformWrapper
       limitToBounds={false}
       initialScale={scale || 0.4}
-      minScale={0.3}
+      minScale={0.1}
       maxScale={20}
     >
       {() => (

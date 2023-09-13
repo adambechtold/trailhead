@@ -5,11 +5,7 @@ import DisplayMapData from "@/components/Debug/DisplayMapData";
 
 import styles from "@/components/MenuTray.module.css";
 
-export default function MenuTray({
-  isSettingLocation,
-  setIsSettingLocation,
-  crosshairsPosition,
-}) {
+export default function MenuTray() {
   const [showDebuggingContent, setShowDebuggingContent] = useState(false);
 
   return (
@@ -24,13 +20,7 @@ export default function MenuTray({
       >
         Inspect Data
       </button>
-      {!showDebuggingContent && (
-        <ManageMap
-          isSettingLocation={isSettingLocation}
-          setIsSettingLocation={setIsSettingLocation}
-          crosshairsPosition={crosshairsPosition}
-        />
-      )}
+      {!showDebuggingContent && <ManageMap />}
       {showDebuggingContent && (
         <div className={styles.debugContainer}>
           <DisplayMapData />

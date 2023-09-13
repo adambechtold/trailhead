@@ -1,30 +1,21 @@
-import { useEffect, useRef } from "react";
+// consider making this a stateless component
+import { useCreatePinContext } from "@/contexts/CreatePinContext";
 
 import styles from "@/components/Crosshairs.module.css";
 
-export default function Crosshairs({ setCrosshairsPosition }) {
-  const centerPointReference = useRef(null);
-
-  function getCenter(centerPointReference) {
-    const centerPointNode = centerPointReference.current;
-    const centerPointRect = centerPointNode.getBoundingClientRect();
-    const { x, y, width, height } = centerPointRect;
-    return { x, y, width, height };
-  }
-
-  useEffect(() => {
-    const { x, y, width, height } = getCenter(centerPointReference);
-    setCrosshairsPosition({
-      x: x + width / 2,
-      y: y + height / 2,
-    });
-  }, [centerPointReference]);
+export default function Crosshairs() {
+  const { inProgress: isCreatingPin, selectPositionElementName } =
+    useCreatePinContext();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.centerPoint} ref={centerPointReference} />
-      <div className={styles.horizontalLine} />
-      <div className={styles.verticalLine} />
-    </div>
+    <>
+      {isCreatingPin && (
+        <div className={styles.container}>
+          <div className={styles.centerPoint} id={selectPositionElementName} />
+          <div className={styles.horizontalLine} />
+          <div className={styles.verticalLine} />
+        </div>
+      )}
+    </>
   );
 }

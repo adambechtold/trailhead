@@ -2,27 +2,37 @@ import styles from "@/components/ManageMap.module.css";
 
 import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import { useCreatePinContext } from "@/contexts/CreatePinContext";
 
-export default function ManageMap({
-  isSettingLocation,
-  setIsSettingLocation,
-  crosshairsPosition,
-}) {
+export default function ManageMap() {
   const { start, end, addPin, mapPosition } = useMapContext();
-  const { updateStatus, updateUserLocation } = useUserLocationContext();
+  const { updateStatus: updateUserLocationStatus, updateUserLocation } =
+    useUserLocationContext();
 
-  const toggleIsSettingLocation = () => {
-    setIsSettingLocation(!isSettingLocation);
+  const {
+    startCreatePin,
+    endCreatePin,
+    inProgress: isCreatingPin,
+    getSelectedPosition,
+  } = useCreatePinContext();
+
+  const toggleIsCreatingPin = () => {
+    if (isCreatingPin) {
+      endCreatePin();
+    } else {
+      startCreatePin();
+    }
   };
 
   const handleAddPin = ({ coordinates, accuracy }) => {
     const { latitude, longitude } = coordinates;
     const { scale } = mapPosition;
+    const { x: selectedX, y: selectedY } = getSelectedPosition();
 
     const newPin = {
       mapPoint: {
-        x: (crosshairsPosition.x - mapPosition.x) / scale,
-        y: -(crosshairsPosition.y - mapPosition.y) / scale,
+        x: (selectedX - mapPosition.x) / scale,
+        y: -(selectedY - mapPosition.y) / scale, // TODO adjust functionality so y is not inverted
       },
       location: {
         coordinates: {
@@ -38,19 +48,19 @@ export default function ManageMap({
 
   const handleConfirmLocation = async () => {
     const result = await updateUserLocation();
-    if (result.updateStatus.success) {
+    if (result && result.updateStatus.success) {
       const location = result.userLocation;
       handleAddPin(location);
     }
-    toggleIsSettingLocation();
+    toggleIsCreatingPin();
   };
 
   const handleUpdateLocation = async () => {
     await updateUserLocation();
   };
 
-  const showGPSStatusBar = (updateStatus) => {
-    const { isUpdating, pendingLocation, error } = updateStatus;
+  const showGPSStatusBar = (updateUserLocationStatus) => {
+    const { isUpdating, pendingLocation, error } = updateUserLocationStatus;
     const accuracy = pendingLocation?.accuracy || 100;
 
     const getLoadingBarClass = (accuracy) => {
@@ -105,28 +115,28 @@ export default function ManageMap({
   };
 
   const displaySetLocationButton = () => {
-    if (isSettingLocation) return false;
+    if (isCreatingPin) return false;
     if (!start || !end) return true;
   };
 
   return (
     <>
-      {showGPSStatusBar(updateStatus)}
+      {showGPSStatusBar(updateUserLocationStatus)}
       <div className={styles.container}>
         <div className={styles.manageLocation}>
-          {isSettingLocation && (
+          {isCreatingPin && (
             <button className={styles.button} onClick={handleConfirmLocation}>
               Confirm
             </button>
           )}
-          {isSettingLocation && (
-            <button className={styles.button} onClick={toggleIsSettingLocation}>
+          {isCreatingPin && (
+            <button className={styles.button} onClick={toggleIsCreatingPin}>
               Cancel
             </button>
           )}
 
           {displaySetLocationButton() && (
-            <button className={styles.button} onClick={toggleIsSettingLocation}>
+            <button className={styles.button} onClick={toggleIsCreatingPin}>
               {getLocationButtonText()}
             </button>
           )}

@@ -13,7 +13,7 @@ type UserLocationContextProviderProps = {
 };
 
 type UserLocationContext = UserLocationState & {
-  updateUserLocation: () => Promise<UserLocationState>;
+  updateUserLocation: () => Promise<UserLocationState | void>;
 };
 
 export const UserLocationContext = createContext<UserLocationContext | null>(
@@ -32,7 +32,7 @@ export default function UserLocationContextProvider({
     INITIAL_STATE
   );
 
-  const updateUserLocation = async (): Promise<UserLocationState> => {
+  const updateUserLocation = async (): Promise<UserLocationState | void> => {
     userLocationContextDispatch({ type: "START_UPDATE_USER_LOCATION" });
 
     for (let i = 0; i < MAX_NUMBER_OF_RETRIES; i++) {
@@ -55,13 +55,20 @@ export default function UserLocationContextProvider({
           type: "SUCCEED_UPDATE_USER_LOCATION",
           payload: pendingLocation,
         });
-        break;
+        const result = {
+          userLocation: pendingLocation,
+          updateStatus: {
+            isUpdating: false,
+            success: true,
+            error: false,
+          },
+        };
+        return result;
       }
       const message = `Accuracy of ${position.coords.accuracy} is not good enough. Minimum accuracy: ${MINIMUM_ACCURACY} Retrying...`;
       console.log(message);
       await delay(TIME_BETWEEN_RETRIES);
     }
-    return userLocationState;
   };
 
   return (

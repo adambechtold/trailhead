@@ -1,8 +1,7 @@
-import { useState } from "react";
-
 import Head from "next/head";
 import MapContextProvider from "@/contexts/MapContext";
-import UserLocationProvider from "@/contexts/UserLocationContext";
+import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
+import CreatePinContextProvider from "@/contexts/CreatePinContext";
 import dynamic from "next/dynamic";
 
 import MenuTray from "@/components/MenuTray";
@@ -14,13 +13,6 @@ const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
 });
 
 export default function App() {
-  const [isSettingLocation, setIsSettingLocation] = useState(false);
-  const [crosshairsPosition, setCrosshairsPosition] = useState({ x: 0, y: 0 });
-
-  const resetCurrentMap = () => {
-    setIsSettingLocation(false);
-  };
-
   return (
     <>
       <Head>
@@ -29,16 +21,12 @@ export default function App() {
       </Head>
       <MapContextProvider>
         <UserLocationProvider>
-          <Toolbar resetCurrentMap={resetCurrentMap} />
-          {isSettingLocation && (
-            <Crosshairs setCrosshairsPosition={setCrosshairsPosition} />
-          )}
-          <CurrentMap />
-          <MenuTray
-            isSettingLocation={isSettingLocation}
-            setIsSettingLocation={setIsSettingLocation}
-            crosshairsPosition={crosshairsPosition}
-          />
+          <CreatePinContextProvider>
+            <Toolbar />
+            <Crosshairs />
+            <CurrentMap />
+            <MenuTray />
+          </CreatePinContextProvider>
         </UserLocationProvider>
       </MapContextProvider>
     </>

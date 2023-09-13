@@ -1,19 +1,21 @@
 import styles from "@/components/Toolbar.module.css";
 
 import { useMapContext } from "@/contexts/MapContext";
+import { useCreatePinContext } from "@/contexts/CreatePinContext";
 
-export default function Toolbar({ resetCurrentMap }) {
+export default function Toolbar() {
   const { nextMap, start, end, resetPins } = useMapContext();
+  const { endCreatePin } = useCreatePinContext();
 
   // Next Map
   const changeToNextMap = () => {
     nextMap();
-    resetCurrentMap();
+    endCreatePin();
   };
 
   const handleMapReset = () => {
     resetPins();
-    resetCurrentMap();
+    endCreatePin();
   };
 
   return (

@@ -140,9 +140,11 @@ export default function ManageMap() {
               {getLocationButtonText()}
             </button>
           )}
-          <button className={styles.button} onClick={handleUpdateLocation}>
-            Update Location
-          </button>
+          {!isCreatingPin && (
+            <button className={styles.button} onClick={handleUpdateLocation}>
+              Update Location
+            </button>
+          )}
         </div>
       </div>
     </>

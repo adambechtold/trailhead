@@ -1,3 +1,8 @@
+// This could probably be a stateless component
+
+import { useMapContext } from "@/contexts/MapContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
+
 import styles from "./DisplayMapData.module.css";
 
 const displayObject = (object, name) => {
@@ -15,16 +20,32 @@ const displayObject = (object, name) => {
   );
 };
 
-export default function DisplayMapData({
-  pins,
-  userLocation,
-  mapFunctionParameters,
-}) {
+export default function DisplayMapData() {
+  const { userLocation } = useUserLocationContext();
+  const { start, end } = useMapContext();
+
+  const flattenObject = (object) => {
+    const flattenedObject = {};
+    Object.keys(object).forEach((key) => {
+      if (typeof object[key] === "object") {
+        const flattenedChildObject = flattenObject(object[key]);
+        Object.keys(flattenedChildObject).forEach((childKey) => {
+          flattenedObject[`${key}.${childKey}`] =
+            flattenedChildObject[childKey];
+        });
+      } else {
+        flattenedObject[key] = object[key];
+      }
+    });
+    return flattenedObject;
+  };
+
   return (
-    <div>
-      {pins[0] && displayObject(pins[0], "Pin 1")}
-      {pins[1] && displayObject(pins[1], "Pin 2")}
-      {userLocation && displayObject(userLocation, "User Location")}
+    <div className={styles.container}>
+      {start && displayObject(flattenObject(start), "Pin 1")}
+      {end && displayObject(flattenObject(end), "Pin 2")}
+      {userLocation &&
+        displayObject(flattenObject(userLocation), "User Location")}
     </div>
   );
 }

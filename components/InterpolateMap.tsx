@@ -1,6 +1,10 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import {
+  TransformComponent,
+  TransformWrapper,
+  ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
 
 import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
 
@@ -10,23 +14,29 @@ import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/Map.module.css";
 
-// INPUT
-//  - MapURL
-//  - Pins
-//  - UserPath
-
 type Props = {
   start?: Pin;
   end?: Pin;
   userLocation?: Location;
   mapURL: string;
-  scale?: number;
+  scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
+  children?: React.ReactNode;
 };
 
 export function InterpolateMap(props: Props) {
-  const { start, end, userLocation, mapURL, scale, onMapStateUpdate } = props;
+  // TODO: Make this a default export and update import statements
+  const {
+    start,
+    end,
+    userLocation,
+    mapURL,
+    scale,
+    onMapStateUpdate,
+    children,
+  } = props;
   const mapReference = useRef<HTMLImageElement>(null);
+  const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
 
   const canFindUserLocation = !!start && !!end && !!userLocation;
 
@@ -49,15 +59,91 @@ export function InterpolateMap(props: Props) {
     }
   };
 
+  const zoomToImage = () => {
+    if (transformComponentRef.current && mapReference.current) {
+      const ref = transformComponentRef.current;
+      const { zoomToElement } = ref;
+      zoomToElement(mapReference.current);
+    }
+  };
+
+  const resetImage = () => {
+    if (transformComponentRef.current) {
+      const ref = transformComponentRef.current;
+      const { resetTransform } = ref;
+      resetTransform();
+    }
+  };
+
+  const calculateZoomToFitTransform = () => {
+    const imageWidth = mapReference.current?.width;
+    const imageHeight = mapReference.current?.height;
+    const windowWidth = window?.innerWidth;
+    const windowHeight = window?.innerHeight;
+
+    if (!(imageWidth && imageHeight && windowWidth && windowHeight)) {
+      return {
+        x: 0,
+        y: 0,
+        scale: 0.4,
+      };
+    }
+
+    const windowAspectRatio = windowWidth / windowHeight;
+    const imageAspectRatio = imageWidth / imageHeight;
+
+    if (windowAspectRatio < imageAspectRatio) {
+      console.log("scale from width", {
+        imageWidth,
+        windowWidth,
+        scale: windowWidth / imageWidth,
+      });
+      const scale = windowWidth / imageWidth;
+      return {
+        x: 0,
+        y: (windowHeight - imageHeight * scale) / 2,
+        scale,
+      };
+    } else {
+      const scale = windowHeight / imageHeight;
+      return {
+        x: (windowWidth - imageWidth * scale) / 2,
+        y: 0,
+        scale,
+      };
+    }
+  };
+
+  const zoomToFit = () => {
+    console.log("zooming to fit");
+    const { x, y, scale } = calculateZoomToFitTransform();
+    transformComponentRef.current?.setTransform(x, y, scale);
+  };
+
+  useEffect(() => {
+    if (mapReference.current) {
+      zoomToFit();
+    }
+  }, [mapURL]);
+
   return (
     <TransformWrapper
       limitToBounds={false}
       initialScale={scale || 0.4}
       minScale={0.1}
       maxScale={20}
+      ref={transformComponentRef}
     >
       {() => (
         <>
+          {React.Children.map(children, (child) => {
+            return React.cloneElement(child as React.ReactElement, {
+              zoomToFit,
+              zoomToImage,
+              resetImage,
+              mapReference,
+            });
+          })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
             {start && <PinComponent pin={start} type={"PIN"} />}

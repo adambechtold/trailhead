@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { InterpolateMap } from "./InterpolateMap";
+import MapControls from "./MapControls";
 import { useMapContext } from "@/contexts/MapContext";
 
 import styles from "./AddMap.module.css";
@@ -35,7 +36,6 @@ export default function AddMap() {
   const startNavigating = () => {
     router.push("/navigate");
   };
-
   const handleUseSavedMaps = () => {
     startNavigating();
   };
@@ -45,7 +45,11 @@ export default function AddMap() {
   };
 
   function PreviewMap({ mapURL }: PreviewMapProps) {
-    return <InterpolateMap mapURL={mapURL} />;
+    return (
+      <InterpolateMap mapURL={mapURL}>
+        <MapControls />
+      </InterpolateMap>
+    );
   }
 
   function AddMap() {

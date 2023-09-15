@@ -18,7 +18,7 @@ export default function MenuTray() {
         onClick={() => setShowDebuggingContent(!showDebuggingContent)}
         className={styles.inspectDataButton}
       >
-        Inspect Data
+        {showDebuggingContent ? "Hide Data" : "Inspect Data"}
       </button>
       {!showDebuggingContent && <ManageMap />}
       {showDebuggingContent && (

@@ -45,11 +45,7 @@ export default function AddMap() {
   };
 
   function PreviewMap({ mapURL }: PreviewMapProps) {
-    return (
-      <InterpolateMap mapURL={mapURL}>
-        <MapControls />
-      </InterpolateMap>
-    );
+    return <InterpolateMap mapURL={mapURL} />;
   }
 
   function AddMap() {

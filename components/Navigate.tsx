@@ -1,4 +1,3 @@
-import MapContextProvider from "@/contexts/MapContext";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
 import CreatePinContextProvider from "@/contexts/CreatePinContext";
 import dynamic from "next/dynamic";

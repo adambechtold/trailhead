@@ -93,11 +93,6 @@ export function InterpolateMap(props: Props) {
     const imageAspectRatio = imageWidth / imageHeight;
 
     if (windowAspectRatio < imageAspectRatio) {
-      console.log("scale from width", {
-        imageWidth,
-        windowWidth,
-        scale: windowWidth / imageWidth,
-      });
       const scale = windowWidth / imageWidth;
       return {
         x: 0,
@@ -115,7 +110,6 @@ export function InterpolateMap(props: Props) {
   };
 
   const zoomToFit = () => {
-    console.log("zooming to fit");
     const { x, y, scale } = calculateZoomToFitTransform();
     transformComponentRef.current?.setTransform(x, y, scale);
   };

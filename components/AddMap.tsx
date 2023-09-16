@@ -10,7 +10,7 @@ import { useMapContext } from "@/contexts/MapContext";
 import styles from "./AddMap.module.css";
 
 export default function AddMap() {
-  const { addMap } = useMapContext();
+  const { addMap, mapList } = useMapContext();
   const router = useRouter();
   const [previewSrc, setPreviewSrc] = useState<string>("");
   const [isMapSelected, setIsMapSelected] = useState<boolean>(false);
@@ -63,7 +63,9 @@ export default function AddMap() {
           onChange={handleFileInputChange}
           id="map-input"
         />
-        <ClearButton onClick={handleUseSavedMaps}>USE SAVED MAPS</ClearButton>
+        {!!mapList.length && (
+          <ClearButton onClick={handleUseSavedMaps}>USE SAVED MAPS</ClearButton>
+        )}
       </>
     );
   }

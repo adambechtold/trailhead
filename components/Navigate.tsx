@@ -8,6 +8,7 @@ import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
 import ClearButton from "./ClearButton/ClearButton";
 import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
+import AddMap from "./AddMap";
 
 import styles from "./Navigate.module.css";
 
@@ -56,7 +57,8 @@ export default function Navigate() {
         </div>
       )}
       <Crosshairs />
-      <CurrentMap />
+      {!map && <AddMap />}
+      {map && <CurrentMap />}
       <MenuTray />
     </>
   );

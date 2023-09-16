@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/router";
 
 import { useMapContext } from "@/contexts/MapContext";
@@ -11,7 +11,7 @@ import styles from "@/components/MenuTray.module.css";
 
 export default function MenuTray() {
   const router = useRouter();
-  const { map: selectedMap, mapList, chooseMap } = useMapContext();
+  const { map: selectedMap, mapList, chooseMap, deleteMap } = useMapContext();
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [currentY, setCurrentY] = useState(0);
@@ -160,6 +160,13 @@ export default function MenuTray() {
     }
   };
 
+  const onDeleteMap = (mapKey: string) => {
+    const result = confirm("Are you sure you want to delete this map?");
+    if (result) {
+      deleteMap(mapKey);
+    }
+  };
+
   return (
     <>
       {!isMenuOpen && (
@@ -181,6 +188,7 @@ export default function MenuTray() {
             selectedMapIndex={indexOfSelectedMap}
             onClickMap={chooseMap}
             onAddMap={handleAddNewMap}
+            onDeleteMap={onDeleteMap}
           />
           <ClearButton onClick={showDebuggingContent}>INSPECT DATA</ClearButton>
         </div>

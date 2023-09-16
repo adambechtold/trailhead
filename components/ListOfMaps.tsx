@@ -1,6 +1,9 @@
 import React from "react";
 import { Map } from "@/types/Map";
 
+import ClearButton from "./ClearButton/ClearButton";
+import { CancelIcon } from "./Icons/Icons";
+
 import styles from "@/components/ListOfMaps.module.css";
 
 type Props = {
@@ -8,6 +11,7 @@ type Props = {
   selectedMapIndex?: number;
   onClickMap?: (mapKey: string) => void;
   onAddMap?: () => void;
+  onDeleteMap?: (mapKey: string) => void;
 };
 
 export default function ListOfMaps({
@@ -15,6 +19,7 @@ export default function ListOfMaps({
   selectedMapIndex,
   onClickMap,
   onAddMap,
+  onDeleteMap,
 }: Props) {
   const isSelected = (index: number): boolean => {
     if (selectedMapIndex === undefined) return false;
@@ -30,10 +35,12 @@ export default function ListOfMaps({
       {onAddMap && <AddMap onClick={onAddMap} />}
       {maps.map((map, index) => (
         <MapItem
-          key={map.url}
+          key={map.key}
+          mapKey={map.key}
           mapURL={map.url}
           isSelected={isSelected(index)}
           onClick={() => handleMapClick(map.key)}
+          onDelete={() => onDeleteMap && onDeleteMap(map.key)}
         />
       ))}
     </div>
@@ -42,21 +49,35 @@ export default function ListOfMaps({
 
 type MapItemProps = {
   mapURL: string;
+  mapKey: string;
   isSelected?: boolean;
   onClick: () => void;
+  onDelete: (mapKey: string) => void;
 };
 
-function MapItem({ mapURL, isSelected, onClick }: MapItemProps) {
+function MapItem({
+  mapURL,
+  mapKey,
+  isSelected,
+  onClick,
+  onDelete,
+}: MapItemProps) {
   const itemPicture = (
     <img src={mapURL} className={styles["map-picture"]} onClick={onClick} />
   );
   const outline = (child: React.ReactNode) => (
     <div className={styles["selected-map-outline"]}>{child}</div>
   );
+  const addDeleteButton = (child: React.ReactNode) => (
+    <div className={styles["can-delete-container"]}>
+      {child}
+      <DeleteButton onClick={() => onDelete(mapKey)} />
+    </div>
+  );
 
   return (
     <div className={styles["map-item-container"]}>
-      {isSelected ? outline(itemPicture) : itemPicture}
+      {isSelected ? addDeleteButton(outline(itemPicture)) : itemPicture}
     </div>
   );
 }
@@ -71,5 +92,14 @@ function AddMap({ onClick }: { onClick: () => void }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function DeleteButton({ onClick }: { onClick: () => void }) {
+  return (
+    <ClearButton onClick={onClick}>
+      <CancelIcon />
+      DELETE
+    </ClearButton>
   );
 }

@@ -18,7 +18,5 @@ export function generatePinKey(map: Map, name: string): string {
 
 export const EXAMPLE_MAPS: Map[] = [
   { url: "/images/trailmap-timberlands-precise-1.jpeg" },
-  { url: "/images/trail-map-smaller.jpeg" },
-  { url: "/images/bartlett-neighborhood.jpeg" },
-  { url: "/images/bartlett-closeup.jpeg" },
+  { url: "/images/trailmap-timberlands-precise-2.jpeg" },
 ].map((map) => ({ ...map, key: generateMapKey(map.url) }));

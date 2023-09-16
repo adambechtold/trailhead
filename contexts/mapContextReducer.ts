@@ -73,6 +73,7 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
       const indexToDelete: number = newMapList.findIndex(
         (map) => map.key === key
       );
+      if (indexToDelete === -1) return state;
       deleteMap(newMapList[indexToDelete]);
       newMapList.splice(indexToDelete, 1);
       const newIndex = indexToDelete === 0 ? 0 : indexToDelete - 1;
@@ -153,6 +154,8 @@ const saveMap = (map: Map) => {
 
 const deleteMap = (map: Map) => {
   const savedMapKeys = getSavedMapList();
+  const indexOfMap = savedMapKeys.indexOf(map.key);
+  if (indexOfMap === -1) return;
   savedMapKeys.splice(savedMapKeys.indexOf(map.key), 1);
   localStorage.setItem("savedMapKeys", JSON.stringify(savedMapKeys));
   localStorage.removeItem(map.key);

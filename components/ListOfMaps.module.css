@@ -23,7 +23,7 @@
 }
 
 .selected-map-outline {
-  height: 100%;
+  height: calc(100% - 3rem);
   border: 4px solid #3c84f7;
   padding: 0.3rem;
   border-radius: 1.2rem;
@@ -57,4 +57,13 @@
 .add-map-icon {
   font-size: 3rem;
   font-weight: 400;
+}
+
+.can-delete-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }

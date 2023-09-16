@@ -1,9 +1,13 @@
 import Navigate from "@/components/Navigate";
 
+import CreatePinContextProvider from "@/contexts/CreatePinContext";
+
 export default function NavigatePage() {
   return (
     <>
-      <Navigate />
+      <CreatePinContextProvider>
+        <Navigate />
+      </CreatePinContextProvider>
     </>
   );
 }

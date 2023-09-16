@@ -1,8 +1,15 @@
-.debugItem {
+.debug-item {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .container {
   color: black;
+}
+
+.button-container {
+  width: 100%;
+  text-align: center;
+  display: grid;
+  place-items: center;
 }

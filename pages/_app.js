@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import Head from "next/head";
 import MapContextProvider from "@/contexts/MapContext";
+import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
 
 export default function App({ Component, pageProps }) {
   return (
@@ -10,7 +11,9 @@ export default function App({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MapContextProvider>
-        <Component {...pageProps} />
+        <UserLocationProvider>
+          <Component {...pageProps} />
+        </UserLocationProvider>
       </MapContextProvider>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { createContext, use, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer } from "react";
 import {
   userLocationReducer,
   INITIAL_STATE,
@@ -21,7 +21,7 @@ export const UserLocationContext = createContext<UserLocationContext | null>(
 );
 
 const MAX_NUMBER_OF_RETRIES = 10;
-const MINIMUM_ACCURACY = 50;
+const MINIMUM_ACCURACY = 10;
 const TIME_BETWEEN_RETRIES = 1300;
 
 export default function UserLocationContextProvider({
@@ -37,7 +37,6 @@ export default function UserLocationContextProvider({
 
     for (let i = 0; i < MAX_NUMBER_OF_RETRIES; i++) {
       const position = await getCurrentPosition();
-
       const pendingLocation: Location = {
         coordinates: {
           latitude: position.coords.latitude,
@@ -69,6 +68,7 @@ export default function UserLocationContextProvider({
       console.log("Error: " + message);
       await delay(TIME_BETWEEN_RETRIES);
     }
+    userLocationContextDispatch({ type: "FAIL_UPDATE_USER_LOCATION" });
   };
 
   return (

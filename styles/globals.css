@@ -38,6 +38,17 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+  --clear-button-background-color: rgba(195, 194, 194, 0.6);
+  --clear-button-text-color: rgb(78, 78, 78);
+  --clear-button-font-weight: 600;
+
+  --accuracy-very-good: rgba(38, 140, 4, 0.484);
+  --accuracy-good: rgba(191, 205, 0, 0.724);
+  --accuracy-ok: rgba(205, 144, 0, 0.601);
+  --accuracy-bad: rgba(205, 65, 0, 0.801);
+
+  --error-color: rgba(255, 0, 0, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {

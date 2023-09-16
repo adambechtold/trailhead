@@ -1,0 +1,15 @@
+.container {
+  background-color: var(--clear-button-background-color);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-weight: var(--clear-button-font-weight);
+  color: var(--clear-button-text-color);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

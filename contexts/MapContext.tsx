@@ -2,18 +2,18 @@ import React, { createContext, useReducer, useEffect, useContext } from "react";
 import { Pin } from "@/types/Vector";
 import { mapContextReducer, INITIAL_STATE } from "./mapContextReducer";
 import { MapPosition } from "@/types/MapPosition";
+import { Map, generatePinKey } from "@/types/Map";
 
 type MapContextProviderProps = {
   children: React.ReactNode;
 };
 
 type MapContext = {
-  mapURL: string;
+  map: Map;
+  mapList: Map[];
   addMap: (mapURL: string) => void;
-  nextMap: () => void;
-  start?: Pin;
-  end?: Pin;
-  addPin: (pin: Pin) => void;
+  chooseMap: (mapKey: string) => void;
+  addPin: (pin: Pin, index: number) => void;
   resetPins: () => void;
   mapPosition?: MapPosition;
   setMapPosition: (mapPosition: MapPosition) => void;
@@ -30,10 +30,18 @@ export default function MapContextProvider({
     INITIAL_STATE
   );
 
+  const addPin = (pin: Pin, index: number) =>
+    mapContextDispatch({ type: "ADD_PIN", payload: { pin, index } });
+
   // PINS FROM STORAGE (search for this in other files)
   useEffect(() => {
-    const startFromStorage = localStorage.getItem("start");
-    const endFromStorage = localStorage.getItem("end");
+    const currentMap: Map = mapContextState.mapList[mapContextState.mapIndex];
+    const startFromStorage = localStorage.getItem(
+      generatePinKey(currentMap, "start")
+    );
+    const endFromStorage = localStorage.getItem(
+      generatePinKey(currentMap, "end")
+    );
 
     if (startFromStorage) {
       const start = JSON.parse(startFromStorage);
@@ -43,10 +51,10 @@ export default function MapContextProvider({
       const end = JSON.parse(endFromStorage);
       mapContextDispatch({ type: "SET_END", payload: end });
     }
-  }, []);
+  }, [mapContextState.mapIndex]);
 
-  const mapURL = mapContextState.mapList[mapContextState.mapIndex];
-  const { start, end, mapPosition } = mapContextState;
+  const map = mapContextState.mapList[mapContextState.mapIndex];
+  const { mapPosition, mapList } = mapContextState;
 
   // ====== ACTIONS ======
   const addMap = (mapURL: string) => {
@@ -54,13 +62,11 @@ export default function MapContextProvider({
     mapContextDispatch({ type: "RESET_PINS" });
   };
 
-  const nextMap = () => {
-    mapContextDispatch({ type: "NEXT_MAP" });
-    mapContextDispatch({ type: "RESET_PINS" });
+  const chooseMap = (mapKey: string) => {
+    const mapIndex = mapList.findIndex((map) => map.key === mapKey);
+    mapContextDispatch({ type: "CHOOSE_MAP", payload: mapIndex });
   };
 
-  const addPin = (pin: Pin) =>
-    mapContextDispatch({ type: "ADD_PIN", payload: pin });
   const resetPins = () => mapContextDispatch({ type: "RESET_PINS" });
 
   const setMapPosition = (mapPosition: MapPosition) =>
@@ -69,11 +75,10 @@ export default function MapContextProvider({
   return (
     <MapContext.Provider
       value={{
-        mapURL,
+        map,
+        mapList,
         addMap,
-        nextMap,
-        start,
-        end,
+        chooseMap,
         addPin,
         resetPins,
         mapPosition,

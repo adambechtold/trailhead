@@ -1,40 +1,62 @@
 .container {
   /* Color */
-  backdrop-filter: blur(8px);
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: #f4f4f4;
 
   /* Size and Shape*/
   width: 100%;
-  border-radius: 2rem 2rem 0 0;
+  border-radius: 1rem 1rem 0 0;
 
   /* Position */
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
   z-index: 3;
 
   transition: height 0.25s ease-in-out;
+
+  /* Shadow */
+  box-shadow: 0px 0px 0.66rem 0px rgba(0, 0, 0, 0.3);
+
+  /* Draggable */
+  touch-action: none;
+  transform: translate3d(0, calc(100% - 6rem), 0);
 }
 
-.expanded {
-  height: 98%;
+.position-toolbar {
+  position: fixed;
+  bottom: 7rem;
+  width: 100vw;
 }
 
-.contracted {
-  height: 10rem;
+.menu-handle {
+  background-color: grey;
+  height: 0.3rem;
+  width: 4rem;
+  border-radius: 0.2rem;
+  position: absolute;
+  top: 0.3rem;
+  left: calc(50%);
+  transform: translateX(-50%);
+}
+
+.menu-content {
+  padding: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .debugContainer {
   margin: 15px;
 }
 
-.inspectDataButton {
-  position: absolute;
-  bottom: 1rem;
-  left: 20px;
-}
-
-.consoleButton {
-  position: absolute;
-  bottom: 1rem;
-  right: 20px;
+.menu-buffer {
+  height: 100rem;
+  position: abolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }

@@ -1,0 +1,62 @@
+.container {
+  width: 4rem;
+  height: 3rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+  background-color: var(--clear-button-background-color);
+  color: white;
+
+  display: grid;
+  place-items: center;
+}
+
+.is-updating {
+  animation: anti-spin 1s linear infinite;
+}
+
+.accuracy-updating-glow {
+  width: 6rem;
+  height: 5rem;
+
+  background-position: -0.3rem -0.3rem;
+
+  display: grid;
+  place-items: center;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes anti-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.accuracy-very-good {
+  background: var(--accuracy-very-good);
+}
+
+.accuracy-good {
+  background: var(--accuracy-good);
+}
+
+.accuracy-ok {
+  background: var(--accuracy-ok);
+}
+
+.accuracy-bad {
+  background: var(--accuracy-bad);
+}
+
+.accuracy-error {
+  background: var(--error-color);
+}

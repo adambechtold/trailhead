@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  gap: 2rem;
 }
 
 .horizontal-container {
@@ -29,10 +30,6 @@
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0%);
-}
-
-.button {
-  margin: 12px;
 }
 
 .map-input {

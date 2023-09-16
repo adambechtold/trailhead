@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+
 import { InterpolateMap } from "./InterpolateMap";
-import MapControls from "./MapControls";
+import ClearButton from "./ClearButton/ClearButton";
+import { CancelIcon, ConfirmIcon } from "./Icons/Icons";
+
 import { useMapContext } from "@/contexts/MapContext";
 
 import styles from "./AddMap.module.css";
@@ -51,9 +54,7 @@ export default function AddMap() {
   function AddMap() {
     return (
       <>
-        <button onClick={handleAddMap} className={styles.button}>
-          Add Map Photo
-        </button>
+        <ClearButton onClick={handleAddMap}>ADD MAP PHOTO</ClearButton>
         <input
           className={styles["map-input"]}
           type="file"
@@ -62,9 +63,7 @@ export default function AddMap() {
           onChange={handleFileInputChange}
           id="map-input"
         />
-        <button onClick={handleUseSavedMaps} className={styles.button}>
-          Use Saved Maps
-        </button>
+        <ClearButton onClick={handleUseSavedMaps}>USE SAVED MAPS</ClearButton>
       </>
     );
   }
@@ -82,12 +81,14 @@ export default function AddMap() {
   function ConfirmMap() {
     return (
       <>
-        <button onClick={handleCancelSelection} className={styles.button}>
-          Clear Selection
-        </button>
-        <button onClick={handleConfirmMap} className={styles.button}>
-          Use This Map
-        </button>
+        <ClearButton onClick={handleCancelSelection}>
+          <CancelIcon />
+          SELECT NEW IMAGE
+        </ClearButton>
+        <ClearButton onClick={handleConfirmMap}>
+          <ConfirmIcon />
+          CONFIRM
+        </ClearButton>
       </>
     );
   }

@@ -3,6 +3,7 @@ import { Location } from "@/types/Vector";
 import { useMapContext } from "@/contexts/MapContext";
 import { useCreatePinContext } from "@/contexts/CreatePinContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import { CancelIcon, ConfirmIcon } from "./Icons/Icons";
 
 import ClearButton from "./ClearButton/ClearButton";
 
@@ -100,12 +101,4 @@ export default function Toolbar() {
       )}
     </div>
   );
-}
-
-function CancelIcon() {
-  return <img className={styles["icon-img"]} src={"/cancel-x.svg"} />;
-}
-
-function ConfirmIcon() {
-  return <img className={styles["icon-img"]} src={"/confirm-check.svg"} />;
 }

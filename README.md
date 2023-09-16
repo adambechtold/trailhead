@@ -1,6 +1,6 @@
 # ⛰️ Trailhead 🗺️
 
-Alltrails, Gaia GPS, and even Google Maps provide a huge library of GPS-enabled maps you can use _if you prepare ahead of time._ If you forget to download the trail before you leave the house or you choose a new trail, you're out of luck. You take a picture of the trail map at the trailhead and try to keep track of your progress as you walk, but I often lose my place.
+Alltrails, Gaia GPS, and even Google Maps provide a huge library of GPS-enabled maps you can use _if you prepare ahead of time._ If you forget to download the trail before you leave the house or you choose a new trail, you're out of luck. I take a picture of the trail map at the trailhead and try to keep track of my progress as I walk, but I often lose my place.
 
 Trailhead turns any image into a GPS-enabled map: it provides a pin that shows your current location as you walk.
 
@@ -9,6 +9,10 @@ Just a few setup steps:
 1. At the trailhead, select your current position on the map.
 2. Walk to the first fork in the trail, and select your current position on the map.
 3. That's it! Enjoy the hike!
+
+### Give it a Try
+
+[trailhead.adambechtold.xyz](https://trailhead.adambechtold.xyz)
 
 ### Demo
 

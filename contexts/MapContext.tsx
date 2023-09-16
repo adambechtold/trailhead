@@ -12,6 +12,7 @@ type MapContext = {
   map: Map;
   mapList: Map[];
   addMap: (mapURL: string) => void;
+  deleteMap: (mapKey: string) => void;
   chooseMap: (mapKey: string) => void;
   addPin: (pin: Pin, index: number) => void;
   resetPins: () => void;
@@ -33,9 +34,11 @@ export default function MapContextProvider({
   const addPin = (pin: Pin, index: number) =>
     mapContextDispatch({ type: "ADD_PIN", payload: { pin, index } });
 
-  // PINS FROM STORAGE (search for this in other files)
+  // Load Pins for Map
   useEffect(() => {
+    if (!mapContextState.mapList.length) return;
     const currentMap: Map = mapContextState.mapList[mapContextState.mapIndex];
+
     const startFromStorage = localStorage.getItem(
       generatePinKey(currentMap, "start")
     );
@@ -53,13 +56,26 @@ export default function MapContextProvider({
     }
   }, [mapContextState.mapIndex]);
 
+  useEffect(() => {
+    // ========= Load Saved Maps ==============
+    const result = localStorage.getItem("savedMapKeys");
+    const savedMapKeys = result ? JSON.parse(result) : [];
+
+    for (const mapKey of savedMapKeys) {
+      mapContextDispatch({ type: "LOAD_SAVED_MAP", payload: mapKey });
+    }
+  }, []);
+
   const map = mapContextState.mapList[mapContextState.mapIndex];
   const { mapPosition, mapList } = mapContextState;
 
   // ====== ACTIONS ======
   const addMap = (mapURL: string) => {
-    mapContextDispatch({ type: "ADD_MAP", payload: mapURL });
-    mapContextDispatch({ type: "RESET_PINS" });
+    mapContextDispatch({ type: "ADD_NEW_MAP", payload: mapURL });
+  };
+
+  const deleteMap = (mapKey: string) => {
+    mapContextDispatch({ type: "DELETE_MAP", payload: mapKey });
   };
 
   const chooseMap = (mapKey: string) => {
@@ -78,6 +94,7 @@ export default function MapContextProvider({
         map,
         mapList,
         addMap,
+        deleteMap,
         chooseMap,
         addPin,
         resetPins,

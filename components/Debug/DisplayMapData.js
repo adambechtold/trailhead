@@ -28,7 +28,6 @@ export default function DisplayMapData() {
   const { userLocation } = useUserLocationContext();
   const { map } = useMapContext();
   const router = useRouter();
-  const { start, end } = map;
 
   const flattenObject = (object) => {
     const flattenedObject = {};
@@ -51,22 +50,37 @@ export default function DisplayMapData() {
   };
 
   const content =
-    !start && !end && !userLocation ? (
+    !map || (!map.start && !map.end && !userLocation) ? (
       <div>No data to display.</div>
     ) : (
       <>
-        {start && displayObject(flattenObject(start), "Pin 1")}
-        {end && displayObject(flattenObject(end), "Pin 2")}
+        {map.start && displayObject(flattenObject(start), "Pin 1")}
+        {map.end && displayObject(flattenObject(end), "Pin 2")}
         {userLocation &&
           displayObject(flattenObject(userLocation), "User Location")}
       </>
     );
+
+  const clearLocalStorage = () => {
+    const result = confirm("Are you sure you want to clear local storage?");
+    if (result) {
+      // User clicked OK
+      // Perform delete operation
+      localStorage.clear();
+      window.location.reload();
+    } else {
+      return;
+    }
+  };
 
   return (
     <div className={styles.container}>
       {content}
       <div className={styles["button-container"]}>
         <ClearButton onClick={returnToNavigate}>RETURN TO NAVIGATE</ClearButton>
+        <ClearButton onClick={clearLocalStorage}>
+          CLEAR LOCAL STORAGE
+        </ClearButton>
       </div>
     </div>
   );

@@ -15,6 +15,8 @@ export default function CurrentMap() {
     setMapPosition({ x, y, scale });
   };
 
+  if (!map) return null;
+
   return (
     <InterpolateMap
       start={map.start}

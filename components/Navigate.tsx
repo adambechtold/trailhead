@@ -22,7 +22,7 @@ export default function Navigate() {
     useUserLocationContext();
   const isUpdatingLocation = updateUserLocationStatus.isUpdating;
 
-  const canDisplayResetButton = map.start || map.end;
+  const canDisplayResetButton = map && (map.start || map.end);
   const canDisplayAccuracyIndicator =
     userLocation || isUpdatingLocation || updateUserLocationStatus.error;
   let accuracyToDisplay = userLocation?.accuracy;

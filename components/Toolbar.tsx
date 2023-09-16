@@ -71,11 +71,10 @@ export default function Toolbar() {
   };
 
   const isUpdatingLocation = updateUserLocationStatus.isUpdating;
-  const canSetPin = (!map.start || !map.end) && !isUpdatingLocation;
+  const canSetPin = map && (!map.start || !map.end) && !isUpdatingLocation;
   const canDisplaySetPin = !isCreatingPin && canSetPin;
   const canDisplayConfirmLocation = isCreatingPin && !isUpdatingLocation;
-  const canDisplayUpdateLocation = !isCreatingPin && !isUpdatingLocation;
-  const currentAcuracy = updateUserLocationStatus.pendingLocation?.accuracy;
+  const canDisplayUpdateLocation = map && !isCreatingPin && !isUpdatingLocation;
 
   return (
     <div className={styles.container}>

@@ -1,6 +1,6 @@
 import { MapPosition } from "@/types/MapPosition";
 import { Pin } from "@/types/Vector";
-import { Map, EXAMPLE_MAPS, generateMapKey, generatePinKey } from "@/types/Map";
+import { Map, generateMapKey, generatePinKey } from "@/types/Map";
 
 export type MapContextState = {
   mapIndex: number;
@@ -10,7 +10,9 @@ export type MapContextState = {
 
 type Action = {
   type:
-    | "ADD_MAP"
+    | "ADD_NEW_MAP"
+    | "LOAD_SAVED_MAP"
+    | "DELETE_MAP"
     | "CHOOSE_MAP"
     | "ADD_PIN"
     | "RESET_PINS"
@@ -22,7 +24,7 @@ type Action = {
 
 export const INITIAL_STATE: MapContextState = {
   mapIndex: 0,
-  mapList: EXAMPLE_MAPS,
+  mapList: [],
   mapPosition: {
     x: 0,
     y: 0,
@@ -36,16 +38,48 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
   let newMapList: Map[] = [...state.mapList];
 
   switch (action.type) {
-    case "ADD_MAP":
+    case "ADD_NEW_MAP":
       const newMapURL = action.payload;
+      const newMapKey = generateMapKey(newMapURL);
+      const existingMap = state.mapList.find((map) => map.key === newMapKey);
+      if (existingMap) return state;
       newMap = {
         url: newMapURL,
         key: generateMapKey(newMapURL),
       };
       newMapList.splice(state.mapIndex, 0, newMap);
+      if (localStorage.getItem(newMap.key) === null) {
+        saveMap(newMap);
+      }
       return {
         ...state,
         mapList: newMapList,
+      };
+    case "LOAD_SAVED_MAP":
+      const savedMapKey = action.payload;
+      const savedMap = JSON.parse(localStorage.getItem(savedMapKey) || "");
+      if (!savedMap) return state;
+      const alreadyLoaded = !!state.mapList.find(
+        (map) => map.key === savedMapKey
+      );
+      if (alreadyLoaded) return state;
+      newMapList.push(savedMap);
+      return {
+        ...state,
+        mapList: newMapList,
+      };
+    case "DELETE_MAP":
+      const key: string = action.payload;
+      const indexToDelete: number = newMapList.findIndex(
+        (map) => map.key === key
+      );
+      deleteMap(newMapList[indexToDelete]);
+      newMapList.splice(indexToDelete, 1);
+      const newIndex = indexToDelete === 0 ? 0 : indexToDelete - 1;
+      return {
+        ...state,
+        mapList: newMapList,
+        mapIndex: newIndex,
       };
     case "CHOOSE_MAP":
       return {
@@ -108,4 +142,23 @@ const addPin = (
 
 const savePin = (name: string, pin: Pin) => {
   localStorage.setItem(name, JSON.stringify(pin));
+};
+
+const saveMap = (map: Map) => {
+  const savedMapKeys = getSavedMapList();
+  savedMapKeys.unshift(map.key);
+  localStorage.setItem("savedMapKeys", JSON.stringify(savedMapKeys));
+  localStorage.setItem(map.key, JSON.stringify(map));
+};
+
+const deleteMap = (map: Map) => {
+  const savedMapKeys = getSavedMapList();
+  savedMapKeys.splice(savedMapKeys.indexOf(map.key), 1);
+  localStorage.setItem("savedMapKeys", JSON.stringify(savedMapKeys));
+  localStorage.removeItem(map.key);
+};
+
+const getSavedMapList = (): string[] => {
+  const result = localStorage.getItem("savedMapKeys");
+  return result ? JSON.parse(result) : [];
 };

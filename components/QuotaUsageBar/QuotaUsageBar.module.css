@@ -1,0 +1,28 @@
+.container {
+  width: 20rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+
+.bar-background {
+  background-color: var(--clear-button-background-color);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  height: 1.2rem;
+  width: 100%;
+  position: relative;
+}
+
+.bar {
+  height: 1.2rem;
+  background: #292929;
+  border-radius: 0.5rem;
+}
+
+.title {
+  font-weight: bold;
+}

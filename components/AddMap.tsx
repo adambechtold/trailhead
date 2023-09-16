@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 
 import { InterpolateMap } from "./InterpolateMap";
 import ClearButton from "./ClearButton/ClearButton";
@@ -8,6 +9,10 @@ import { CancelIcon, ConfirmIcon } from "./Icons/Icons";
 import { useMapContext } from "@/contexts/MapContext";
 
 import styles from "./AddMap.module.css";
+
+const QuotaUsageBar = dynamic(() => import("./QuotaUsageBar/QuotaUsageBar"), {
+  ssr: false,
+});
 
 export default function AddMap() {
   const { addMap, mapList } = useMapContext();
@@ -51,18 +56,29 @@ export default function AddMap() {
     return <InterpolateMap mapURL={mapURL} />;
   }
 
-  function AddMap() {
+  function SelectMap() {
+    let quotaUsed = 0;
+    let quotaTotal = 5000; // 5MB
+    if (typeof window !== "undefined" && window.localStorage) {
+      quotaUsed = JSON.stringify(localStorage).length / 1024; // KB
+    }
+
     return (
       <>
-        <ClearButton onClick={handleAddMap}>ADD MAP PHOTO</ClearButton>
-        <input
-          className={styles["map-input"]}
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileInputChange}
-          id="map-input"
-        />
+        <div className={styles["add-map-container"]}>
+          <ClearButton onClick={handleAddMap}>ADD MAP PHOTO</ClearButton>
+          <input
+            className={styles["map-input"]}
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleFileInputChange}
+            id="map-input"
+          />
+          {typeof window !== "undefined" && (
+            <QuotaUsageBar quotaUsed={quotaUsed} quotaTotal={quotaTotal} />
+          )}
+        </div>
         {!!mapList.length && (
           <ClearButton onClick={handleUseSavedMaps}>USE SAVED MAPS</ClearButton>
         )}
@@ -112,7 +128,7 @@ export default function AddMap() {
           orientationClass,
         ].join(" ")}
       >
-        {!isMapSelected && <AddMap />}
+        {!isMapSelected && <SelectMap />}
         {isMapSelected && <ConfirmMap />}
       </div>
 

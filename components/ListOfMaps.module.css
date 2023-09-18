@@ -39,7 +39,7 @@
 }
 
 .add-map-content {
-  background-color: rgb(189, 189, 189);
+  background-color: var(--clear-button-background-color);
   border-radius: 1rem;
   display: flex;
   justify-content: center;
@@ -47,11 +47,12 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  color: gray;
+  color: var(--clear-button-text-color);
 }
 
 .add-map-text {
-  font-weight: 600;
+  /* font-weight: 520; */
+  font-weight: var(--clear-button-font-weight);
 }
 
 .add-map-icon {
@@ -65,5 +66,5 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }

@@ -1,5 +1,8 @@
 :root {
   --clear-button-background-color: rgba(195, 194, 194, 0.6);
+  /* --clear-button-background-color: rgba(246, 246, 246, 0.345); 
+    TODO: Apply this style and change non-clear buttons to use the above style
+  */
   --clear-button-text-color: rgb(78, 78, 78);
   --clear-button-font-weight: 600;
 
@@ -9,6 +12,8 @@
   --accuracy-bad: rgba(205, 65, 0, 0.801);
 
   --error-color: rgba(255, 0, 0, 0.5);
+
+  --small-button-text-size: 0.8rem;
 }
 
 * {

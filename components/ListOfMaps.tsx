@@ -32,7 +32,7 @@ export default function ListOfMaps({
 
   return (
     <div className={styles.container}>
-      {onAddMap && <AddMap onClick={onAddMap} />}
+      {onAddMap && <AddMapOption onClick={onAddMap} />}
       {maps.map((map, index) => (
         <MapItem
           key={map.key}
@@ -82,13 +82,13 @@ function MapItem({
   );
 }
 
-function AddMap({ onClick }: { onClick: () => void }) {
+function AddMapOption({ onClick }: { onClick: () => void }) {
   return (
     <div className={styles["map-item-container"]}>
       <div className={styles["add-map-container"]} onClick={onClick}>
         <div className={styles["add-map-content"]}>
           <div className={styles["add-map-icon"]}>+</div>
-          <div className={styles["add-map-text"]}>Add Map</div>
+          <div className={styles["add-map-text"]}>ADD MAP</div>
         </div>
       </div>
     </div>
@@ -97,9 +97,9 @@ function AddMap({ onClick }: { onClick: () => void }) {
 
 function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
-    <ClearButton onClick={onClick}>
-      <CancelIcon />
-      DELETE
+    <ClearButton onClick={onClick} size={"small"}>
+      <CancelIcon size={"small"} />
+      <div style={{ fontSize: "var(--small-button-text-size)" }}>DELETE</div>
     </ClearButton>
   );
 }

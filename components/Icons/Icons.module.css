@@ -1,3 +1,7 @@
-.icon-img {
-  height: 0.9rem;
+.size-medium {
+  height: 1.1rem;
+}
+
+.size-small {
+  height: var(--small-button-text-size);
 }

@@ -18,6 +18,8 @@ type MapContext = {
   resetPins: () => void;
   mapPosition?: MapPosition;
   setMapPosition: (mapPosition: MapPosition) => void;
+  mapSaveError: boolean;
+  removeMapError: () => void;
 };
 
 export const MapContext = createContext<MapContext | null>(null);
@@ -88,6 +90,8 @@ export default function MapContextProvider({
   const setMapPosition = (mapPosition: MapPosition) =>
     mapContextDispatch({ type: "SET_MAP_POSITION", payload: mapPosition });
 
+  const removeMapError = () => mapContextDispatch({ type: "REMOVE_MAP_ERROR" });
+
   return (
     <MapContext.Provider
       value={{
@@ -100,6 +104,8 @@ export default function MapContextProvider({
         resetPins,
         mapPosition,
         setMapPosition,
+        mapSaveError: mapContextState.mapSaveError,
+        removeMapError,
       }}
     >
       {children}

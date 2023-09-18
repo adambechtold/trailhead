@@ -6,21 +6,20 @@ export type MapContextState = {
   mapIndex: number;
   mapList: Map[];
   mapPosition?: MapPosition;
+  mapSaveError: boolean;
 };
 
-type Action = {
-  type:
-    | "ADD_NEW_MAP"
-    | "LOAD_SAVED_MAP"
-    | "DELETE_MAP"
-    | "CHOOSE_MAP"
-    | "ADD_PIN"
-    | "RESET_PINS"
-    | "SET_MAP_POSITION"
-    | "SET_START"
-    | "SET_END";
-  payload?: any;
-};
+export type Action =
+  | { type: "ADD_NEW_MAP"; payload: string }
+  | { type: "LOAD_SAVED_MAP"; payload: string }
+  | { type: "DELETE_MAP"; payload: string }
+  | { type: "CHOOSE_MAP"; payload: number }
+  | { type: "ADD_PIN"; payload: { pin: Pin; index: number } }
+  | { type: "RESET_PINS" }
+  | { type: "SET_MAP_POSITION"; payload: MapPosition }
+  | { type: "SET_START"; payload: Pin }
+  | { type: "SET_END"; payload: Pin }
+  | { type: "REMOVE_MAP_ERROR" };
 
 export const INITIAL_STATE: MapContextState = {
   mapIndex: 0,
@@ -30,6 +29,7 @@ export const INITIAL_STATE: MapContextState = {
     y: 0,
     scale: 0.4, // TODO: Calculate This from the image size
   },
+  mapSaveError: false,
 };
 
 export const mapContextReducer = (state: MapContextState, action: Action) => {
@@ -49,11 +49,19 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
       };
       newMapList.splice(state.mapIndex, 0, newMap);
       if (localStorage.getItem(newMap.key) === null) {
-        saveMap(newMap);
+        const saveWasSuccessful = saveMap(newMap);
+        if (!saveWasSuccessful) {
+          newMapList.splice(state.mapIndex, 1);
+          return {
+            ...state,
+            mapSaveError: true,
+          };
+        }
       }
       return {
         ...state,
         mapList: newMapList,
+        mapSaveError: false,
       };
     case "LOAD_SAVED_MAP":
       const savedMapKey = action.payload;
@@ -121,6 +129,11 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
         ...state,
         mapPosition: action.payload,
       };
+    case "REMOVE_MAP_ERROR":
+      return {
+        ...state,
+        mapSaveError: false,
+      };
     default:
       return state;
   }
@@ -145,11 +158,18 @@ const savePin = (name: string, pin: Pin) => {
   localStorage.setItem(name, JSON.stringify(pin));
 };
 
-const saveMap = (map: Map) => {
+const saveMap = (map: Map): boolean => {
   const savedMapKeys = getSavedMapList();
-  savedMapKeys.unshift(map.key);
-  localStorage.setItem("savedMapKeys", JSON.stringify(savedMapKeys));
-  localStorage.setItem(map.key, JSON.stringify(map));
+  const newSavedMapKeys = [...savedMapKeys, map.key];
+  try {
+    localStorage.setItem("savedMapKeys", JSON.stringify(newSavedMapKeys));
+    localStorage.setItem(map.key, JSON.stringify(map));
+    return true;
+  } catch (e) {
+    localStorage.setItem("savedMapKeys", JSON.stringify(savedMapKeys));
+    localStorage.removeItem(map.key);
+    return false;
+  }
 };
 
 const deleteMap = (map: Map) => {

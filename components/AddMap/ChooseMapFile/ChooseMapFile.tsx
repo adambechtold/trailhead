@@ -76,12 +76,6 @@ export default function ChooseMapFile({
           <QuotaUsageBar quotaUsed={quotaUsed} quotaTotal={quotaTotal} />
         )}
       </div>
-      {!hasSavedMaps && (
-        <ClearButton onClick={() => router.push("/how-to-use")}>
-          <QuestionIcon />
-          HOW TO USE TRAILHEAD
-        </ClearButton>
-      )}
       {hasSavedMaps && (
         <ClearButton onClick={onCancelChooseMap}>USE SAVED MAPS</ClearButton>
       )}

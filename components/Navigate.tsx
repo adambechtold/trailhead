@@ -13,7 +13,7 @@ import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
 import AddMap from "./AddMap/AddMap";
 
 import styles from "./Navigate.module.css";
-import { QuestionIcon } from "./Icons/Icons";
+import HelpButton from "./HelpButton";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
   ssr: false,
@@ -52,13 +52,6 @@ export default function Navigate() {
     endCreatePin();
   };
 
-  const showHelp = () => {
-    router.push({
-      pathname: "/how-to-use",
-      query: { disclaimer: "false" },
-    });
-  };
-
   return (
     <>
       <div className={styles["button-container"]}>
@@ -71,9 +64,7 @@ export default function Navigate() {
             />
           </div>
         )}
-        <ClearButton onClick={showHelp}>
-          <QuestionIcon />
-        </ClearButton>
+        <HelpButton />
       </div>
       {canDisplayResetButton && (
         <div className={styles["position-reset-button"]}>

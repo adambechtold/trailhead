@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import { useMapContext } from "@/contexts/MapContext";
 import { useCreatePinContext } from "@/contexts/CreatePinContext";
@@ -12,6 +13,7 @@ import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
 import AddMap from "./AddMap/AddMap";
 
 import styles from "./Navigate.module.css";
+import { QuestionIcon } from "./Icons/Icons";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
   ssr: false,
@@ -27,6 +29,7 @@ export default function Navigate() {
     mostRecentLocation,
     startWatchingUserLocation,
   } = useUserLocationContext();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isWatchingLocation) startWatchingUserLocation();
@@ -49,17 +52,29 @@ export default function Navigate() {
     endCreatePin();
   };
 
+  const showHelp = () => {
+    router.push({
+      pathname: "/how-to-use",
+      query: { disclaimer: "false" },
+    });
+  };
+
   return (
     <>
-      {canDisplayAccuracyIndicator && (
-        <div className={styles["position-accuracy-indicator"]}>
-          <AccuracyIndicator
-            accuracy={accuracyToDisplay}
-            isUpdating={isWatchingLocation}
-            error={!!userLocationError}
-          />
-        </div>
-      )}
+      <div className={styles["button-container"]}>
+        {canDisplayAccuracyIndicator && (
+          <div className={styles["position-accuracy-indicator"]}>
+            <AccuracyIndicator
+              accuracy={accuracyToDisplay}
+              isUpdating={isWatchingLocation}
+              error={!!userLocationError}
+            />
+          </div>
+        )}
+        <ClearButton onClick={showHelp}>
+          <QuestionIcon />
+        </ClearButton>
+      </div>
       {canDisplayResetButton && (
         <div className={styles["position-reset-button"]}>
           <ClearButton onClick={onReset}>RESET PINS</ClearButton>

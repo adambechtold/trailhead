@@ -28,3 +28,30 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
 }
+
+h2 {
+  padding-top: 1rem;
+}
+
+ol {
+  list-style-position: inside;
+  margin-left: 1rem;
+}
+
+ol li p {
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+}
+
+ol ul {
+  margin-top: 0.5rem;
+}
+
+ol > * {
+  margin-top: 1rem;
+}
+
+ol ul {
+  list-style-position: inside;
+  margin-left: 1rem;
+}

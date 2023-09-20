@@ -194,9 +194,6 @@ export default function MenuTray() {
             <ClearButton onClick={showDebuggingContent}>
               INSPECT DATA
             </ClearButton>
-            <ClearButton onClick={() => router.push("/how-to-use")}>
-              HELP
-            </ClearButton>
           </div>
         </div>
         <div className={styles["menu-buffer"]}></div>

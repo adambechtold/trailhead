@@ -1,6 +1,13 @@
-.debug-item {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.section {
+  padding-top: 1rem;
+}
+
+.section h3 {
+  padding-bottom: 0.5rem;
+}
+
+.object {
+  padding-bottom: 0.5rem;
 }
 
 .container {
@@ -12,5 +19,6 @@
   text-align: center;
   display: grid;
   place-items: center;
-  gap: 5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }

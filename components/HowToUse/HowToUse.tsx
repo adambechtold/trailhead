@@ -19,7 +19,7 @@ export default function HowToUse() {
           </ul>
         </li>
         <li>
-          Set Your Current Location
+          Pin Your Current Location
           <ul>
             <li>
               Click <b>Set Pin</b> and position the crosshairs over your current
@@ -35,7 +35,7 @@ export default function HowToUse() {
           Pin Another Location
           <p>
             Walk a short distance to a spot that's clearly marked on the map,{" "}
-            <i>for example, walk to the first intersection</i>.
+            <i>for example, walk to the first fork in the trail</i>.
           </p>
           <ul>
             <li>

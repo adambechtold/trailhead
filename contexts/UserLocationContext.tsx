@@ -18,6 +18,7 @@ type UserLocationContext = {
   mostRecentLocation: Location | null;
   isWatchingLocation: boolean;
   error: string | null;
+  startWatchingUserLocation: () => void;
 };
 
 export const UserLocationContext = createContext<UserLocationContext | null>(
@@ -37,7 +38,6 @@ export default function UserLocationContextProvider({
   const [watchId, setWatchId] = useState<number | null>(null);
 
   useEffect(() => {
-    startWatchingUserLocation();
     return () => {
       stopWatchingUserLocation();
     };
@@ -115,6 +115,7 @@ export default function UserLocationContextProvider({
         mostRecentLocation: mostRecentLocation,
         isWatchingLocation,
         error,
+        startWatchingUserLocation,
       }}
     >
       {children}

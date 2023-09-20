@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import dynamic from "next/dynamic";
 
 import { useMapContext } from "@/contexts/MapContext";
@@ -24,7 +25,12 @@ export default function Navigate() {
     currentAcceptedUserLocation,
     error: userLocationError,
     mostRecentLocation,
+    startWatchingUserLocation,
   } = useUserLocationContext();
+
+  useEffect(() => {
+    if (!isWatchingLocation) startWatchingUserLocation();
+  }, []);
 
   const canDisplayResetButton = map && (map.start || map.end);
   const canDisplayAccuracyIndicator =

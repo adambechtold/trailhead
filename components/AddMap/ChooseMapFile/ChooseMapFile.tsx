@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import {
   getMaximumStorageAmount,
@@ -8,6 +9,7 @@ import {
 import ClearButton from "@/components/ClearButton/ClearButton";
 
 import styles from "./ChooseMapFile.module.css";
+import { QuestionIcon } from "@/components/Icons/Icons";
 
 const QuotaUsageBar = dynamic(
   () => import("@/components/QuotaUsageBar/QuotaUsageBar"),
@@ -28,6 +30,7 @@ export default function ChooseMapFile({
   onMapFileSelected,
 }: Props) {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const handleSelectMapFile = () => {
     if (fileInputRef.current) {
@@ -73,6 +76,12 @@ export default function ChooseMapFile({
           <QuotaUsageBar quotaUsed={quotaUsed} quotaTotal={quotaTotal} />
         )}
       </div>
+      {!hasSavedMaps && (
+        <ClearButton onClick={() => router.push("/how-to-use")}>
+          <QuestionIcon />
+          HOW TO USE TRAILHEAD
+        </ClearButton>
+      )}
       {hasSavedMaps && (
         <ClearButton onClick={onCancelChooseMap}>USE SAVED MAPS</ClearButton>
       )}

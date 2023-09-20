@@ -190,7 +190,14 @@ export default function MenuTray() {
             onAddMap={handleAddNewMap}
             onDeleteMap={onDeleteMap}
           />
-          <ClearButton onClick={showDebuggingContent}>INSPECT DATA</ClearButton>
+          <div className={styles["lower-buttons-container"]}>
+            <ClearButton onClick={showDebuggingContent}>
+              INSPECT DATA
+            </ClearButton>
+            <ClearButton onClick={() => router.push("/how-to-use")}>
+              HELP
+            </ClearButton>
+          </div>
         </div>
         <div className={styles["menu-buffer"]}></div>
       </div>

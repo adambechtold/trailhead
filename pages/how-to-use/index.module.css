@@ -1,0 +1,38 @@
+.container {
+  width: 100vw;
+
+  padding: 1rem;
+}
+
+.container h2 {
+  padding-top: 1rem;
+}
+
+.container ol {
+  list-style-position: inside;
+  margin-left: 1rem;
+}
+
+.container ol li p {
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+}
+
+.container ol ul {
+  margin-top: 0.5rem;
+}
+
+.container ol > * {
+  margin-top: 1rem;
+}
+
+.container ol ul {
+  list-style-position: inside;
+  margin-left: 1rem;
+}
+
+.return-button-container {
+  padding: 2rem;
+  display: grid;
+  place-items: center;
+}

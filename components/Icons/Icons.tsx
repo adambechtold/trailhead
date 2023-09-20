@@ -25,3 +25,7 @@ export function CancelIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 export function ConfirmIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/confirm-check.svg"} />;
 }
+
+export function QuestionIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/question-mark.svg"} />;
+}

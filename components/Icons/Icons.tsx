@@ -29,3 +29,7 @@ export function ConfirmIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 export function QuestionIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/question-mark.svg"} />;
 }
+
+export function TrashIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/trash-outline.svg"} />;
+}

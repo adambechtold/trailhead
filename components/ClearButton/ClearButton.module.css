@@ -19,10 +19,12 @@
 
 .size-small {
   padding: 0.5rem;
+  border-radius: 0.3rem;
 }
 
 .size-medium {
   padding: 1rem;
+  border-radius: 0.8rem;
 }
 
 .disabled {

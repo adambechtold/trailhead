@@ -14,10 +14,12 @@ export type Action =
   | { type: "LOAD_SAVED_MAP"; payload: string }
   | { type: "DELETE_MAP"; payload: string }
   | { type: "CHOOSE_MAP"; payload: number }
-  | { type: "RESET_PINS" }
-  | { type: "SET_MAP_POSITION"; payload: MapPosition }
   | { type: "SET_START"; payload: { map: Map; pin: Pin } }
   | { type: "SET_END"; payload: { map: Map; pin: Pin } }
+  | { type: "DELETE_START"; payload: Map }
+  | { type: "DELETE_END"; payload: Map }
+  | { type: "RESET_PINS" }
+  | { type: "SET_MAP_POSITION"; payload: MapPosition }
   | { type: "REMOVE_MAP_ERROR" };
 
 export const INITIAL_STATE: MapContextState = {
@@ -98,6 +100,10 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
       return addPin(state, action.payload, "start");
     case "SET_END":
       return addPin(state, action.payload, "end");
+    case "DELETE_START":
+      return removePin(state, action.payload, "start");
+    case "DELETE_END":
+      return removePin(state, action.payload, "end");
     case "RESET_PINS":
       const newState = { ...state };
       delete newState.mapList[state.mapIndex].start;
@@ -126,6 +132,23 @@ const addPin = (
 ): MapContextState => {
   if (!map) return state;
   map[type] = pin;
+  const indexOfMap = state.mapList.findIndex((m) => m.key === map.key);
+  const newMapList = [...state.mapList];
+  newMapList[indexOfMap] = map;
+  saveMap(map);
+  return {
+    ...state,
+    mapList: newMapList,
+  };
+};
+
+const removePin = (
+  state: MapContextState,
+  map: Map,
+  type: "start" | "end"
+): MapContextState => {
+  if (!map) return state;
+  delete map[type];
   const indexOfMap = state.mapList.findIndex((m) => m.key === map.key);
   const newMapList = [...state.mapList];
   newMapList[indexOfMap] = map;

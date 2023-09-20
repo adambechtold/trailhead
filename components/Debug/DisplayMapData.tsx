@@ -11,6 +11,7 @@ import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import ClearButton from "@/components/ClearButton/ClearButton";
 
 import styles from "./DisplayMapData.module.css";
+import { TrashIcon } from "../Icons/Icons";
 
 export default function DisplayMapData() {
   const {
@@ -20,7 +21,7 @@ export default function DisplayMapData() {
     error,
     startWatchingUserLocation,
   } = useUserLocationContext();
-  const { map } = useMapContext();
+  const { map, deleteStartPin, deleteEndPin } = useMapContext();
   const router = useRouter();
 
   const returnToNavigate = () => {
@@ -41,6 +42,19 @@ export default function DisplayMapData() {
 
   return (
     <div className={styles.container}>
+      {map && (
+        <MapData
+          map={map}
+          deleteStartPin={deleteStartPin}
+          deleteEndPin={deleteEndPin}
+        />
+      )}
+      <UserLocationData
+        currentAcceptedUserLocation={currentAcceptedUserLocation}
+        mostRecentLocation={mostRecentLocation}
+        isWatchingLocation={isWatchingLocation}
+        error={error}
+      />
       <div className={styles["button-container"]}>
         <ClearButton onClick={returnToNavigate}>RETURN TO NAVIGATE</ClearButton>
         <ClearButton onClick={clearLocalStorage}>
@@ -53,35 +67,44 @@ export default function DisplayMapData() {
           START WATCHING LOCATION
         </ClearButton>
       </div>
-      {map && <MapData map={map} />}
-      <UserLocationData
-        currentAcceptedUserLocation={currentAcceptedUserLocation}
-        mostRecentLocation={mostRecentLocation}
-        isWatchingLocation={isWatchingLocation}
-        error={error}
-      />
     </div>
   );
 }
 
 type MapDataProps = {
   map: Map;
+  deleteStartPin: (map: Map) => void;
+  deleteEndPin: (map: Map) => void;
 };
 
-function MapData({ map }: MapDataProps) {
+function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
   return (
     <div>
       <h3>Map</h3>
-      <p>
-        {map.start
-          ? displayObject(flattenObject(map.start), "Pin 1")
-          : "Start Position Not Set"}
-      </p>
-      <p>
-        {map.end
-          ? displayObject(flattenObject(map.end), "Pin 2")
-          : "End Position Not Set"}
-      </p>
+      {map.start ? (
+        <div className={styles.pin}>
+          <p>{displayObject(flattenObject(map.start), "Start Pin")}</p>
+          <div className={styles["delete-button"]}>
+            <ClearButton onClick={() => deleteStartPin(map)} size="small">
+              <TrashIcon />
+            </ClearButton>
+          </div>
+        </div>
+      ) : (
+        <p>Start Position Not Set</p>
+      )}
+      {map.end ? (
+        <div className={styles.pin}>
+          <p>{displayObject(flattenObject(map.end), "End Pin")}</p>
+          <div className={styles["delete-button"]}>
+            <ClearButton onClick={() => deleteEndPin(map)} size="small">
+              <TrashIcon />
+            </ClearButton>
+          </div>
+        </div>
+      ) : (
+        <p>End Position Not Set</p>
+      )}
     </div>
   );
 }

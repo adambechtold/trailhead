@@ -16,6 +16,8 @@ type MapContext = {
   chooseMap: (mapKey: string) => void;
   setStartPin: (map: Map, pin: Pin) => void;
   setEndPin: (map: Map, pin: Pin) => void;
+  deleteStartPin: (map: Map) => void;
+  deleteEndPin: (map: Map) => void;
   resetPins: () => void;
   mapPosition?: MapPosition;
   setMapPosition: (mapPosition: MapPosition) => void;
@@ -83,8 +85,6 @@ export default function MapContextProvider({
     mapContextDispatch({ type: "CHOOSE_MAP", payload: mapIndex });
   };
 
-  const resetPins = () => mapContextDispatch({ type: "RESET_PINS" });
-
   const setMapPosition = (mapPosition: MapPosition) =>
     mapContextDispatch({ type: "SET_MAP_POSITION", payload: mapPosition });
 
@@ -110,6 +110,22 @@ export default function MapContextProvider({
     });
   };
 
+  const deleteStartPin = (map: Map) => {
+    mapContextDispatch({
+      type: "DELETE_START",
+      payload: map,
+    });
+  };
+
+  const deleteEndPin = (map: Map) => {
+    mapContextDispatch({
+      type: "DELETE_END",
+      payload: map,
+    });
+  };
+
+  const resetPins = () => mapContextDispatch({ type: "RESET_PINS" });
+
   return (
     <MapContext.Provider
       value={{
@@ -120,6 +136,8 @@ export default function MapContextProvider({
         chooseMap,
         setStartPin,
         setEndPin,
+        deleteStartPin,
+        deleteEndPin,
         resetPins,
         mapPosition,
         setMapPosition,

@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "@/types/Map";
 
 import ClearButton from "./ClearButton/ClearButton";
-import { CancelIcon } from "./Icons/Icons";
+import { TrashIcon } from "./Icons/Icons";
 
 import styles from "@/components/ListOfMaps.module.css";
 
@@ -98,8 +98,7 @@ function AddMapOption({ onClick }: { onClick: () => void }) {
 function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
     <ClearButton onClick={onClick} size={"small"}>
-      <CancelIcon size={"small"} />
-      <div style={{ fontSize: "var(--small-button-text-size)" }}>DELETE</div>
+      <TrashIcon />
     </ClearButton>
   );
 }

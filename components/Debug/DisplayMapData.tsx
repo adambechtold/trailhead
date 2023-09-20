@@ -64,7 +64,7 @@ type MapDataProps = {
 function MapData({ map }: MapDataProps) {
   return (
     <div>
-      <h3>Map Data</h3>
+      <h3>Map</h3>
       <p>
         {map.start
           ? displayObject(flattenObject(map.start), "Pin 1")
@@ -94,7 +94,12 @@ function UserLocationData({
 }: UserLocationData) {
   return (
     <div className={styles.section}>
-      <h3>User Location Data</h3>
+      <h3>User Location</h3>
+      <div className={styles.object}>
+        {isWatchingLocation
+          ? "🔄 Is Watching Location"
+          : "❌ Not Watching Location"}
+      </div>
       {currentAcceptedUserLocation &&
         displayObject(
           flattenObject(currentAcceptedUserLocation),
@@ -104,11 +109,6 @@ function UserLocationData({
         displayObject(
           flattenObject(mostRecentLocation),
           "Most Recent Location"
-        )}
-      {isWatchingLocation ? (
-        <div>🔄 Is Watching Location</div>
-      ) : (
-        <div>❌ Not Watching Location</div>
       )}
       {error && <div>Error: {error}</div>}
     </div>

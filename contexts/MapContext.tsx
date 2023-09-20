@@ -14,7 +14,8 @@ type MapContext = {
   addMap: (mapURL: string) => void;
   deleteMap: (mapKey: string) => void;
   chooseMap: (mapKey: string) => void;
-  addPin: (pin: Pin, index: number) => void;
+  setStartPin: (map: Map, pin: Pin) => void;
+  setEndPin: (map: Map, pin: Pin) => void;
   resetPins: () => void;
   mapPosition?: MapPosition;
   setMapPosition: (mapPosition: MapPosition) => void;
@@ -32,9 +33,6 @@ export default function MapContextProvider({
     mapContextReducer,
     INITIAL_STATE
   );
-
-  const addPin = (pin: Pin, index: number) =>
-    mapContextDispatch({ type: "ADD_PIN", payload: { pin, index } });
 
   // Load Pins for Map
   useEffect(() => {
@@ -92,6 +90,26 @@ export default function MapContextProvider({
 
   const removeMapError = () => mapContextDispatch({ type: "REMOVE_MAP_ERROR" });
 
+  const setStartPin = (map: Map, pin: Pin) => {
+    mapContextDispatch({
+      type: "SET_START",
+      payload: {
+        map,
+        pin,
+      },
+    });
+  };
+
+  const setEndPin = (map: Map, pin: Pin) => {
+    mapContextDispatch({
+      type: "SET_END",
+      payload: {
+        map,
+        pin,
+      },
+    });
+  };
+
   return (
     <MapContext.Provider
       value={{
@@ -100,7 +118,8 @@ export default function MapContextProvider({
         addMap,
         deleteMap,
         chooseMap,
-        addPin,
+        setStartPin,
+        setEndPin,
         resetPins,
         mapPosition,
         setMapPosition,

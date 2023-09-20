@@ -10,7 +10,7 @@ import ClearButton from "./ClearButton/ClearButton";
 import styles from "@/components/Toolbar.module.css";
 
 export default function Toolbar() {
-  const { map, addPin, mapPosition } = useMapContext();
+  const { map, setStartPin, setEndPin, mapPosition } = useMapContext();
   const { currentAcceptedUserLocation } = useUserLocationContext();
   const {
     startCreatePin,
@@ -43,9 +43,11 @@ export default function Toolbar() {
       },
     };
 
-    const index = map.start ? 1 : 0;
-
-    addPin(newPin, index);
+    if (!map.start) {
+      setStartPin(map, newPin);
+    } else {
+      setEndPin(map, newPin);
+    }
   };
 
   const handleConfirmLocation = async () => {

@@ -1,6 +1,6 @@
 import { MapPosition } from "@/types/MapPosition";
 import { Pin } from "@/types/Vector";
-import { Map, generateMapKey, generatePinKey } from "@/types/Map";
+import { Map, generateMapKey } from "@/types/Map";
 
 export type MapContextState = {
   mapIndex: number;
@@ -14,11 +14,10 @@ export type Action =
   | { type: "LOAD_SAVED_MAP"; payload: string }
   | { type: "DELETE_MAP"; payload: string }
   | { type: "CHOOSE_MAP"; payload: number }
-  | { type: "ADD_PIN"; payload: { pin: Pin; index: number } }
   | { type: "RESET_PINS" }
   | { type: "SET_MAP_POSITION"; payload: MapPosition }
-  | { type: "SET_START"; payload: Pin }
-  | { type: "SET_END"; payload: Pin }
+  | { type: "SET_START"; payload: { map: Map; pin: Pin } }
+  | { type: "SET_END"; payload: { map: Map; pin: Pin } }
   | { type: "REMOVE_MAP_ERROR" };
 
 export const INITIAL_STATE: MapContextState = {
@@ -95,34 +94,15 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
         ...state,
         mapIndex: action.payload,
       };
-    case "ADD_PIN":
-      const { pin, index } = action.payload;
-      return addPin(state, pin, index);
     case "SET_START":
-      savePin(generatePinKey(currentMap, "start"), action.payload);
-      currentMap.start = action.payload;
-      newMapList[state.mapIndex] = newMap;
-      return {
-        ...state,
-        mapList: newMapList,
-      };
+      return addPin(state, action.payload, "start");
     case "SET_END":
-      savePin(generatePinKey(currentMap, "end"), action.payload);
-      newMap = { ...currentMap };
-      newMap.end = action.payload;
-      newMapList = [...state.mapList];
-      newMapList[state.mapIndex] = newMap;
-      return {
-        ...state,
-        mapList: newMapList,
-      };
+      return addPin(state, action.payload, "end");
     case "RESET_PINS":
       const newState = { ...state };
       delete newState.mapList[state.mapIndex].start;
       delete newState.mapList[state.mapIndex].end;
-
-      localStorage.removeItem(generatePinKey(currentMap, "start"));
-      localStorage.removeItem(generatePinKey(currentMap, "end"));
+      saveMap(newState.mapList[state.mapIndex]);
       return newState;
     case "SET_MAP_POSITION":
       return {
@@ -141,21 +121,19 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
 
 const addPin = (
   state: MapContextState,
-  pin: Pin,
-  index: number
+  { map, pin }: { map: Map; pin: Pin },
+  type: "start" | "end"
 ): MapContextState => {
-  const currentMap: Map = state.mapList[state.mapIndex];
-  if (index > 1) return state;
-
-  const name = index === 0 ? "start" : "end";
-  const newState = { ...state };
-  newState.mapList[state.mapIndex][name] = pin;
-  savePin(generatePinKey(currentMap, name), pin);
-  return newState;
-};
-
-const savePin = (name: string, pin: Pin) => {
-  localStorage.setItem(name, JSON.stringify(pin));
+  if (!map) return state;
+  map[type] = pin;
+  const indexOfMap = state.mapList.findIndex((m) => m.key === map.key);
+  const newMapList = [...state.mapList];
+  newMapList[indexOfMap] = map;
+  saveMap(map);
+  return {
+    ...state,
+    mapList: newMapList,
+  };
 };
 
 const saveMap = (map: Map): boolean => {

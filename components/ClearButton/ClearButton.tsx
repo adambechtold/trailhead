@@ -17,8 +17,6 @@ export default function ClearButton({
 }: Props) {
   const sizeClass = styles[`size-${size}`];
 
-  console.log("ClearButton rendered", disabled);
-
   return (
     <button
       className={[styles.container, sizeClass].join(" ")}

@@ -11,8 +11,7 @@ import styles from "@/components/Toolbar.module.css";
 
 export default function Toolbar() {
   const { map, addPin, mapPosition } = useMapContext();
-  const { updateStatus: updateUserLocationStatus, updateUserLocation } =
-    useUserLocationContext();
+  const { currentAcceptedUserLocation } = useUserLocationContext();
   const {
     startCreatePin,
     endCreatePin,
@@ -50,11 +49,7 @@ export default function Toolbar() {
   };
 
   const handleConfirmLocation = async () => {
-    const result = await updateUserLocation();
-    if (result && result.updateStatus.success) {
-      const location = result.userLocation;
-      if (location) handleAddPin(location);
-    }
+    if (currentAcceptedUserLocation) handleAddPin(currentAcceptedUserLocation);
     toggleIsCreatingPin();
   };
 
@@ -66,15 +61,9 @@ export default function Toolbar() {
     }
   };
 
-  const handleUpdateLocation = async () => {
-    await updateUserLocation();
-  };
-
-  const isUpdatingLocation = updateUserLocationStatus.isUpdating;
-  const canSetPin = map && (!map.start || !map.end) && !isUpdatingLocation;
+  const canSetPin = map && (!map.start || !map.end);
   const canDisplaySetPin = !isCreatingPin && canSetPin;
-  const canDisplayConfirmLocation = isCreatingPin && !isUpdatingLocation;
-  const canDisplayUpdateLocation = map && !isCreatingPin && !isUpdatingLocation;
+  const canDisplayConfirmLocation = isCreatingPin;
 
   return (
     <div className={styles.container}>
@@ -92,11 +81,6 @@ export default function Toolbar() {
             CONFIRM
           </ClearButton>
         </>
-      )}
-      {canDisplayUpdateLocation && (
-        <ClearButton onClick={handleUpdateLocation}>
-          UPDATE LOCATION
-        </ClearButton>
       )}
     </div>
   );

@@ -7,7 +7,7 @@ import { MapPosition } from "@/types/MapPosition";
 
 export default function CurrentMap() {
   const { map, mapPosition, setMapPosition } = useMapContext();
-  const { userLocation } = useUserLocationContext();
+  const { currentAcceptedUserLocation } = useUserLocationContext();
 
   const scale = mapPosition?.scale || 0.4;
 
@@ -21,7 +21,9 @@ export default function CurrentMap() {
     <InterpolateMap
       start={map.start}
       end={map.end}
-      userLocation={userLocation}
+      userLocation={
+        currentAcceptedUserLocation ? currentAcceptedUserLocation : undefined
+      }
       mapURL={map.url}
       scale={scale}
       onMapStateUpdate={handleMapStateUpdate}

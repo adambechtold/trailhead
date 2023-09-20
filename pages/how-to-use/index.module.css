@@ -31,8 +31,16 @@
   margin-left: 1rem;
 }
 
-.return-button-container {
+.button-container {
   padding: 2rem;
   display: grid;
   place-items: center;
+}
+
+.section-container {
+  padding-top: 1rem;
+}
+
+.section-container p {
+  padding-top: 0.8rem;
 }

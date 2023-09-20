@@ -1,7 +1,12 @@
 import "@/styles/globals.css";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import MapContextProvider from "@/contexts/MapContext";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
+import UserAgreementContextProvider, {
+  useUserAgreementContext,
+} from "@/contexts/UserAgreementContext";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -12,9 +17,27 @@ export default function App({ Component, pageProps }) {
       </Head>
       <MapContextProvider>
         <UserLocationProvider>
-          <Component {...pageProps} />
+          <UserAgreementContextProvider>
+            <>
+              <CheckUserAgreement />
+              <Component {...pageProps} />
+            </>
+          </UserAgreementContextProvider>
         </UserLocationProvider>
       </MapContextProvider>
     </>
   );
+}
+
+function CheckUserAgreement() {
+  const router = useRouter();
+  const { hasAgreedToUserAgreement } = useUserAgreementContext();
+
+  useEffect(() => {
+    if (!hasAgreedToUserAgreement) {
+      router.push("/how-to-use");
+    }
+  }, [hasAgreedToUserAgreement]);
+
+  return <></>;
 }

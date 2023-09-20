@@ -2,26 +2,29 @@ import React from "react";
 
 import styles from "./ClearButton.module.css";
 
-type Size = "small" | "medium";
-
 type Props = {
   onClick: () => void;
   children: React.ReactNode;
   size?: "small" | "medium";
+  disabled?: boolean;
 };
 
 export default function ClearButton({
   onClick,
   children,
   size = "medium",
+  disabled = false,
 }: Props) {
   const sizeClass = styles[`size-${size}`];
+
+  console.log("ClearButton rendered", disabled);
+
   return (
     <button
       className={[styles.container, sizeClass].join(" ")}
-      onClick={onClick}
+      onClick={disabled ? () => {} : onClick}
     >
-      {children}
+      <div className={disabled ? styles.disabled : ""}>{children}</div>
     </button>
   );
 }

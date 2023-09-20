@@ -18,6 +18,7 @@ export default function DisplayMapData() {
     mostRecentLocation,
     isWatchingLocation,
     error,
+    startWatchingUserLocation,
   } = useUserLocationContext();
   const { map } = useMapContext();
   const router = useRouter();
@@ -44,6 +45,12 @@ export default function DisplayMapData() {
         <ClearButton onClick={returnToNavigate}>RETURN TO NAVIGATE</ClearButton>
         <ClearButton onClick={clearLocalStorage}>
           CLEAR LOCAL STORAGE
+        </ClearButton>
+        <ClearButton
+          onClick={startWatchingUserLocation}
+          disabled={isWatchingLocation}
+        >
+          START WATCHING LOCATION
         </ClearButton>
       </div>
       {map && <MapData map={map} />}
@@ -109,7 +116,7 @@ function UserLocationData({
         displayObject(
           flattenObject(mostRecentLocation),
           "Most Recent Location"
-      )}
+        )}
       {error && <div>Error: {error}</div>}
     </div>
   );

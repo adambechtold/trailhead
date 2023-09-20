@@ -12,7 +12,8 @@ export default function QuotaUsageBar({ quotaUsed, quotaTotal }: Props) {
     <div className={styles.container}>
       <div className={styles["text"]}>
         <span className={styles.title}>Storage </span>
-        {Math.round(quotaUsed)} KB / {Math.round(quotaTotal)} KB
+        {Math.round(quotaUsed)} KB used out of {Math.round(quotaTotal)} KB
+        available
       </div>
       <div className={styles["bar-background"]}>
         <div

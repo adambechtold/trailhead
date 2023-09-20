@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useReducer } from "react";
-import {
-  userLocationReducer,
-  INITIAL_STATE,
-  UserLocationState,
-} from "./userLocationReducer";
-import { getCurrentPosition } from "@/utils/location";
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useState,
+} from "react";
+import { userLocationReducer, INITIAL_STATE } from "./userLocationReducer";
 
 import { Location } from "@/types/Vector";
 
@@ -12,17 +13,18 @@ type UserLocationContextProviderProps = {
   children: React.ReactNode;
 };
 
-type UserLocationContext = UserLocationState & {
-  updateUserLocation: () => Promise<UserLocationState | void>;
+type UserLocationContext = {
+  currentAcceptedUserLocation: Location | null;
+  mostRecentLocation: Location | null;
+  isWatchingLocation: boolean;
+  error: string | null;
 };
 
 export const UserLocationContext = createContext<UserLocationContext | null>(
   null
 );
 
-const MAX_NUMBER_OF_RETRIES = 10;
-const MINIMUM_ACCURACY = 10;
-const TIME_BETWEEN_RETRIES = 1300;
+const MINIMUM_ACCURACY = 10; // meters
 
 export default function UserLocationContextProvider({
   children,
@@ -32,60 +34,92 @@ export default function UserLocationContextProvider({
     INITIAL_STATE
   );
 
-  const updateUserLocation = async (): Promise<UserLocationState | void> => {
-    userLocationContextDispatch({ type: "START_UPDATE_USER_LOCATION" });
+  const [watchId, setWatchId] = useState<number | null>(null);
 
-    for (let i = 0; i < MAX_NUMBER_OF_RETRIES; i++) {
-      const position = await getCurrentPosition();
-      const pendingLocation: Location = {
-        coordinates: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        },
-        accuracy: position.coords.accuracy,
-      };
-      userLocationContextDispatch({
-        type: "RECORD_PENDING_USER_LOCATION",
-        payload: pendingLocation,
-      });
+  useEffect(() => {
+    startWatchingUserLocation();
+    return () => {
+      stopWatchingUserLocation();
+    };
+  }, []);
 
-      if (position.coords.accuracy < MINIMUM_ACCURACY) {
-        userLocationContextDispatch({
-          type: "SUCCEED_UPDATE_USER_LOCATION",
-          payload: pendingLocation,
-        });
-        const result = {
-          userLocation: pendingLocation,
-          updateStatus: {
-            isUpdating: false,
-            success: true,
-            error: false,
-          },
-        };
-        return result;
+  const startWatchingUserLocation = (): void => {
+    userLocationContextDispatch({ type: "START_WATCH_USER_LOCATION" });
+    const watchID = navigator.geolocation.watchPosition(
+      (position) => {
+        handleLocationUpdate(position);
+      },
+      (error) => handleLocationError(error),
+      {
+        enableHighAccuracy: true,
+        timeout: 10000, // 10s //TODO: I'm not sure what this should be set to
+        maximumAge: 0,
       }
-      const message = `Accuracy of ${position.coords.accuracy} is not good enough. Minimum accuracy: ${MINIMUM_ACCURACY} Retrying...`;
-      console.log("Error: " + message);
-      await delay(TIME_BETWEEN_RETRIES);
-    }
-    userLocationContextDispatch({ type: "FAIL_UPDATE_USER_LOCATION" });
+    );
+    setWatchId(watchID);
   };
+
+  const stopWatchingUserLocation = (): void => {
+    if (watchId) {
+      navigator.geolocation.clearWatch(watchId);
+      setWatchId(null);
+      userLocationContextDispatch({ type: "STOP_WATCH_USER_LOCATION" });
+    }
+  };
+
+  const handleLocationUpdate = (position: GeolocationPosition) => {
+    const newLocation: Location = {
+      coordinates: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      },
+      accuracy: position.coords.accuracy,
+    };
+
+    const locationPayload = {
+      location: newLocation,
+      time: new Date(),
+      useLocation: position.coords.accuracy < MINIMUM_ACCURACY,
+    };
+
+    userLocationContextDispatch({
+      type: "RECORD_USER_LOCATION",
+      payload: locationPayload,
+    });
+
+    return locationPayload;
+  };
+
+  const handleLocationError = (error: GeolocationPositionError) => {
+    console.error(error);
+    userLocationContextDispatch({
+      type: "ERROR_UPDATE_USER_LOCATION",
+      payload: error.toString(),
+    });
+  };
+
+  const { currentLocationIndex, userLocations, isWatchingLocation, error } =
+    userLocationState;
+
+  const currentUserLocation: Location | null =
+    userLocations.length > 0 && currentLocationIndex !== null
+      ? userLocations[currentLocationIndex].location
+      : null;
+  const mostRecentLocation: Location | null =
+    userLocations.length > 0 ? userLocations[0].location : null;
 
   return (
     <UserLocationContext.Provider
       value={{
-        userLocation: userLocationState.userLocation,
-        updateStatus: userLocationState.updateStatus,
-        updateUserLocation,
+        currentAcceptedUserLocation: currentUserLocation,
+        mostRecentLocation: mostRecentLocation,
+        isWatchingLocation,
+        error,
       }}
     >
       {children}
     </UserLocationContext.Provider>
   );
-}
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function useUserLocationContext() {

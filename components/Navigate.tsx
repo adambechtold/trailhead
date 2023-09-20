@@ -19,17 +19,20 @@ const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
 export default function Navigate() {
   const { resetPins, map } = useMapContext();
   const { endCreatePin } = useCreatePinContext();
-  const { updateStatus: updateUserLocationStatus, userLocation } =
-    useUserLocationContext();
-  const isUpdatingLocation = updateUserLocationStatus.isUpdating;
+  const {
+    isWatchingLocation,
+    currentAcceptedUserLocation,
+    error: userLocationError,
+    mostRecentLocation,
+  } = useUserLocationContext();
 
   const canDisplayResetButton = map && (map.start || map.end);
   const canDisplayAccuracyIndicator =
-    userLocation || isUpdatingLocation || updateUserLocationStatus.error;
-  let accuracyToDisplay = userLocation?.accuracy;
-  if (isUpdatingLocation) {
-    if (updateUserLocationStatus.pendingLocation) {
-      accuracyToDisplay = updateUserLocationStatus.pendingLocation.accuracy;
+    currentAcceptedUserLocation || isWatchingLocation || userLocationError;
+  let accuracyToDisplay = currentAcceptedUserLocation?.accuracy;
+  if (isWatchingLocation) {
+    if (mostRecentLocation) {
+      accuracyToDisplay = mostRecentLocation.accuracy;
     } else {
       accuracyToDisplay = undefined;
     }
@@ -46,8 +49,8 @@ export default function Navigate() {
         <div className={styles["position-accuracy-indicator"]}>
           <AccuracyIndicator
             accuracy={accuracyToDisplay}
-            isUpdating={updateUserLocationStatus.isUpdating}
-            error={!!updateUserLocationStatus.error}
+            isUpdating={isWatchingLocation}
+            error={!!userLocationError}
           />
         </div>
       )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { HowToSaveOffline } from "@/components/HowTo/HowToSaveOffline";
+import HowToSaveOffline from "@/components/HowTo/HowToSaveOffline";
 
 export default function Offline() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 
-import HowToUse from "@/components/HowToUse/HowToUse";
+import HowToUse from "@/components/HowTo/HowToUse";
 
 export default function HowToUseNoDisclaimer() {
   return (

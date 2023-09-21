@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import ClearButton from "@/components/ClearButton/ClearButton";
-import HowToUse from "@/components/HowToUse/HowToUse";
+import HowToUse from "@/components/HowTo/HowToUse";
 
 import styles from "./index.module.css";
 

@@ -4,25 +4,30 @@
   height: 100%;
   z-index: 2;
   pointer-events: none;
+  --border-width: 0.2rem;
+  --color: white;
+  --border-style: var(--border-width) solid var(--color);
+  --inner-crosshair-size: 2rem;
 }
 
 .horizontalLine {
   position: relative;
   top: 50%;
-  left: 0;
-  height: 2px;
-  transform: translateY(-50%);
-  background-color: #ff5714;
+  left: 50%;
+  height: calc(var(--border-width) / 2);
+  transform: translate(-50%, -50%);
+  width: var(--inner-crosshair-size);
+  background-color: var(--color);
 }
 
 .verticalLine {
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  width: 2px;
-  height: 100%;
-  background-color: #ff5714;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  width: calc(var(--border-width) / 2);
+  height: var(--inner-crosshair-size);
+  background-color: var(--color);
 }
 
 .centerPoint {
@@ -30,8 +35,53 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 5px;
-  height: 5px;
-  background-color: #ff5714;
+  width: var(--border-width);
+  height: var(--border-width);
+  background-color: var(--color);
   border-radius: 50%;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6rem;
+  height: 6rem;
+}
+
+.arc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50%;
+  width: 50%;
+}
+
+.upper-left {
+  border-radius: 50% 0 0 0;
+  transform: translate(calc(-100% - 0.5rem), calc(-100% - 0.5rem));
+  border-top: var(--border-style);
+  border-left: var(--border-style);
+}
+
+.lower-left {
+  border-radius: 0 0 0 50%;
+  transform: translate(calc(-100% - 0.5rem), calc(0% + 0.5rem));
+  border-bottom: var(--border-style);
+  border-left: var(--border-style);
+}
+
+.lower-right {
+  border-radius: 0 0 50% 0;
+  transform: translate(0.5rem, 0.5rem);
+  border-right: var(--border-style);
+  border-bottom: var(--border-style);
+}
+
+.upper-right {
+  border-radius: 0 50% 0 0;
+  border-top: var(--border-style);
+  border-right: var(--border-style);
+  transform: translate(0.5rem, calc(-100% - 0.5rem));
 }

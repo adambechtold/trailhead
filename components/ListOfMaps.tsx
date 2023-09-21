@@ -2,7 +2,7 @@ import React from "react";
 import { Map } from "@/types/Map";
 
 import ClearButton from "./ClearButton/ClearButton";
-import { TrashIcon } from "./Icons/Icons";
+import { ShareIcon, TrashIcon } from "./Icons/Icons";
 
 import styles from "@/components/ListOfMaps.module.css";
 
@@ -12,6 +12,7 @@ type Props = {
   onClickMap?: (mapKey: string) => void;
   onAddMap?: () => void;
   onDeleteMap?: (mapKey: string) => void;
+  onShareMap?: (mapKey: string) => void;
 };
 
 export default function ListOfMaps({
@@ -20,6 +21,7 @@ export default function ListOfMaps({
   onClickMap,
   onAddMap,
   onDeleteMap,
+  onShareMap,
 }: Props) {
   const isSelected = (index: number): boolean => {
     if (selectedMapIndex === undefined) return false;
@@ -41,6 +43,7 @@ export default function ListOfMaps({
           isSelected={isSelected(index)}
           onClick={() => handleMapClick(map.key)}
           onDelete={() => onDeleteMap && onDeleteMap(map.key)}
+          onShare={() => onShareMap && onShareMap(map.key)}
         />
       ))}
     </div>
@@ -53,6 +56,7 @@ type MapItemProps = {
   isSelected?: boolean;
   onClick: () => void;
   onDelete: (mapKey: string) => void;
+  onShare: (mapKey: string) => void;
 };
 
 function MapItem({
@@ -61,6 +65,7 @@ function MapItem({
   isSelected,
   onClick,
   onDelete,
+  onShare,
 }: MapItemProps) {
   const itemPicture = (
     <img src={mapURL} className={styles["map-picture"]} onClick={onClick} />
@@ -69,9 +74,12 @@ function MapItem({
     <div className={styles["selected-map-outline"]}>{child}</div>
   );
   const addDeleteButton = (child: React.ReactNode) => (
-    <div className={styles["can-delete-container"]}>
+    <div className={styles["can-delete-and-share-container"]}>
       {child}
-      <DeleteButton onClick={() => onDelete(mapKey)} />
+      <div className={styles["buttons-container"]}>
+        <DeleteButton onClick={() => onDelete(mapKey)} />
+        <ShareButton onClick={() => onShare(mapKey)} />
+      </div>
     </div>
   );
 
@@ -99,6 +107,14 @@ function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
     <ClearButton onClick={onClick} size={"small"}>
       <TrashIcon />
+    </ClearButton>
+  );
+}
+
+function ShareButton({ onClick }: { onClick: () => void }) {
+  return (
+    <ClearButton onClick={onClick} size={"small"}>
+      <ShareIcon />
     </ClearButton>
   );
 }

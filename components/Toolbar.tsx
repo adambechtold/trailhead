@@ -51,7 +51,11 @@ export default function Toolbar() {
   };
 
   const handleConfirmLocation = async () => {
-    if (currentAcceptedUserLocation) handleAddPin(currentAcceptedUserLocation);
+    if (currentAcceptedUserLocation) {
+      handleAddPin(currentAcceptedUserLocation);
+    } else {
+      alert("Please allow location access before setting pins.");
+    }
     toggleIsCreatingPin();
   };
 

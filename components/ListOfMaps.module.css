@@ -60,11 +60,19 @@
   font-weight: 400;
 }
 
-.can-delete-container {
+.can-delete-and-share-container {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+}
+
+.can-delete-and-share-container .buttons-container {
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }

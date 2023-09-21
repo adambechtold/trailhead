@@ -11,7 +11,13 @@ import styles from "@/components/MenuTray.module.css";
 
 export default function MenuTray() {
   const router = useRouter();
-  const { map: selectedMap, mapList, chooseMap, deleteMap } = useMapContext();
+  const {
+    map: selectedMap,
+    mapList,
+    chooseMap,
+    deleteMap,
+    downloadMap,
+  } = useMapContext();
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [currentY, setCurrentY] = useState(0);
@@ -189,6 +195,7 @@ export default function MenuTray() {
             onClickMap={chooseMap}
             onAddMap={handleAddNewMap}
             onDeleteMap={onDeleteMap}
+            onShareMap={downloadMap}
           />
           <div className={styles["lower-buttons-container"]}>
             <ClearButton onClick={showDebuggingContent}>

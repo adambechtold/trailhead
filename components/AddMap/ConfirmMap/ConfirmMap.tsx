@@ -5,15 +5,19 @@ import ClearButton from "../../ClearButton/ClearButton";
 import { InterpolateMap } from "../../InterpolateMap";
 
 import styles from "./ConfirmMap.module.css";
+import { Map } from "@/types/Map";
+import { Location } from "@/types/Vector";
 
 type Props = {
-  previewSrc: string;
+  previewMap: Map;
+  userLocation?: Location;
   onConfirmSelection: () => void;
   onCancelSelection: () => void;
 };
 
 export default function ConfirmMap({
-  previewSrc,
+  previewMap,
+  userLocation,
   onConfirmSelection,
   onCancelSelection,
 }: Props) {
@@ -37,7 +41,12 @@ export default function ConfirmMap({
           CONFIRM
         </ClearButton>
       </div>
-      <InterpolateMap mapURL={previewSrc} />
+      <InterpolateMap
+        mapURL={previewMap.url}
+        start={previewMap.start}
+        end={previewMap.end}
+        userLocation={userLocation}
+      />
     </>
   );
 }

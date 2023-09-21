@@ -10,9 +10,10 @@ export type MapContextState = {
 };
 
 export type Action =
-  | { type: "ADD_NEW_MAP"; payload: string }
+  | { type: "ADD_NEW_MAP"; payload: Map }
   | { type: "LOAD_SAVED_MAP"; payload: string }
   | { type: "DELETE_MAP"; payload: string }
+  | { type: "OVERWRITE_MAP"; payload: Map }
   | { type: "CHOOSE_MAP"; payload: number }
   | { type: "SET_START"; payload: { map: Map; pin: Pin } }
   | { type: "SET_END"; payload: { map: Map; pin: Pin } }
@@ -40,17 +41,12 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
 
   switch (action.type) {
     case "ADD_NEW_MAP":
-      const newMapURL = action.payload;
-      const newMapKey = generateMapKey(newMapURL);
-      const existingMap = state.mapList.find((map) => map.key === newMapKey);
+      const mapToAdd = action.payload;
+      const existingMap = state.mapList.find((map) => map.key === mapToAdd.key);
       if (existingMap) return state;
-      newMap = {
-        url: newMapURL,
-        key: generateMapKey(newMapURL),
-      };
-      newMapList.splice(state.mapIndex, 0, newMap);
+      newMapList.splice(state.mapIndex, 0, mapToAdd);
       if (localStorage.getItem(newMap.key) === null) {
-        const saveWasSuccessful = saveMap(newMap);
+        const saveWasSuccessful = saveMap(mapToAdd, false);
         if (!saveWasSuccessful) {
           newMapList.splice(state.mapIndex, 1);
           return {
@@ -90,6 +86,18 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
         ...state,
         mapList: newMapList,
         mapIndex: newIndex,
+      };
+    case "OVERWRITE_MAP":
+      newMap = action.payload;
+      const indexOfNewMap = newMapList.findIndex(
+        (map) => map.key === newMap.key
+      );
+      if (indexOfNewMap === -1) return state;
+      newMapList[indexOfNewMap] = newMap;
+      saveMap(newMap, true);
+      return {
+        ...state,
+        mapList: newMapList,
       };
     case "CHOOSE_MAP":
       return {
@@ -152,15 +160,16 @@ const removePin = (
   const indexOfMap = state.mapList.findIndex((m) => m.key === map.key);
   const newMapList = [...state.mapList];
   newMapList[indexOfMap] = map;
-  saveMap(map);
+  saveMap(map, true);
   return {
     ...state,
     mapList: newMapList,
   };
 };
 
-const saveMap = (map: Map): boolean => {
+const saveMap = (map: Map, overwriteIfExists: boolean = true): boolean => {
   const savedMapKeys = getSavedMapList();
+  if (savedMapKeys.includes(map.key) && !overwriteIfExists) return true;
   const newSavedMapKeys = [...savedMapKeys, map.key];
   try {
     localStorage.setItem("savedMapKeys", JSON.stringify(newSavedMapKeys));

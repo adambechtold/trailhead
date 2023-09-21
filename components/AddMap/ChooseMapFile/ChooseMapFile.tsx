@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import {
   getMaximumStorageAmount,
@@ -9,7 +8,6 @@ import {
 import ClearButton from "@/components/ClearButton/ClearButton";
 
 import styles from "./ChooseMapFile.module.css";
-import { QuestionIcon } from "@/components/Icons/Icons";
 
 const QuotaUsageBar = dynamic(
   () => import("@/components/QuotaUsageBar/QuotaUsageBar"),
@@ -21,7 +19,7 @@ const QuotaUsageBar = dynamic(
 type Props = {
   hasSavedMaps: boolean;
   onCancelChooseMap: () => void;
-  onMapFileSelected: (srcURL: string) => void;
+  onMapFileSelected: (file: File) => void;
 };
 
 export default function ChooseMapFile({
@@ -30,7 +28,6 @@ export default function ChooseMapFile({
   onMapFileSelected,
 }: Props) {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const router = useRouter();
 
   const handleSelectMapFile = () => {
     if (fileInputRef.current) {
@@ -41,14 +38,7 @@ export default function ChooseMapFile({
   function handleFileInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target?.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (event: ProgressEvent<FileReader>) {
-      const result = event.target?.result?.toString();
-      if (result) {
-        onMapFileSelected(result);
-      }
-    };
-    reader.readAsDataURL(file);
+    onMapFileSelected(file);
   }
 
   const quotaUsed = getUsedStorageAmount();
@@ -67,7 +57,7 @@ export default function ChooseMapFile({
         <input
           className={styles["map-input"]}
           type="file"
-          accept="image/*"
+          accept="image/*,.json"
           ref={fileInputRef}
           onChange={handleFileInputChange}
           id="map-input"

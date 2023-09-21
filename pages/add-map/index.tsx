@@ -10,7 +10,7 @@ export default function AddMapPage() {
       <div className={styles["button-container"]}>
         <HelpButton />
       </div>
-      <AddMap />;
+      <AddMap />
     </>
   );
 }

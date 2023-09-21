@@ -11,9 +11,10 @@ type MapContextProviderProps = {
 type MapContext = {
   map: Map;
   mapList: Map[];
-  addMap: (mapURL: string) => void;
+  addMap: (map: Map) => boolean;
   deleteMap: (mapKey: string) => void;
   chooseMap: (mapKey: string) => void;
+  downloadMap: (mapKey: string) => void;
   setStartPin: (map: Map, pin: Pin) => void;
   setEndPin: (map: Map, pin: Pin) => void;
   deleteStartPin: (map: Map) => void;
@@ -72,8 +73,17 @@ export default function MapContextProvider({
   const { mapPosition, mapList } = mapContextState;
 
   // ====== ACTIONS ======
-  const addMap = (mapURL: string) => {
-    mapContextDispatch({ type: "ADD_NEW_MAP", payload: mapURL });
+  const addMap = (map: Map): boolean => {
+    if (mapList.filter((map) => map.key === map.key).length > 0) {
+      // if this map already exists
+      const result = confirm(
+        "You already have a map based on the same image. Continuing will overwrite it."
+      );
+      mapContextDispatch({ type: "OVERWRITE_MAP", payload: map });
+      if (!result) return false;
+    }
+    mapContextDispatch({ type: "ADD_NEW_MAP", payload: map });
+    return true;
   };
 
   const deleteMap = (mapKey: string) => {
@@ -83,6 +93,20 @@ export default function MapContextProvider({
   const chooseMap = (mapKey: string) => {
     const mapIndex = mapList.findIndex((map) => map.key === mapKey);
     mapContextDispatch({ type: "CHOOSE_MAP", payload: mapIndex });
+  };
+
+  const downloadMap = (mapKey: string) => {
+    const map = mapList.find((map) => map.key === mapKey);
+    if (!map) return;
+
+    const json = JSON.stringify(map);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.download = `map-${mapKey}.json`;
+    link.href = url;
+    link.click();
   };
 
   const setMapPosition = (mapPosition: MapPosition) =>
@@ -134,6 +158,7 @@ export default function MapContextProvider({
         addMap,
         deleteMap,
         chooseMap,
+        downloadMap,
         setStartPin,
         setEndPin,
         deleteStartPin,

@@ -29,8 +29,13 @@ body {
   overflow-x: hidden;
 }
 
-h2 {
+h2,
+h3 {
   padding-top: 1rem;
+}
+
+h1 {
+  padding-bottom: 1rem;
 }
 
 ol {

@@ -16,13 +16,16 @@ export default function ClearButton({
   disabled = false,
 }: Props) {
   const sizeClass = styles[`size-${size}`];
+  const contentClass = [styles.content, disabled ? styles.disabled : ""].join(
+    " "
+  );
 
   return (
     <button
       className={[styles.container, sizeClass].join(" ")}
       onClick={disabled ? () => {} : onClick}
     >
-      <div className={disabled ? styles.disabled : ""}>{children}</div>
+      <div className={contentClass}>{children}</div>
     </button>
   );
 }

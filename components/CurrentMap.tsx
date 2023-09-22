@@ -2,7 +2,7 @@
 // Consider renaming it to MapDisplay or Map
 import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
-import { InterpolateMap } from "@/components/InterpolateMap";
+import InterpolateMap from "@/components/InterpolateMap";
 import { MapPosition } from "@/types/MapPosition";
 
 export default function CurrentMap() {

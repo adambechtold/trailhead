@@ -24,7 +24,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-export function InterpolateMap(props: Props) {
+export default function InterpolateMap(props: Props) {
   // TODO: Make this a default export and update import statements
   const {
     start,

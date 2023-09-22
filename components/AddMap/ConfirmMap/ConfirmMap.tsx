@@ -2,7 +2,7 @@ import React from "react";
 
 import { CancelIcon, ConfirmIcon } from "../../Icons/Icons";
 import ClearButton from "../../ClearButton/ClearButton";
-import { InterpolateMap } from "../../InterpolateMap";
+import InterpolateMap from "../../InterpolateMap";
 
 import styles from "./ConfirmMap.module.css";
 import { Map } from "@/types/Map";

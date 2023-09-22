@@ -1,6 +1,6 @@
 import React from "react";
 
-import { InterpolateMap } from "@/components/InterpolateMap";
+import InterpolateMap from "@/components/InterpolateMap";
 
 import styles from "./RejectMapFile.module.css";
 import ClearButton from "@/components/ClearButton/ClearButton";

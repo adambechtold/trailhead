@@ -4,7 +4,7 @@
 // the entire page is a map that we can pinch and zoom and drag
 // we can add x markers for pins and a path of the user
 
-import { InterpolateMap } from "@/components/InterpolateMap";
+import InterpolateMap from "@/components/InterpolateMap";
 import { Pin } from "@/types/Vector";
 import { configurations } from "../../types/overlay.configurations";
 import { useEffect, useState } from "react";

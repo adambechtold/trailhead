@@ -2,51 +2,56 @@ import React from "react";
 
 import PictureGuidlines from "./PictureGuidelines";
 
+import styles from "./HowToUse.module.css";
+
 export default function HowToUse() {
   return (
-    <div>
+    <div className={styles.container}>
       <h2>How to Use Trailhead</h2>
-      <ol>
-        <li>
-          Take a Picture of a Trailmap
+      <ol className={styles["main-step"]}>
+        <li className={styles["main-step"]}>
+          <span className={styles["title"]}>
+            📸 Take a Picture of a Trailmap
+          </span>
           <p>Make sure that...</p>
           <PictureGuidlines />
         </li>
         <li>
-          Pin Your Current Location
-          <ul>
-            <li>
-              Click <b>Set Pin</b> and position the crosshairs over your current
-              location.
-            </li>
-            <li>
-              The app will only set your pin if it can get an accurate location.
-              If it fails, try again. Location accuracy increases over time.
-            </li>
-          </ul>
-        </li>
-        <li>
-          Pin Another Location
+          <span className={styles["title"]}>📍 Pin Your Current Location</span>
           <p>
-            Walk a short distance to a spot that's clearly marked on the map,{" "}
-            <i>for example, walk to the first fork in the trail</i>.
+            Click <b>Set Pin</b> and position the crosshairs over your current
+            location.
           </p>
-          <ul>
-            <li>
-              Click <b>Set Pin</b> again and place the pin on your current
-              location.
-            </li>
-          </ul>
         </li>
         <li>
-          Enjoy Your Hike!
+          <span className={styles["title"]}>📍 Pin Another Location</span>
           <p>
-            You've succesfully configured your map! Any time you want to see
-            your location, click <b>Update Location</b>. (Constantly updated
-            position should be available tomorrow, 09/19).
+            <b>Walk a short distance</b> to a spot that's clearly marked on the
+            map, <i>for example, walk to the first fork in the trail</i>.
+          </p>
+          <p>
+            Click <b>Set Pin</b> again and place the pin on your current
+            location.
+          </p>
+        </li>
+        <li>
+          <span className={styles["title"]}>🗺️ Enjoy Your Hike!</span>
+          <p>
+            You've succesfully configured your map! View it any time to see your
+            current position.
           </p>
         </li>
       </ol>
+      <h3 className={styles["h3-title"]}>Reset Configuration</h3>
+      <p>Need to adjust your pins? You have two options:</p>
+      <ul className={styles["reset-options"]}>
+        <li>
+          Click <b>Reset Pins</b> to restart configuration.
+        </li>
+        <li>
+          Go the the <b>Inspect Data</b> page to remove specific pins.{" "}
+        </li>
+      </ul>
     </div>
   );
 }

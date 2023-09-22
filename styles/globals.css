@@ -40,7 +40,7 @@ h1 {
 
 ol {
   list-style-position: inside;
-  margin-left: 1rem;
+  padding-left: 1rem;
 }
 
 ol li p {
@@ -50,13 +50,10 @@ ol li p {
 
 ol ul {
   margin-top: 0.5rem;
+  list-style-position: inside;
+  padding-left: 1rem;
 }
 
 ol > * {
   margin-top: 1rem;
-}
-
-ol ul {
-  list-style-position: inside;
-  margin-left: 1rem;
 }

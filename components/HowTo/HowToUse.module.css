@@ -1,0 +1,34 @@
+.container ol {
+  counter-reset: li-counter;
+  --title-size: 1.08rem;
+}
+
+.container .main-step > li {
+  list-style-type: none;
+}
+
+.container .main-step > li::before {
+  content: counter(li-counter) ". ";
+  counter-increment: li-counter;
+  font-weight: bold;
+  font-size: var(--title-size);
+  margin-right: 0.1rem;
+}
+
+.title {
+  font-size: var(--title-size);
+  font-weight: bold;
+}
+
+.h3-title {
+  padding-bottom: 0.5rem;
+}
+
+.container p {
+  padding-bottom: 0.5rem;
+}
+
+.reset-options {
+  padding-left: 2rem;
+  padding-right: 1rem;
+}

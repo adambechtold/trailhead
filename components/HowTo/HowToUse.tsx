@@ -46,10 +46,10 @@ export default function HowToUse() {
       <p>Need to adjust your pins? You have two options:</p>
       <ul className={styles["reset-options"]}>
         <li>
-          Click <b>Reset Pins</b> to restart configuration.
+          Click <b>Reset Pins</b> to remove both pins.
         </li>
         <li>
-          Go the the <b>Inspect Data</b> page to remove specific pins.{" "}
+          Go the the <b>Inspect Data</b> page to remove specific pins.
         </li>
       </ul>
     </div>

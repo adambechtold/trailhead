@@ -9,11 +9,3 @@
   display: grid;
   place-items: center;
 }
-
-.section-container {
-  padding-top: 1rem;
-}
-
-.section-container p {
-  padding-top: 0.8rem;
-}

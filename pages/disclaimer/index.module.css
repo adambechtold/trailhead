@@ -1,0 +1,23 @@
+.container {
+  padding: 1rem;
+}
+
+.section-container {
+  padding-top: 1rem;
+}
+
+.section-container p {
+  padding-top: 0.8rem;
+}
+
+.button-container {
+  padding-top: 1rem;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 1rem;
+}

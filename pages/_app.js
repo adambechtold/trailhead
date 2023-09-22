@@ -59,7 +59,7 @@ function CheckUserAgreement() {
 
   useEffect(() => {
     if (!hasAgreedToUserAgreement) {
-      router.push({ pathname: "/how-to-use", query: { disclaimer: "true" } });
+      router.push({ pathname: "/disclaimer" });
     }
   }, [hasAgreedToUserAgreement]);
 

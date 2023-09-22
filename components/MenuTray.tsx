@@ -26,13 +26,15 @@ export default function MenuTray() {
   const containerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const INITIAL_MENU_HEIGHT = "4rem";
+
   const touchEventDelta = currentY - startY;
   const deltaFromOriginalPosition = touchEventDelta + previousOffset;
   const getMaximumOffset = (elementHeight: number) => {
     const rootFontSize = parseFloat(
       getComputedStyle(document.documentElement).fontSize
     );
-    const maxHeightFromContent = elementHeight - 7 * rootFontSize;
+    const maxHeightFromContent = elementHeight - 5 * rootFontSize;
 
     const windowHeight = window.innerHeight;
     const maxHeightFromWindow =
@@ -86,7 +88,7 @@ export default function MenuTray() {
       amountToOffset = maxDeltaY - (maxDeltaY - amountToOffset) / 1.5;
     }
 
-    containerRef.current.style.transform = `translate3d(0, calc(100% - 6rem + ${amountToOffset}px), 0)`;
+    containerRef.current.style.transform = `translate3d(0, calc(100% - ${INITIAL_MENU_HEIGHT} + ${amountToOffset}px), 0)`;
     // TODO: Fix this. This implementation is fragile because it depends on the calculation being the same as the CSS
   };
 
@@ -110,8 +112,12 @@ export default function MenuTray() {
       return;
     }
 
+    const wasDraggedUp = wasClosed && deltaFromOriginalPosition < -60;
+    const wasDraggedDown =
+      wasOpen && deltaFromOriginalPosition > maxOffset + 60;
+
     if (wasClosed) {
-      if (deltaFromOriginalPosition < -60) {
+      if (wasDraggedUp) {
         openMenu();
         return;
       } else {
@@ -121,7 +127,7 @@ export default function MenuTray() {
     }
 
     if (wasOpen) {
-      if (deltaFromOriginalPosition > maxOffset + 60) {
+      if (wasDraggedDown) {
         closeMenu();
         return;
       } else {
@@ -151,7 +157,7 @@ export default function MenuTray() {
     if (!containerRef.current) return;
 
     containerRef.current.style.transition = "transform 0.3s ease-in-out";
-    containerRef.current.style.transform = `translate3d(0, calc(100% - 6rem + ${height}px), 0)`;
+    containerRef.current.style.transform = `translate3d(0, calc(100% - ${INITIAL_MENU_HEIGHT} + ${height}px), 0)`;
   };
 
   const indexOfSelectedMap = mapList.findIndex(

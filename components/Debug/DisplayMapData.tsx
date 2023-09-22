@@ -16,6 +16,9 @@ import { TrashIcon } from "../Icons/Icons";
 export default function DisplayMapData() {
   const {
     currentAcceptedUserLocation,
+    currentHeading,
+    isWatchingHeading,
+    startWatchingHeading,
     mostRecentLocation,
     isWatchingLocation,
     error,
@@ -51,6 +54,8 @@ export default function DisplayMapData() {
       )}
       <UserLocationData
         currentAcceptedUserLocation={currentAcceptedUserLocation}
+        currentHeading={currentHeading}
+        isWatchingHeading={isWatchingHeading}
         mostRecentLocation={mostRecentLocation}
         isWatchingLocation={isWatchingLocation}
         error={error}
@@ -66,6 +71,14 @@ export default function DisplayMapData() {
         >
           START WATCHING LOCATION
         </ClearButton>
+        {isWatchingLocation && (
+          <ClearButton
+            onClick={startWatchingHeading}
+            disabled={isWatchingHeading}
+          >
+            START WATCHING HEADING
+          </ClearButton>
+        )}
       </div>
     </div>
   );
@@ -111,6 +124,8 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
 
 type UserLocationData = {
   currentAcceptedUserLocation: Location | null;
+  currentHeading: number | string | null;
+  isWatchingHeading: boolean;
   mostRecentLocation: Location | null;
   isWatchingLocation: boolean;
   error: string | null;
@@ -118,6 +133,8 @@ type UserLocationData = {
 
 function UserLocationData({
   currentAcceptedUserLocation,
+  currentHeading,
+  isWatchingHeading,
   mostRecentLocation,
   isWatchingLocation,
   error,
@@ -126,9 +143,14 @@ function UserLocationData({
     <div className={styles.section}>
       <h3>User Location</h3>
       <div className={styles.object}>
+        {isWatchingHeading
+          ? `🔄 User Heading: ${currentHeading}`
+          : "❌ Not Tracking User Heading"}
+      </div>
+      <div className={styles.object}>
         {isWatchingLocation
-          ? "🔄 Is Watching Location"
-          : "❌ Not Watching Location"}
+          ? "🔄 Recieving User Location"
+          : "❌ Not Tracking User Location"}
       </div>
       {currentAcceptedUserLocation &&
         displayObject(

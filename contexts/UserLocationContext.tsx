@@ -15,6 +15,9 @@ type UserLocationContextProviderProps = {
 
 type UserLocationContext = {
   currentAcceptedUserLocation: Location | null;
+  currentHeading: number | string | null; // TODO: make this a number or null
+  isWatchingHeading: boolean;
+  startWatchingHeading: () => void;
   mostRecentLocation: Location | null;
   isWatchingLocation: boolean;
   error: string | null;
@@ -36,9 +39,15 @@ export default function UserLocationContextProvider({
   );
 
   const [watchId, setWatchId] = useState<number | null>(null);
+  const [currentHeading, setCurrentHeading] = useState<number | string | null>(
+    "Not watching heading yet"
+  ); // TODO: add this to the reducer
+  const [isWatchingHeading, setIsWatchingHeading] = useState(false);
 
   useEffect(() => {
+    stopWatchingHeading();
     return () => {
+      stopWatchingHeading();
       stopWatchingUserLocation();
     };
   }, []);
@@ -98,6 +107,50 @@ export default function UserLocationContextProvider({
     });
   };
 
+  function startWatchingUserHeading() {
+    console.log("startWatchingUserHeading");
+    if (!window) return;
+    console.log("window exists", window);
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      DeviceOrientationEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === "granted") {
+            window.addEventListener("deviceorientation", getCurrentHeading);
+            setIsWatchingHeading(true);
+          }
+        })
+        .catch(console.error);
+    } else {
+      window.addEventListener("deviceorientation", getCurrentHeading);
+    }
+    console.log("added event listener");
+  }
+
+  function stopWatchingHeading() {
+    console.log("stopWatchingHeading");
+    setIsWatchingHeading(false);
+    if (!window) return;
+    window.removeEventListener("deviceorientation", getCurrentHeading);
+  }
+
+  function getCurrentHeading(event: DeviceOrientationEvent) {
+    console.log("received deviceorientation event");
+    let alpha = event.alpha; // z-axis rotation [0,360)
+
+    if (typeof event.webkitCompassHeading) {
+      alpha = event.webkitCompassHeading; // iOS non-standard
+
+      console.log("you're heading is: ", alpha);
+      setCurrentHeading(alpha);
+    } else {
+      console.log(
+        "your device can't get aboslute heading. It's showing: ",
+        alpha
+      );
+      setCurrentHeading("Unkown");
+    }
+  }
+
   const { currentLocationIndex, userLocations, isWatchingLocation, error } =
     userLocationState;
 
@@ -112,6 +165,9 @@ export default function UserLocationContextProvider({
     <UserLocationContext.Provider
       value={{
         currentAcceptedUserLocation: currentUserLocation,
+        currentHeading,
+        isWatchingHeading,
+        startWatchingHeading: startWatchingUserHeading,
         mostRecentLocation: mostRecentLocation,
         isWatchingLocation,
         error,

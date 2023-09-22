@@ -1,5 +1,7 @@
 import React from "react";
 
+import PictureGuidlines from "./PictureGuidelines";
+
 export default function HowToUse() {
   return (
     <div>
@@ -8,15 +10,7 @@ export default function HowToUse() {
         <li>
           Take a Picture of a Trailmap
           <p>Make sure that...</p>
-          <ul>
-            <li>North is up</li>
-            <li>
-              The photo is perpendicular to the trailmap, not from either side
-              or skewed
-            </li>
-            <li>The map proportions are to scale</li>
-            <li>The image of the map is clear</li>
-          </ul>
+          <PictureGuidlines />
         </li>
         <li>
           Pin Your Current Location

@@ -6,6 +6,7 @@ import {
 } from "@/utils/localStorage";
 
 import ClearButton from "@/components/ClearButton/ClearButton";
+import PictureGuidlines from "@/components/HowTo/PictureGuidelines";
 
 import styles from "./ChooseMapFile.module.css";
 
@@ -65,6 +66,12 @@ export default function ChooseMapFile({
         {typeof window !== "undefined" && (
           <QuotaUsageBar quotaUsed={quotaUsed} quotaTotal={quotaTotal} />
         )}
+        <div>
+          <h4>For great maps, make sure that...</h4>
+          <div style={{ paddingLeft: "1.1rem", paddingTop: "0.3rem" }}>
+            <PictureGuidlines />
+          </div>
+        </div>
       </div>
       {hasSavedMaps && (
         <ClearButton onClick={onCancelChooseMap}>USE SAVED MAPS</ClearButton>

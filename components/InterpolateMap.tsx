@@ -12,7 +12,7 @@ import { Pin, Location, Point } from "@/types/Vector";
 import { convertCoordinates } from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
-import styles from "@/components/Map.module.css";
+import styles from "@/components/InterpolateMap.module.css";
 
 type Props = {
   start?: Pin;

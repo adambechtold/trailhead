@@ -14,6 +14,7 @@ import AddMap from "./AddMap/AddMap";
 
 import styles from "./Navigate.module.css";
 import HelpButton from "./HelpButton";
+import { EnableCompassButton } from "./EnableCompassButton";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
   ssr: false,
@@ -25,6 +26,8 @@ export default function Navigate() {
   const {
     isWatchingLocation,
     currentAcceptedUserLocation,
+    canWatchUserHeading,
+    startWatchingHeading,
     error: userLocationError,
     mostRecentLocation,
     startWatchingUserLocation,
@@ -65,6 +68,9 @@ export default function Navigate() {
           </div>
         )}
         <HelpButton />
+        {canWatchUserHeading && (
+          <EnableCompassButton onClick={startWatchingHeading} />
+        )}
       </div>
       {canDisplayResetButton && (
         <div className={styles["position-reset-button"]}>

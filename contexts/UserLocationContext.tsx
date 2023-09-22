@@ -5,7 +5,15 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { userLocationReducer, INITIAL_STATE } from "./userLocationReducer";
+import {
+  userLocationReducer,
+  INITIAL_STATE as INITIAL_LOCATION_STATE,
+} from "./userLocationReducer";
+import {
+  userHeadingReducer,
+  HeadingError,
+  INITIAL_STATE as INITIAL_HEADING,
+} from "./userHeadingReducer";
 
 import { Location } from "@/types/Vector";
 
@@ -15,8 +23,10 @@ type UserLocationContextProviderProps = {
 
 type UserLocationContext = {
   currentAcceptedUserLocation: Location | null;
-  currentHeading: number | string | null; // TODO: make this a number or null
+  currentHeading: number | null;
   isWatchingHeading: boolean;
+  canWatchUserHeading: boolean;
+  headingError: HeadingError | null;
   startWatchingHeading: () => void;
   mostRecentLocation: Location | null;
   isWatchingLocation: boolean;
@@ -35,17 +45,29 @@ export default function UserLocationContextProvider({
 }: UserLocationContextProviderProps) {
   const [userLocationState, userLocationContextDispatch] = useReducer(
     userLocationReducer,
-    INITIAL_STATE
+    INITIAL_LOCATION_STATE
+  );
+  const [userHeadingState, userHeadingContextDispatch] = useReducer(
+    userHeadingReducer,
+    INITIAL_HEADING
   );
 
   const [watchId, setWatchId] = useState<number | null>(null);
-  const [currentHeading, setCurrentHeading] = useState<number | string | null>(
-    "Not watching heading yet"
-  ); // TODO: add this to the reducer
-  const [isWatchingHeading, setIsWatchingHeading] = useState(false);
 
   useEffect(() => {
     stopWatchingHeading();
+
+    if (getCanWatchUserHeading()) {
+      userHeadingContextDispatch({ type: "CAN_WATCH_USER_HEADING" });
+    } else {
+      userHeadingContextDispatch({
+        type: "CANNOT_WATCH_USER_HEADING",
+        payload: {
+          reason: userHeadingState.error || "NOT_SUPPORTED",
+        },
+      });
+    }
+
     return () => {
       stopWatchingHeading();
       stopWatchingUserLocation();
@@ -107,47 +129,69 @@ export default function UserLocationContextProvider({
     });
   };
 
-  function startWatchingUserHeading() {
-    console.log("startWatchingUserHeading");
+  function getCanWatchUserHeading() {
     if (!window) return;
-    console.log("window exists", window);
-    if (typeof DeviceOrientationEvent.requestPermission === "function") {
-      DeviceOrientationEvent.requestPermission()
-        .then((permissionState) => {
-          if (permissionState === "granted") {
-            window.addEventListener("deviceorientation", getCurrentHeading);
-            setIsWatchingHeading(true);
-          }
-        })
-        .catch(console.error);
+    if (userHeadingState.error === "PERMISSION_DENIED") return false;
+    return (
+      typeof (DeviceOrientationEvent as any).requestPermission === "function"
+    );
+  }
+
+  async function startWatchingUserHeading() {
+    if (!window) return;
+    if (
+      typeof (DeviceOrientationEvent as any).requestPermission === "function"
+    ) {
+      const markPermissionDenied = () => {
+        userHeadingContextDispatch({
+          type: "ERROR_UPDATE_USER_HEADING",
+          payload: "PERMISSION_DENIED",
+        });
+      };
+      try {
+        const permissionGranted =
+          (await (DeviceOrientationEvent as any).requestPermission()) ===
+          "granted";
+        if (permissionGranted) {
+          window.addEventListener("deviceorientation", getCurrentHeading);
+          userHeadingContextDispatch({ type: "START_WATCH_USER_HEADING" });
+        } else {
+          markPermissionDenied();
+        }
+      } catch (error) {
+        markPermissionDenied();
+      }
     } else {
-      window.addEventListener("deviceorientation", getCurrentHeading);
+      userHeadingContextDispatch({
+        type: "ERROR_UPDATE_USER_HEADING",
+        payload: "NOT_SUPPORTED",
+      });
     }
-    console.log("added event listener");
   }
 
   function stopWatchingHeading() {
-    console.log("stopWatchingHeading");
-    setIsWatchingHeading(false);
+    userHeadingContextDispatch({ type: "STOP_WATCH_USER_HEADING" });
     if (!window) return;
     window.removeEventListener("deviceorientation", getCurrentHeading);
   }
 
   function getCurrentHeading(event: DeviceOrientationEvent) {
-    console.log("received deviceorientation event");
     let alpha = event.alpha; // z-axis rotation [0,360)
 
-    if (typeof event.webkitCompassHeading) {
-      alpha = event.webkitCompassHeading; // iOS non-standard
+    if ((event as any).webkitCompassHeading) {
+      alpha = (event as any).webkitCompassHeading! as number; // iOS non-standard
 
-      console.log("you're heading is: ", alpha);
-      setCurrentHeading(alpha);
+      userHeadingContextDispatch({
+        type: "UPDATE_USER_HEADING",
+        payload: alpha,
+      });
     } else {
-      console.log(
-        "your device can't get aboslute heading. It's showing: ",
-        alpha
-      );
-      setCurrentHeading("Unkown");
+      if (!userHeadingState.error) {
+        userHeadingContextDispatch({
+          type: "ERROR_UPDATE_USER_HEADING",
+          payload: "NOT_SUPPORTED",
+        });
+      }
     }
   }
 
@@ -165,8 +209,10 @@ export default function UserLocationContextProvider({
     <UserLocationContext.Provider
       value={{
         currentAcceptedUserLocation: currentUserLocation,
-        currentHeading,
-        isWatchingHeading,
+        currentHeading: userHeadingState.heading,
+        canWatchUserHeading: userHeadingState.canWatchUserHeading,
+        isWatchingHeading: userHeadingState.isWatchingHeading,
+        headingError: userHeadingState.error,
         startWatchingHeading: startWatchingUserHeading,
         mostRecentLocation: mostRecentLocation,
         isWatchingLocation,

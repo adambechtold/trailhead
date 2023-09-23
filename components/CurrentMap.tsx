@@ -7,7 +7,8 @@ import { MapPosition } from "@/types/MapPosition";
 
 export default function CurrentMap() {
   const { map, mapPosition, setMapPosition } = useMapContext();
-  const { currentAcceptedUserLocation } = useUserLocationContext();
+  const { currentAcceptedUserLocation, currentHeading } =
+    useUserLocationContext();
 
   const scale = mapPosition?.scale || 0.4;
 
@@ -24,6 +25,7 @@ export default function CurrentMap() {
       userLocation={
         currentAcceptedUserLocation ? currentAcceptedUserLocation : undefined
       }
+      userHeading={currentHeading != null ? currentHeading : undefined}
       mapURL={map.url}
       scale={scale}
       onMapStateUpdate={handleMapStateUpdate}

@@ -74,7 +74,7 @@ export default function MapContextProvider({
 
   // ====== ACTIONS ======
   const addMap = (map: Map): boolean => {
-    if (mapList.filter((map) => map.key === map.key).length > 0) {
+    if (mapList.filter((savedMap) => savedMap.key === map.key).length > 0) {
       // if this map already exists
       const result = confirm(
         "You already have a map based on the same image. Continuing will overwrite it."

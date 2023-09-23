@@ -221,7 +221,5 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
   };
   if (heading) style["transform"] = `rotate(${heading}deg)`;
 
-  console.log("style", style, "type", type);
-
   return <img src={imgURL} alt="Pin" className={styles.mapPin} style={style} />;
 };

@@ -96,6 +96,19 @@ type MapDataProps = {
 };
 
 function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
+  const onDeletePin = (pin: "start" | "end") => {
+    const result = confirm(`Are you sure you want to delete the ${pin} pin?`);
+    if (result) {
+      // User clicked OK
+      // Perform delete operation
+      if (pin === "start") {
+        deleteStartPin(map);
+      } else {
+        deleteEndPin(map);
+      }
+    }
+  };
+
   return (
     <div>
       <h3>Map</h3>
@@ -103,7 +116,7 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
         <div className={styles.pin}>
           <p>{displayObject(flattenObject(map.start), "Start Pin")}</p>
           <div className={styles["delete-button"]}>
-            <ClearButton onClick={() => deleteStartPin(map)} size="small">
+            <ClearButton onClick={() => onDeletePin("start")} size="small">
               <TrashIcon />
             </ClearButton>
           </div>
@@ -115,7 +128,7 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
         <div className={styles.pin}>
           <p>{displayObject(flattenObject(map.end), "End Pin")}</p>
           <div className={styles["delete-button"]}>
-            <ClearButton onClick={() => deleteEndPin(map)} size="small">
+            <ClearButton onClick={() => onDeletePin("end")} size="small">
               <TrashIcon />
             </ClearButton>
           </div>

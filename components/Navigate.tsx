@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 
 import { useMapContext } from "@/contexts/MapContext";
 import { useCreatePinContext } from "@/contexts/CreatePinContext";
@@ -32,7 +31,6 @@ export default function Navigate() {
     mostRecentLocation,
     startWatchingUserLocation,
   } = useUserLocationContext();
-  const router = useRouter();
 
   useEffect(() => {
     if (!isWatchingLocation) startWatchingUserLocation();
@@ -51,6 +49,9 @@ export default function Navigate() {
   }
 
   const onReset = () => {
+    const result = confirm("Are you sure you want to reset the pins?");
+    if (!result) return;
+    // User Clicked OK
     resetPins();
     endCreatePin();
   };

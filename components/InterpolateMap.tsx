@@ -18,6 +18,7 @@ type Props = {
   start?: Pin;
   end?: Pin;
   userLocation?: Location;
+  userHeading?: number;
   mapURL: string;
   scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
@@ -30,6 +31,7 @@ export default function InterpolateMap(props: Props) {
     start,
     end,
     userLocation,
+    userHeading,
     mapURL,
     scale,
     onMapStateUpdate,
@@ -145,7 +147,8 @@ export default function InterpolateMap(props: Props) {
             {canFindUserLocation && (
               <PinComponent
                 pin={getUserPin(start, end, userLocation)}
-                type={"USER"}
+                type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
+                heading={userHeading}
               />
             )}
             <img src={mapURL} alt="Trail Map" ref={mapReference} />
@@ -196,24 +199,29 @@ function getUserPin(start: Pin, end: Pin, userLocation: Location) {
 
 interface PinMarkerProps {
   pin: Pin;
-  type: "USER" | "PIN";
+  type: "USER_NO_DIRECTION" | "USER_WITH_DIRECTION" | "PIN";
+  heading?: number;
 }
 
+const typeToStyle = {
+  USER_NO_DIRECTION: "/user-location.svg",
+  USER_WITH_DIRECTION: "/user-location-with-direction.svg",
+  PIN: "/map-x.svg",
+};
+
 const PinComponent: React.FC<PinMarkerProps> = (props) => {
-  const { pin, type } = props;
+  const { pin, type, heading } = props;
   const left = pin.mapPoint.x;
   const top = -1 * pin.mapPoint.y;
-  const imgURL = type === "USER" ? "/user-location.svg" : "/map-x.svg";
+  const imgURL = typeToStyle[type];
 
-  return (
-    <img
-      src={imgURL}
-      alt="Pin"
-      className={styles.mapPin}
-      style={{
-        left,
-        top,
-      }}
-    />
-  );
+  let style: any = {
+    top,
+    left,
+  };
+  if (heading) style["transform"] = `rotate(${heading}deg)`;
+
+  console.log("style", style, "type", type);
+
+  return <img src={imgURL} alt="Pin" className={styles.mapPin} style={style} />;
 };

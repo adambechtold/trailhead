@@ -54,7 +54,7 @@ export default function Toolbar() {
     if (currentAcceptedUserLocation) {
       handleAddPin(currentAcceptedUserLocation);
     } else {
-      alert("Please allow location access before setting pins.");
+      alert("Please enable location access before setting pins.");
     }
     toggleIsCreatingPin();
   };

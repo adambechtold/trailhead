@@ -43,3 +43,7 @@ export function TrashIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 export function ShareIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/share-icon.svg"} />;
 }
+
+export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/compass-no-ring.svg"} />;
+}

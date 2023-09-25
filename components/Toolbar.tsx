@@ -5,7 +5,7 @@ import { useCreatePinContext } from "@/contexts/CreatePinContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import { CancelIcon, ConfirmIcon } from "./Icons/Icons";
 
-import ClearButton from "./ClearButton/ClearButton";
+import Button from "./Button/Button";
 
 import styles from "@/components/Toolbar.module.css";
 
@@ -74,18 +74,20 @@ export default function Toolbar() {
   return (
     <div className={styles.container}>
       {canDisplaySetPin && (
-        <ClearButton onClick={toggleIsCreatingPin}>SET PIN</ClearButton>
+        <Button onClick={toggleIsCreatingPin} type="opaque">
+          SET PIN
+        </Button>
       )}
       {canDisplayConfirmLocation && (
         <>
-          <ClearButton onClick={toggleIsCreatingPin}>
+          <Button onClick={toggleIsCreatingPin} type="opaque">
             <CancelIcon />
             CANCEL
-          </ClearButton>
-          <ClearButton onClick={handleConfirmLocation}>
+          </Button>
+          <Button onClick={handleConfirmLocation} type="opaque">
             <ConfirmIcon />
             CONFIRM
-          </ClearButton>
+          </Button>
         </>
       )}
     </div>

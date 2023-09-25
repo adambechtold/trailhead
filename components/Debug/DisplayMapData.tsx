@@ -8,7 +8,7 @@ import { Location } from "@/types/Vector";
 import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 
 import styles from "./DisplayMapData.module.css";
 import { TrashIcon } from "../Icons/Icons";
@@ -56,16 +56,14 @@ export default function DisplayMapData() {
         error={error}
       />
       <div className={styles["button-container"]}>
-        <ClearButton onClick={returnToNavigate}>RETURN TO NAVIGATE</ClearButton>
-        <ClearButton onClick={clearLocalStorage}>
-          CLEAR LOCAL STORAGE
-        </ClearButton>
-        <ClearButton
+        <Button onClick={returnToNavigate}>RETURN TO NAVIGATE</Button>
+        <Button onClick={clearLocalStorage}>CLEAR LOCAL STORAGE</Button>
+        <Button
           onClick={startWatchingUserLocation}
           disabled={isWatchingLocation}
         >
           START WATCHING LOCATION
-        </ClearButton>
+        </Button>
       </div>
     </div>
   );
@@ -98,9 +96,9 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
         <div className={styles.pin}>
           <p>{displayObject(flattenObject(map.start), "Start Pin")}</p>
           <div className={styles["delete-button"]}>
-            <ClearButton onClick={() => onDeletePin("start")} size="small">
+            <Button onClick={() => onDeletePin("start")} size="small">
               <TrashIcon />
-            </ClearButton>
+            </Button>
           </div>
         </div>
       ) : (
@@ -110,9 +108,9 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
         <div className={styles.pin}>
           <p>{displayObject(flattenObject(map.end), "End Pin")}</p>
           <div className={styles["delete-button"]}>
-            <ClearButton onClick={() => onDeletePin("end")} size="small">
+            <Button onClick={() => onDeletePin("end")} size="small">
               <TrashIcon />
-            </ClearButton>
+            </Button>
           </div>
         </div>
       ) : (

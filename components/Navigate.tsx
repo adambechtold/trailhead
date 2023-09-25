@@ -7,7 +7,7 @@ import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
-import ClearButton from "./ClearButton/ClearButton";
+import Button from "./Button/Button";
 import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
 import AddMap from "./AddMap/AddMap";
 
@@ -69,7 +69,7 @@ export default function Navigate() {
       </div>
       {canDisplayResetButton && (
         <div className={styles["position-reset-button"]}>
-          <ClearButton onClick={onReset}>RESET PINS</ClearButton>
+          <Button onClick={onReset}>RESET PINS</Button>
         </div>
       )}
       <Crosshairs />

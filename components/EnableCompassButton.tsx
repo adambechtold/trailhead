@@ -8,7 +8,11 @@ type Props = {
 };
 
 export const EnableCompassButton = ({ onClick }: Props) => (
+<<<<<<< HEAD
   <Button onClick={onClick}>
+=======
+  <Button onClick={onClick} type="opaque">
+>>>>>>> feature/show-current-heading
     <CompassIcon />
   </Button>
 );

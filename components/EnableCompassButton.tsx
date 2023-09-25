@@ -1,6 +1,6 @@
 import React from "react";
 
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 import { CompassIcon } from "./Icons/Icons";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const EnableCompassButton = ({ onClick }: Props) => (
-  <ClearButton onClick={onClick}>
+  <Button onClick={onClick} type="opaque">
     <CompassIcon />
-  </ClearButton>
+  </Button>
 );

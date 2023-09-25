@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "@/types/Map";
 
-import ClearButton from "./ClearButton/ClearButton";
+import Button from "./Button/Button";
 import { ShareIcon, TrashIcon } from "./Icons/Icons";
 
 import styles from "@/components/ListOfMaps.module.css";
@@ -105,16 +105,16 @@ function AddMapOption({ onClick }: { onClick: () => void }) {
 
 function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
-    <ClearButton onClick={onClick} size={"small"}>
+    <Button onClick={onClick} size={"small"}>
       <TrashIcon />
-    </ClearButton>
+    </Button>
   );
 }
 
 function ShareButton({ onClick }: { onClick: () => void }) {
   return (
-    <ClearButton onClick={onClick} size={"small"}>
+    <Button onClick={onClick} size={"small"}>
       <ShareIcon />
-    </ClearButton>
+    </Button>
   );
 }

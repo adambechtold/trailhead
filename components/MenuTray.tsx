@@ -5,7 +5,7 @@ import { useMapContext } from "@/contexts/MapContext";
 
 import ListOfMaps from "./ListOfMaps";
 import Toolbar from "./Toolbar";
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 
 import styles from "@/components/MenuTray.module.css";
 
@@ -204,9 +204,7 @@ export default function MenuTray() {
             onShareMap={downloadMap}
           />
           <div className={styles["lower-buttons-container"]}>
-            <ClearButton onClick={showDebuggingContent}>
-              INSPECT DATA
-            </ClearButton>
+            <Button onClick={showDebuggingContent}>INSPECT DATA</Button>
           </div>
         </div>
         <div className={styles["menu-buffer"]}></div>

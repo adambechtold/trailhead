@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import ClearButton from "./ClearButton/ClearButton";
+import Button from "./Button/Button";
 import { QuestionIcon } from "./Icons/Icons";
 
 export default function HelpButton() {
@@ -15,8 +15,8 @@ export default function HelpButton() {
   };
 
   return (
-    <ClearButton onClick={handleHelpClick}>
+    <Button onClick={handleHelpClick} type="opaque">
       <QuestionIcon />
-    </ClearButton>
+    </Button>
   );
 }

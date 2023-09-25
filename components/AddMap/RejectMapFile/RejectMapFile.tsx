@@ -3,7 +3,7 @@ import React from "react";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import styles from "./RejectMapFile.module.css";
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 
 type Props = {
   previewSrc: string;
@@ -39,7 +39,7 @@ export default function RefectMapFile({
           </div>
         </div>
         <div className={styles["button-container"]}>
-          <ClearButton onClick={onConfirmRejection}>OK</ClearButton>
+          <Button onClick={onConfirmRejection}>OK</Button>
         </div>
       </div>
       <InterpolateMap mapURL={previewSrc} />

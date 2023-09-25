@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 
 import HowToSaveOffline from "@/components/HowTo/HowToSaveOffline";
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 
 import styles from "./_offline.module.css";
 
@@ -19,9 +19,7 @@ export default function Offline() {
       <p>Reload Trailhead when you're connected to cache the site.</p>
       <HowToSaveOffline />
       <div className={styles["return-container"]}>
-        <ClearButton onClick={onClickToNavigate}>
-          RETURN TO NAVIGATION
-        </ClearButton>
+        <Button onClick={onClickToNavigate}>RETURN TO NAVIGATION</Button>
       </div>
     </div>
   );

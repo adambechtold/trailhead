@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import styles from "./index.module.css";
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 
 export default function DisclaimerPage() {
   const router = useRouter();
@@ -48,18 +48,16 @@ export default function DisclaimerPage() {
       </div>
       <div className={styles["button-container"]}>
         {!hasAgreedToUserAgreement && (
-          <ClearButton onClick={onAgreeToUserAgreement}>
-            I UNDERSTAND
-          </ClearButton>
+          <Button onClick={onAgreeToUserAgreement}>I UNDERSTAND</Button>
         )}
         {hasAgreedToUserAgreement && (
           <>
-            <ClearButton onClick={() => router.push("/navigate")}>
+            <Button onClick={() => router.push("/navigate")}>
               START NAVIGATING
-            </ClearButton>
-            <ClearButton onClick={() => router.push("/how-to-use")}>
+            </Button>
+            <Button onClick={() => router.push("/how-to-use")}>
               HOW TO USE TRAILHEAD
-            </ClearButton>
+            </Button>
           </>
         )}
       </div>

@@ -5,7 +5,7 @@ import {
   getUsedStorageAmount,
 } from "@/utils/localStorage";
 
-import ClearButton from "@/components/ClearButton/ClearButton";
+import Button from "@/components/Button/Button";
 import PictureGuidlines from "@/components/HowTo/PictureGuidelines";
 
 import styles from "./ChooseMapFile.module.css";
@@ -54,7 +54,7 @@ export default function ChooseMapFile({
       ].join(" ")}
     >
       <div className={styles["add-map-container"]}>
-        <ClearButton onClick={handleSelectMapFile}>ADD MAP PHOTO</ClearButton>
+        <Button onClick={handleSelectMapFile}>ADD MAP PHOTO</Button>
         <input
           className={styles["map-input"]}
           type="file"
@@ -74,7 +74,7 @@ export default function ChooseMapFile({
         </div>
       </div>
       {hasSavedMaps && (
-        <ClearButton onClick={onCancelChooseMap}>USE SAVED MAPS</ClearButton>
+        <Button onClick={onCancelChooseMap}>USE SAVED MAPS</Button>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { CancelIcon, ConfirmIcon } from "../../Icons/Icons";
-import ClearButton from "../../ClearButton/ClearButton";
+import Button from "../../Button/Button";
 import InterpolateMap from "../../InterpolateMap";
 
 import styles from "./ConfirmMap.module.css";
@@ -32,14 +32,14 @@ export default function ConfirmMap({
           styles["horizontal-container"],
         ].join(" ")}
       >
-        <ClearButton onClick={handleCancelSelection}>
+        <Button onClick={handleCancelSelection} type="opaque">
           <CancelIcon />
           SELECT NEW IMAGE
-        </ClearButton>
-        <ClearButton onClick={handleConfirmMap}>
+        </Button>
+        <Button onClick={handleConfirmMap} type="opaque">
           <ConfirmIcon />
           CONFIRM
-        </ClearButton>
+        </Button>
       </div>
       <InterpolateMap
         mapURL={previewMap.url}

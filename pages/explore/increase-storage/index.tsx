@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useCallback, useState } from "react";
 
 import {
   increaseStorageReducer,
@@ -11,15 +11,50 @@ export default function IncreaseStorage() {
     INITIAL_STATE
   );
   const [nameInput, setNameInput] = useState("");
+  const [db, setDb] = useState<IDBDatabase | null>(null);
 
-  const onAddName = () => {
-    increaseStorageDispatch({ type: "ADD_NAME", payload: nameInput });
-  };
-  const onDeleteName = (index: number) => {
-    increaseStorageDispatch({ type: "DELETE_NAME", payload: index });
-  };
+  useEffect(() => {
+    const request = indexedDB.open("names", 1);
+    request.onsuccess = (event) => {
+      setDb(event.target.result as IDBDatabase);
+      const nowDB = event.target.result as IDBDatabase;
+      // get all names
 
-  console.log(increaseStorageState);
+      const transaction = nowDB.transaction(["names"], "readonly");
+      const objectStore = transaction.objectStore("names");
+      const getNamesRequest = objectStore.getAll();
+      getNamesRequest.onsuccess = (event) => {
+        const names = event.target.result as { key: string; name: string }[];
+        increaseStorageDispatch({
+          type: "SET_NAMES",
+          payload: {
+            value: names.map((result) => result.name),
+            db: null,
+          },
+        });
+      };
+    };
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result as IDBDatabase;
+      const objectStore = db.createObjectStore("names", {
+        keyPath: "key",
+      });
+    };
+    request.onerror = (event) => {
+      console.error("error: ", event);
+    };
+  }, []);
+
+  const onAddName = (name: string) => {
+    console.log("onAddName: ", name);
+    increaseStorageDispatch({
+      type: "ADD_NAME",
+      payload: {
+        value: name,
+        db,
+      },
+    });
+  };
 
   return (
     <div>
@@ -29,12 +64,9 @@ export default function IncreaseStorage() {
         value={nameInput}
         onChange={(e) => setNameInput(e.target.value)}
       />
-      <button onClick={onAddName}>Add Name</button>
+      <button onClick={() => onAddName(nameInput)}>Add Name</button>
       {increaseStorageState.names.map((name, index) => (
-        <div key={`name-${index}`}>
-          {name}
-          <button onClick={() => onDeleteName(index)}>Delete</button>
-        </div>
+        <div key={`name-${index}`}>{name}</div>
       ))}
     </div>
   );

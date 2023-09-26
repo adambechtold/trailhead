@@ -32,6 +32,10 @@ export class MapStorageManager {
         this.addMap = (map: Map) => saveMapToIndexedDB(map, false);
         this.putMap = (map: Map) => saveMapToIndexedDB(map, true);
         this.deleteMapByKey = deleteMapFromIndexedDB;
+        // Load Maps from Local Storage into IndexedDB
+        getMapsFromLocalStorage().then((maps) => {
+          maps.forEach((map) => this.addMap(map));
+        });
         break;
       default:
         throw new Error("Invalid storage strategy");

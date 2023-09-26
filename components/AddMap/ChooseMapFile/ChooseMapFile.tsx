@@ -49,8 +49,13 @@ export default function ChooseMapFile({
           id="map-input"
         />
         <div>
-          <h4>For great maps, make sure that...</h4>
-          <div style={{ paddingLeft: "1.1rem", paddingTop: "0.3rem" }}>
+          <h4>For great maps, make sure...</h4>
+          <div
+            style={{
+              paddingLeft: "1.1rem",
+              paddingTop: "0.3rem",
+            }}
+          >
             <PictureGuidlines />
           </div>
         </div>

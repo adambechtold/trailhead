@@ -38,30 +38,13 @@ export default function MapContextProvider({
     INITIAL_STATE
   );
 
-  const mapStorage = new MapStorageManager("LOCAL_STORAGE");
-
-  /* Load Pins for Map
-  useEffect(() => {
-    if (!mapContextState.mapList.length) return;
-    const currentMap: Map = mapContextState.mapList[mapContextState.mapIndex];
-
-    if (startFromStorage) {
-      const start = JSON.parse(startFromStorage);
-      mapContextDispatch({ type: "SET_START", payload: start });
-    }
-    if (endFromStorage) {
-      const end = JSON.parse(endFromStorage);
-      mapContextDispatch({ type: "SET_END", payload: end });
-    }
-  }, [mapContextState.mapIndex]);
-  */
+  const mapStorage = new MapStorageManager("INDEXED_DB");
 
   // ========= Load Saved Maps ==============
   useEffect(() => {
     mapStorage
       .getMaps()
       .then((maps) => {
-        console.log("load the maps", maps);
         mapContextDispatch({ type: "SET_MAPS", payload: maps });
       })
       .catch((err) => {

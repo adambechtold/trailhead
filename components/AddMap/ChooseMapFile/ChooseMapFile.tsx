@@ -1,21 +1,9 @@
 import React from "react";
-import dynamic from "next/dynamic";
-import {
-  getMaximumStorageAmount,
-  getUsedStorageAmount,
-} from "@/utils/localStorage";
 
 import Button from "@/components/Button/Button";
 import PictureGuidlines from "@/components/HowTo/PictureGuidelines";
 
 import styles from "./ChooseMapFile.module.css";
-
-const QuotaUsageBar = dynamic(
-  () => import("@/components/QuotaUsageBar/QuotaUsageBar"),
-  {
-    ssr: false,
-  }
-);
 
 type Props = {
   hasSavedMaps: boolean;
@@ -42,9 +30,6 @@ export default function ChooseMapFile({
     onMapFileSelected(file);
   }
 
-  const quotaUsed = getUsedStorageAmount();
-  const quotaTotal = getMaximumStorageAmount();
-
   return (
     <div
       className={[
@@ -63,9 +48,6 @@ export default function ChooseMapFile({
           onChange={handleFileInputChange}
           id="map-input"
         />
-        {typeof window !== "undefined" && (
-          <QuotaUsageBar quotaUsed={quotaUsed} quotaTotal={quotaTotal} />
-        )}
         <div>
           <h4>For great maps, make sure that...</h4>
           <div style={{ paddingLeft: "1.1rem", paddingTop: "0.3rem" }}>

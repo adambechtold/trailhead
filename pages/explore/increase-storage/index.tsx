@@ -16,15 +16,15 @@ export default function IncreaseStorage() {
   useEffect(() => {
     const request = indexedDB.open("names", 1);
     request.onsuccess = (event) => {
-      setDb(event.target.result as IDBDatabase);
-      const nowDB = event.target.result as IDBDatabase;
+      setDb(request.result);
+      const nowDB = request.result;
 
       // get all names
       const transaction = nowDB.transaction(["names"], "readonly");
       const objectStore = transaction.objectStore("names");
       const getNamesRequest = objectStore.getAll();
       getNamesRequest.onsuccess = (event) => {
-        const names = event.target.result as { key: string; name: string }[];
+        const names = getNamesRequest.result as { name: string }[];
         increaseStorageDispatch({
           type: "SET_NAMES",
           payload: {
@@ -35,7 +35,7 @@ export default function IncreaseStorage() {
       };
     };
     request.onupgradeneeded = (event) => {
-      const db = event.target.result as IDBDatabase;
+      const db = request.result as IDBDatabase;
       const objectStore = db.createObjectStore("names", {
         keyPath: "key",
       });

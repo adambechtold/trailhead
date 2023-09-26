@@ -1,5 +1,5 @@
 // This could probably be a stateless component
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { Map } from "@/types/Map";
@@ -29,6 +29,19 @@ export default function DisplayMapData() {
   } = useUserLocationContext();
   const { map, deleteStartPin, deleteEndPin } = useMapContext();
   const router = useRouter();
+  const [version, setVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/manifest.webmanifest?v=${Date.now()}")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("manifest data: ", data);
+        if (data.version) {
+          setVersion(data.version);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
   const returnToNavigate = () => {
     router.push("/navigate");
@@ -79,6 +92,7 @@ export default function DisplayMapData() {
             START WATCHING HEADING
           </Button>
         )}
+        {version && `Version: ${version}`}
       </div>
     </div>
   );

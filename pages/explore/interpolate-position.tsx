@@ -17,6 +17,7 @@ export default function ExploreInterpolatePosition() {
   const [percentMovementLongitude, setPercentMovementLongitude] = useState(50);
   const [percentMovementLatitude, setPercentMovementLatitude] = useState(50);
   const [isIncrementing, setIsIncrementing] = useState(true);
+  const [heading, setHeading] = useState(0);
 
   // this isn't working, but that's fine
   function updateMovement() {
@@ -31,6 +32,10 @@ export default function ExploreInterpolatePosition() {
     });
     setPercentMovementLatitude((prev) => {
       return isIncrementing ? prev + 1 : prev - 1;
+    });
+
+    setHeading((prev) => {
+      return prev + 5 > 360 ? 0 : prev + 5;
     });
   }
 
@@ -65,6 +70,7 @@ export default function ExploreInterpolatePosition() {
         start={start}
         end={end}
         userLocation={currentUserLocation}
+        userHeading={heading}
         mapURL={MAP_URL}
       />
     </div>

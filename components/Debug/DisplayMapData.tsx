@@ -12,10 +12,16 @@ import Button from "@/components/Button/Button";
 
 import styles from "./DisplayMapData.module.css";
 import { TrashIcon } from "../Icons/Icons";
+import { HeadingError } from "@/contexts/userHeadingReducer";
 
 export default function DisplayMapData() {
   const {
     currentAcceptedUserLocation,
+    currentHeading,
+    canWatchUserHeading,
+    isWatchingHeading,
+    headingError,
+    startWatchingHeading,
     mostRecentLocation,
     isWatchingLocation,
     error,
@@ -51,6 +57,10 @@ export default function DisplayMapData() {
       )}
       <UserLocationData
         currentAcceptedUserLocation={currentAcceptedUserLocation}
+        currentHeading={currentHeading}
+        canWatchUserHeading={canWatchUserHeading}
+        isWatchingHeading={isWatchingHeading}
+        headingError={headingError}
         mostRecentLocation={mostRecentLocation}
         isWatchingLocation={isWatchingLocation}
         error={error}
@@ -64,6 +74,11 @@ export default function DisplayMapData() {
         >
           START WATCHING LOCATION
         </Button>
+        {isWatchingLocation && canWatchUserHeading && (
+          <Button onClick={startWatchingHeading} disabled={isWatchingHeading}>
+            START WATCHING HEADING
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -122,6 +137,10 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
 
 type UserLocationData = {
   currentAcceptedUserLocation: Location | null;
+  currentHeading: number | string | null;
+  canWatchUserHeading: boolean;
+  isWatchingHeading: boolean;
+  headingError: HeadingError | null;
   mostRecentLocation: Location | null;
   isWatchingLocation: boolean;
   error: string | null;
@@ -129,6 +148,10 @@ type UserLocationData = {
 
 function UserLocationData({
   currentAcceptedUserLocation,
+  currentHeading,
+  canWatchUserHeading,
+  isWatchingHeading,
+  headingError,
   mostRecentLocation,
   isWatchingLocation,
   error,
@@ -138,8 +161,17 @@ function UserLocationData({
       <h3>User Location</h3>
       <div className={styles.object}>
         {isWatchingLocation
-          ? "🔄 Is Watching Location"
-          : "❌ Not Watching Location"}
+          ? "🔄 Recieving User Location"
+          : "❌ Not Tracking User Location"}
+      </div>
+      <div className={styles.object}>
+        {isWatchingHeading
+          ? `🔄 User Heading: ${currentHeading}`
+          : `❌ Not Tracking User Heading. ${
+              canWatchUserHeading
+                ? "This device supports user heading"
+                : "Heading is not supported on this device."
+            }`}
       </div>
       {currentAcceptedUserLocation &&
         displayObject(
@@ -152,6 +184,7 @@ function UserLocationData({
           "Most Recent Location"
         )}
       {error && <div>Error: {error}</div>}
+      {headingError && <div>Heading Error: {headingError}</div>}
     </div>
   );
 }

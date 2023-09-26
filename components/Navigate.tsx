@@ -49,7 +49,7 @@ export default function Navigate() {
     const result = confirm("Are you sure you want to reset the pins?");
     if (!result) return;
     // User Clicked OK
-    resetPins();
+    resetPins(map);
     endCreatePin();
   };
 

@@ -219,7 +219,8 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
     top,
     left,
   };
-  if (heading) style["transform"] = `rotate(${heading}deg)`;
+  if (heading)
+    style["transform"] = `translate(-50%, -50%) rotate(${heading}deg)`;
 
   return <img src={imgURL} alt="Pin" className={styles.mapPin} style={style} />;
 };

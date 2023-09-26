@@ -1,5 +1,3 @@
-import React, { Dispatch } from "react";
-
 type increaseStorageState = {
   names: string[];
 };
@@ -46,11 +44,22 @@ export const increaseStorageReducer = (
       };
     case "DELETE_NAME":
       const indexToDelete = value as number;
+
       const isIndexNotInRange =
         indexToDelete < 0 || indexToDelete > state.names.length - 1;
       if (isIndexNotInRange) return state;
+
       const newNames = [...state.names];
       newNames.splice(indexToDelete, 1);
+
+      if (db) {
+        const deleteNameTransaction = db.transaction("names", "readwrite");
+        const deleteNameObjectStore =
+          deleteNameTransaction.objectStore("names");
+        const nameKey = state.names[indexToDelete];
+        deleteNameObjectStore.delete(nameKey);
+      }
+
       return {
         ...state,
         names: newNames,

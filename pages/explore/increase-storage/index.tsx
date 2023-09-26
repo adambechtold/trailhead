@@ -3,7 +3,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import {
   increaseStorageReducer,
   INITIAL_STATE,
-} from "./increaseStorageReducer";
+} from "../../../contexts/increaseStorageReducer";
 
 export default function IncreaseStorage() {
   const [increaseStorageState, increaseStorageDispatch] = useReducer(

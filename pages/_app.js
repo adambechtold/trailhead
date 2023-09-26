@@ -1,12 +1,17 @@
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import MapContextProvider from "@/contexts/MapContext";
+//import MapContextProvider from "@/contexts/MapContext";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
 import UserAgreementContextProvider, {
   useUserAgreementContext,
 } from "@/contexts/UserAgreementContext";
 import { useEffect } from "react";
+
+const MapContextProvider = dynamic(() => import("@/contexts/MapContext"), {
+  ssr: false,
+});
 
 export default function App({ Component, pageProps }) {
   return (
@@ -39,16 +44,16 @@ export default function App({ Component, pageProps }) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="manifest" href="/manifest.webmanifest" />
       </Head>
-      <MapContextProvider>
-        <UserLocationProvider>
-          <UserAgreementContextProvider>
+      <UserLocationProvider>
+        <UserAgreementContextProvider>
+          <MapContextProvider>
             <>
               <CheckUserAgreement />
               <Component {...pageProps} />
             </>
-          </UserAgreementContextProvider>
-        </UserLocationProvider>
-      </MapContextProvider>
+          </MapContextProvider>
+        </UserAgreementContextProvider>
+      </UserLocationProvider>
     </>
   );
 }

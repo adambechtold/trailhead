@@ -33,8 +33,10 @@ export class MapStorageManager {
         this.putMap = (map: Map) => saveMapToIndexedDB(map, true);
         this.deleteMapByKey = deleteMapFromIndexedDB;
         // Load Maps from Local Storage into IndexedDB
-        getMapsFromLocalStorage().then((maps) => {
-          maps.forEach((map) => this.addMap(map));
+        updateLocalStorageToLatest().then(() => {
+          getMapsFromLocalStorage().then((maps) => {
+            maps.forEach((map) => this.addMap(map));
+          });
         });
         break;
       default:

@@ -110,6 +110,7 @@ export default function AddMap() {
 }
 
 function canSavePhoto(photoURL: string) {
+  return true;
   const quotaUsed = getUsedStorageAmount();
   const quotaTotal = getMaximumStorageAmount();
   const remainingQuota = quotaTotal - quotaUsed;

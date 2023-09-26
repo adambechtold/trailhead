@@ -2,7 +2,7 @@ import React, { createContext, useReducer, useEffect, useContext } from "react";
 import { Pin } from "@/types/Vector";
 import { mapContextReducer, INITIAL_STATE } from "./mapContextReducer";
 import { MapPosition } from "@/types/MapPosition";
-import { Map, generatePinKey } from "@/types/Map";
+import { Map } from "@/types/Map";
 import { MapStorageManager } from "@/types/MapStorageManager";
 
 type MapContextProviderProps = {
@@ -45,7 +45,14 @@ export default function MapContextProvider({
     mapStorage
       .getMaps()
       .then((maps) => {
-        mapContextDispatch({ type: "SET_MAPS", payload: maps });
+        const savedMaps = maps.map((m) => ({
+          ...m,
+          isSaved: true,
+        }));
+        mapContextDispatch({
+          type: "SET_MAPS",
+          payload: savedMaps,
+        });
       })
       .catch((err) => {
         console.error("load saved maps error", err);
@@ -57,6 +64,16 @@ export default function MapContextProvider({
     mapContextState;
 
   // ====== ACTIONS ======
+  function storeSavedResult(map: Map, wasSaved: boolean) {
+    map.isSaved = wasSaved;
+    mapContextDispatch({ type: "OVERWRITE_MAP", payload: map });
+  }
+
+  function clearSavedFromMap(map: Map): Map {
+    delete map.isSaved;
+    return map;
+  }
+
   const addMap = (map: Map): boolean => {
     const mapAlreadyExists =
       currentMapList.filter((savedMap) => savedMap.key === map.key).length > 0;
@@ -67,11 +84,18 @@ export default function MapContextProvider({
       );
       if (!result) return false;
       mapContextDispatch({ type: "OVERWRITE_MAP", payload: map });
-      mapStorage.putMap(map);
+      mapStorage
+        .putMap(clearSavedFromMap(map))
+        .then((wasSaved) => storeSavedResult(map, wasSaved));
+      return true;
+    } else {
+      // TODO: should this be "add" instead of "put"? I used put because the mapAlreadyExists doesn't check saved maps
+      mapStorage
+        .putMap(clearSavedFromMap(map))
+        .then((wasSaved) => storeSavedResult(map, wasSaved));
+      mapContextDispatch({ type: "ADD_NEW_MAP", payload: map });
+      return true;
     }
-    mapStorage.putMap(map); // TODO: should this be "add" instead of "put"? I used put because the mapAlreadyExists doesn't check saved maps
-    mapContextDispatch({ type: "ADD_NEW_MAP", payload: map });
-    return true;
   };
 
   const deleteMap = (mapKey: string) => {
@@ -109,7 +133,9 @@ export default function MapContextProvider({
       type: "OVERWRITE_MAP",
       payload: map,
     });
-    mapStorage.putMap(map);
+    mapStorage
+      .putMap(clearSavedFromMap(map))
+      .then((wasSaved) => storeSavedResult(map, wasSaved));
   };
 
   const deletePinFromMap = (map: Map, type: "start" | "end") => {
@@ -118,7 +144,9 @@ export default function MapContextProvider({
       type: "OVERWRITE_MAP",
       payload: map,
     });
-    mapStorage.putMap(map);
+    mapStorage
+      .putMap(clearSavedFromMap(map))
+      .then((wasSaved) => storeSavedResult(map, wasSaved));
   };
 
   const resetPins = (map: Map) => {
@@ -128,7 +156,9 @@ export default function MapContextProvider({
       type: "OVERWRITE_MAP",
       payload: map,
     });
-    mapStorage.putMap(map);
+    mapStorage
+      .putMap(clearSavedFromMap(map))
+      .then((wasSaved) => storeSavedResult(map, wasSaved));
   };
 
   return (

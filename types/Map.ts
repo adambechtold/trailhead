@@ -9,6 +9,7 @@ export type Map = {
   start?: Pin;
   end?: Pin;
   formatVersion: MapFormatVersion;
+  isSaved?: boolean;
 };
 
 export function generateMapKey(url: string): string {

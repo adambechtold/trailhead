@@ -41,6 +41,7 @@ export default function ListOfMaps({
           mapKey={map.key}
           mapURL={map.url}
           isSelected={isSelected(index)}
+          isSaved={map.isSaved}
           onClick={() => handleMapClick(map.key)}
           onDelete={() => onDeleteMap && onDeleteMap(map.key)}
           onShare={() => onShareMap && onShareMap(map.key)}
@@ -54,6 +55,7 @@ type MapItemProps = {
   mapURL: string;
   mapKey: string;
   isSelected?: boolean;
+  isSaved?: boolean;
   onClick: () => void;
   onDelete: (mapKey: string) => void;
   onShare: (mapKey: string) => void;
@@ -63,11 +65,12 @@ function MapItem({
   mapURL,
   mapKey,
   isSelected,
+  isSaved,
   onClick,
   onDelete,
   onShare,
 }: MapItemProps) {
-  const itemPicture = (
+  let itemPicture = (
     <img src={mapURL} className={styles["map-picture"]} onClick={onClick} />
   );
   const outline = (child: React.ReactNode) => (
@@ -82,6 +85,13 @@ function MapItem({
       </div>
     </div>
   );
+  const addNotSavedIcon = (child: React.ReactNode) => (
+    <>
+      <div className={styles["not-saved-icon"]}>Not Saved</div>
+      {child}
+    </>
+  );
+  if (!isSaved) itemPicture = addNotSavedIcon(itemPicture);
 
   return (
     <div className={styles["map-item-container"]}>

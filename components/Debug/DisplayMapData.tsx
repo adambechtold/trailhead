@@ -119,7 +119,7 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
   };
 
   return (
-    <div>
+    <div className={styles.section}>
       <h3>Map</h3>
       {map.start ? (
         <div className={styles.pin}>

@@ -22,6 +22,7 @@ type Props = {
   mapURL: string;
   scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
+  pinScale?: number;
   children?: React.ReactNode;
 };
 
@@ -35,6 +36,7 @@ export default function InterpolateMap(props: Props) {
     mapURL,
     scale,
     onMapStateUpdate,
+    pinScale,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
@@ -142,13 +144,16 @@ export default function InterpolateMap(props: Props) {
           })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
-            {start && <PinComponent pin={start} type={"PIN"} />}
-            {end && <PinComponent pin={end} type={"PIN"} />}
+            {start && (
+              <PinComponent pin={start} type={"PIN"} scale={pinScale} />
+            )}
+            {end && <PinComponent pin={end} type={"PIN"} scale={pinScale} />}
             {canFindUserLocation && (
               <PinComponent
                 pin={getUserPin(start, end, userLocation)}
                 type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
                 heading={userHeading}
+                scale={pinScale}
               />
             )}
             <img src={mapURL} alt="Trail Map" ref={mapReference} />
@@ -201,6 +206,7 @@ interface PinMarkerProps {
   pin: Pin;
   type: "USER_NO_DIRECTION" | "USER_WITH_DIRECTION" | "PIN";
   heading?: number;
+  scale?: number;
 }
 
 const typeToStyle = {
@@ -210,7 +216,7 @@ const typeToStyle = {
 };
 
 const PinComponent: React.FC<PinMarkerProps> = (props) => {
-  const { pin, type, heading } = props;
+  const { pin, type, heading, scale } = props;
   const left = pin.mapPoint.x;
   const top = -1 * pin.mapPoint.y;
   const imgURL = typeToStyle[type];
@@ -221,6 +227,9 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
   };
   if (heading)
     style["transform"] = `translate(-50%, -50%) rotate(${heading}deg)`;
+
+  style.width = scale ? `${scale * 24}px` : "24px";
+  style.height = scale ? `${scale * 24}px` : "24px";
 
   return <img src={imgURL} alt="Pin" className={styles.mapPin} style={style} />;
 };

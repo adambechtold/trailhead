@@ -47,3 +47,7 @@ export function ShareIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/compass-no-ring.svg"} />;
 }
+
+export function GearIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/gear.svg"} />;
+}

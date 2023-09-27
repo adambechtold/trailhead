@@ -1,5 +1,4 @@
 import { MapPosition } from "@/types/MapPosition";
-import { Pin } from "@/types/Vector";
 import { Map } from "@/types/Map";
 
 export type MapContextState = {

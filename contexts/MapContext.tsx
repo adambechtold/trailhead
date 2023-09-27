@@ -25,6 +25,7 @@ type MapContext = {
   setMapPosition: (mapPosition: MapPosition) => void;
   mapSaveError: boolean;
   removeMapError: () => void;
+  setPinScale: (map: Map, newScale: number) => void;
 };
 
 export const MapContext = createContext<MapContext | null>(null);
@@ -161,6 +162,17 @@ export default function MapContextProvider({
       .then((wasSaved) => storeSavedResult(map, wasSaved));
   };
 
+  const setPinScale = (map: Map, newScale: number) => {
+    map.pinScale = newScale;
+    mapContextDispatch({
+      type: "OVERWRITE_MAP",
+      payload: map,
+    });
+    mapStorage
+      .putMap(clearSavedFromMap(map))
+      .then((wasSaved) => storeSavedResult(map, wasSaved));
+  };
+
   return (
     <MapContext.Provider
       value={{
@@ -179,6 +191,7 @@ export default function MapContextProvider({
         setMapPosition,
         mapSaveError: mapContextState.mapSaveError,
         removeMapError,
+        setPinScale,
       }}
     >
       {children}

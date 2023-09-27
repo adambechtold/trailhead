@@ -8,6 +8,7 @@ type Props = {
   size?: "small" | "medium";
   disabled?: boolean;
   type?: "clear" | "opaque" | "default";
+  isElevated?: boolean;
 };
 
 export default function Button({
@@ -16,16 +17,20 @@ export default function Button({
   size = "medium",
   disabled = false,
   type = "clear",
+  isElevated = true,
 }: Props) {
   const sizeClass = styles[`size-${size}`];
   const contentClass = [styles.content, disabled ? styles.disabled : ""].join(
     " "
   );
-  const typeClass = styles[`type-${type}`];
+  const typeClass = type === "clear" ? "clear" : "opaque";
+  const elevatedClass = isElevated ? "elevated" : "";
 
   return (
     <button
-      className={[styles.container, sizeClass, typeClass].join(" ")}
+      className={[styles.container, sizeClass, typeClass, elevatedClass].join(
+        " "
+      )}
       onClick={disabled ? () => {} : onClick}
     >
       <div className={contentClass}>{children}</div>

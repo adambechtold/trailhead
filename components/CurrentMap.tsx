@@ -28,6 +28,7 @@ export default function CurrentMap() {
       userHeading={currentHeading != null ? currentHeading : undefined}
       mapURL={map.url}
       scale={scale}
+      pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
     />
   );

@@ -57,3 +57,18 @@ ol ul {
 ol > * {
   margin-top: 1rem;
 }
+
+.opaque {
+  background-color: white;
+  color: var(--clear-button-text-color);
+}
+
+.clear {
+  background-color: var(--clear-button-background-color);
+  backdrop-filter: blur(8px);
+  color: var(--clear-button-text-color);
+}
+
+.elevated {
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
+}

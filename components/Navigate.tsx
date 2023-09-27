@@ -7,9 +7,9 @@ import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
-import Button from "./Button/Button";
 import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
 import AddMap from "./AddMap/AddMap";
+import SettingsPanel from "./SettingsPanel/SettingsPanel";
 
 import styles from "./Navigate.module.css";
 import HelpButton from "./HelpButton";
@@ -20,7 +20,7 @@ const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
 });
 
 export default function Navigate() {
-  const { resetPins, map } = useMapContext();
+  const { resetPins, map, setPinScale } = useMapContext();
   const { endCreatePin } = useCreatePinContext();
   const {
     isWatchingLocation,
@@ -37,7 +37,7 @@ export default function Navigate() {
     if (!isWatchingLocation) startWatchingUserLocation();
   }, []);
 
-  const canDisplayResetButton = map && (map.start || map.end);
+  const canDisplayResetButton = !!(map && (map.start || map.end));
   const canDisplayAccuracyIndicator =
     currentAcceptedUserLocation || isWatchingLocation || userLocationError;
   let accuracyToDisplay = currentAcceptedUserLocation?.accuracy;
@@ -74,9 +74,14 @@ export default function Navigate() {
           <EnableCompassButton onClick={startWatchingHeading} />
         )}
       </div>
-      {canDisplayResetButton && (
-        <div className={styles["position-reset-button"]}>
-          <Button onClick={onReset}>RESET PINS</Button>
+      {map && (
+        <div className={styles["position-settings-panel"]}>
+          <SettingsPanel
+            pinScale={map.pinScale || 1}
+            setPinScale={(scale: number) => setPinScale(map, scale)}
+            canResetPins={canDisplayResetButton}
+            resetPins={onReset}
+          />
         </div>
       )}
       <Crosshairs />

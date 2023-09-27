@@ -132,7 +132,6 @@ export default function UserLocationContextProvider({
   function getCanWatchUserHeading() {
     if (!window) return;
     if (userHeadingState.error === "PERMISSION_DENIED") return false;
-    console.log("here...");
     try {
       if (!DeviceOrientationEvent) return false;
     } catch (error) {

@@ -35,7 +35,6 @@ export default function DisplayMapData() {
     fetch("/manifest.webmanifest?v=${Date.now()}")
       .then((response) => response.json())
       .then((data) => {
-        console.log("manifest data: ", data);
         if (data.version) {
           setVersion(data.version);
         }

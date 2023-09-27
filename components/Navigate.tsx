@@ -13,7 +13,6 @@ import SettingsPanel from "./SettingsPanel/SettingsPanel";
 
 import styles from "./Navigate.module.css";
 import HelpButton from "./HelpButton";
-import { EnableCompassButton } from "./EnableCompassButton";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
   ssr: false,
@@ -69,12 +68,12 @@ export default function Navigate() {
             />
           </div>
         )}
-        <HelpButton />
       </div>
-      {map &&
-        ((canWatchUserHeading && !isWatchingHeading) ||
-          canDisplayResetButton) && (
-          <div className={styles["position-settings-panel"]}>
+      <div className={styles["position-settings-panel"]}>
+        <HelpButton />
+        {map &&
+          ((canWatchUserHeading && !isWatchingHeading) ||
+            canDisplayResetButton) && (
             <SettingsPanel
               pinScale={map.pinScale || 1}
               setPinScale={(scale: number) => setPinScale(map, scale)}
@@ -83,8 +82,8 @@ export default function Navigate() {
               showEnableCompass={canWatchUserHeading && !isWatchingHeading}
               startWatchingUserHeading={startWatchingHeading}
             />
-          </div>
-        )}
+          )}
+      </div>
       <Crosshairs />
       {!map && <AddMap />}
       {map && <CurrentMap />}

@@ -4,8 +4,10 @@
 
 .size-medium {
   height: 1.1rem;
+  width: 1.1rem;
 }
 
 .size-small {
   height: var(--small-button-text-size);
+  width: var(--small-button-text-size);
 }

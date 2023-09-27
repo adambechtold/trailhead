@@ -6,7 +6,7 @@
   "display": "standalone",
   "scope": "./",
   "start_url": "./navigate",
-  "version": "beta-0.0.3-heading-and-increased-storage",
+  "version": "0.1.4",
   "icons": [
     {
       "src": "/favicons/android-chrome-192x192.png",

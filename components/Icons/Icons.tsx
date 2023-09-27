@@ -51,3 +51,11 @@ export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 export function GearIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/gear.svg"} />;
 }
+
+export function PlusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/plus-icon.svg"} />;
+}
+
+export function MinusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/minus-icon.svg"} />;
+}

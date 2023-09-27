@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Button from "@/components/Button/Button";
 
 import styles from "./SettingsPanel.module.css";
-import { GearIcon } from "../Icons/Icons";
+import { GearIcon, PlusIcon, MinusIcon } from "../Icons/Icons";
 import { EnableCompassButton } from "../EnableCompassButton";
 
 type Props = {
@@ -61,18 +61,18 @@ export default function ControlPinScale({
                 <Button
                   onClick={incrementPinScale}
                   type="clear"
-                  size="medium"
+                  size="small"
                   isElevated={false}
                 >
-                  +
+                  <PlusIcon size="small" />
                 </Button>
                 <Button
                   onClick={decrementPinScale}
                   type="clear"
-                  size="medium"
+                  size="small"
                   isElevated={false}
                 >
-                  -
+                  <MinusIcon size="small" />
                 </Button>
               </div>
             </div>

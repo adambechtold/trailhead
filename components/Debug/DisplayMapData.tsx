@@ -78,16 +78,25 @@ export default function DisplayMapData() {
         error={error}
       />
       <div className={styles["button-container"]}>
-        <Button onClick={returnToNavigate}>RETURN TO NAVIGATE</Button>
-        <Button onClick={clearLocalStorage}>CLEAR LOCAL STORAGE</Button>
+        <Button onClick={returnToNavigate} isElevated={false}>
+          RETURN TO NAVIGATE
+        </Button>
+        <Button onClick={clearLocalStorage} isElevated={false}>
+          CLEAR LOCAL STORAGE
+        </Button>
         <Button
           onClick={startWatchingUserLocation}
           disabled={isWatchingLocation}
+          isElevated={false}
         >
           START WATCHING LOCATION
         </Button>
         {isWatchingLocation && canWatchUserHeading && (
-          <Button onClick={startWatchingHeading} disabled={isWatchingHeading}>
+          <Button
+            onClick={startWatchingHeading}
+            disabled={isWatchingHeading}
+            isElevated={false}
+          >
             START WATCHING HEADING
           </Button>
         )}
@@ -124,7 +133,11 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
         <div className={styles.pin}>
           <p>{displayObject(flattenObject(map.start), "Start Pin")}</p>
           <div className={styles["delete-button"]}>
-            <Button onClick={() => onDeletePin("start")} size="small">
+            <Button
+              onClick={() => onDeletePin("start")}
+              size="small"
+              isElevated={false}
+            >
               <TrashIcon />
             </Button>
           </div>
@@ -136,7 +149,11 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
         <div className={styles.pin}>
           <p>{displayObject(flattenObject(map.end), "End Pin")}</p>
           <div className={styles["delete-button"]}>
-            <Button onClick={() => onDeletePin("end")} size="small">
+            <Button
+              onClick={() => onDeletePin("end")}
+              size="small"
+              isElevated={false}
+            >
               <TrashIcon />
             </Button>
           </div>

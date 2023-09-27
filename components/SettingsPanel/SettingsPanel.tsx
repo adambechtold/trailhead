@@ -4,12 +4,15 @@ import Button from "@/components/Button/Button";
 
 import styles from "./SettingsPanel.module.css";
 import { GearIcon } from "../Icons/Icons";
+import { EnableCompassButton } from "../EnableCompassButton";
 
 type Props = {
   pinScale: number;
   setPinScale: (newScale: number) => void;
   canResetPins: boolean;
   resetPins: () => void;
+  showEnableCompass: boolean;
+  startWatchingUserHeading: () => void;
 };
 
 export default function ControlPinScale({
@@ -17,6 +20,8 @@ export default function ControlPinScale({
   setPinScale,
   canResetPins,
   resetPins,
+  showEnableCompass,
+  startWatchingUserHeading,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,29 +49,34 @@ export default function ControlPinScale({
       </Button>
       {isOpen && (
         <div className={styles["control-panel"]}>
-          <div
-            className={[styles["background-container"], "elevated"].join(" ")}
-          >
-            <span className={styles.title}>Pin Size</span>
-            <div className={styles["plus-minus-container"]}>
-              <Button
-                onClick={incrementPinScale}
-                type="clear"
-                size="medium"
-                isElevated={false}
-              >
-                +
-              </Button>
-              <Button
-                onClick={decrementPinScale}
-                type="clear"
-                size="medium"
-                isElevated={false}
-              >
-                -
-              </Button>
+          {showEnableCompass && (
+            <EnableCompassButton onClick={startWatchingUserHeading} />
+          )}
+          {canResetPins && (
+            <div
+              className={[styles["background-container"], "elevated"].join(" ")}
+            >
+              <span className={styles.title}>Pin Size</span>
+              <div className={styles["plus-minus-container"]}>
+                <Button
+                  onClick={incrementPinScale}
+                  type="clear"
+                  size="medium"
+                  isElevated={false}
+                >
+                  +
+                </Button>
+                <Button
+                  onClick={decrementPinScale}
+                  type="clear"
+                  size="medium"
+                  isElevated={false}
+                >
+                  -
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
           {canResetPins && (
             <Button onClick={resetPins} type="opaque" size="small">
               RESET PINS

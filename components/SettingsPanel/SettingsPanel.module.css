@@ -32,8 +32,7 @@
 .plus-minus-container {
   padding-top: 0.5rem;
   display: flex;
+  width: 100%;
   flex-direction: row;
-  gap: 1rem;
-
-  justify-content: space-between;
+  justify-content: space-around;
 }

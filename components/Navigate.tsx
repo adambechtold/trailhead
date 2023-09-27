@@ -70,20 +70,21 @@ export default function Navigate() {
           </div>
         )}
         <HelpButton />
-        {canWatchUserHeading && !isWatchingHeading && (
-          <EnableCompassButton onClick={startWatchingHeading} />
-        )}
       </div>
-      {map && (
-        <div className={styles["position-settings-panel"]}>
-          <SettingsPanel
-            pinScale={map.pinScale || 1}
-            setPinScale={(scale: number) => setPinScale(map, scale)}
-            canResetPins={canDisplayResetButton}
-            resetPins={onReset}
-          />
-        </div>
-      )}
+      {map &&
+        ((canWatchUserHeading && !isWatchingHeading) ||
+          canDisplayResetButton) && (
+          <div className={styles["position-settings-panel"]}>
+            <SettingsPanel
+              pinScale={map.pinScale || 1}
+              setPinScale={(scale: number) => setPinScale(map, scale)}
+              canResetPins={canDisplayResetButton}
+              resetPins={onReset}
+              showEnableCompass={canWatchUserHeading && !isWatchingHeading}
+              startWatchingUserHeading={startWatchingHeading}
+            />
+          </div>
+        )}
       <Crosshairs />
       {!map && <AddMap />}
       {map && <CurrentMap />}

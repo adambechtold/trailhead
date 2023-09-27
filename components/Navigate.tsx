@@ -26,6 +26,7 @@ export default function Navigate() {
     isWatchingLocation,
     currentAcceptedUserLocation,
     canWatchUserHeading,
+    isWatchingHeading,
     startWatchingHeading,
     error: userLocationError,
     mostRecentLocation,
@@ -69,7 +70,7 @@ export default function Navigate() {
           </div>
         )}
         <HelpButton />
-        {canWatchUserHeading && (
+        {canWatchUserHeading && !isWatchingHeading && (
           <EnableCompassButton onClick={startWatchingHeading} />
         )}
       </div>

@@ -1,0 +1,17 @@
+.container {
+  width: 100vw;
+  background-color: pink;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 2rem;
+  gap: 1rem;
+}
+
+.map-container {
+  background-color: red;
+  margin-top: 25px;
+  width: 400px;
+  height: 400px;
+}

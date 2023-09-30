@@ -15,7 +15,7 @@ export default function ExploreInterpolatePosition() {
   const [percentMovementLongitude, setPercentMovementLongitude] = useState(50);
   const [percentMovementLatitude, setPercentMovementLatitude] = useState(50);
   const [isIncrementing, setIsIncrementing] = useState(true);
-  const [heading, setHeading] = useState(0);
+  const [heading, setHeading] = useState(undefined);
   const [pinScale, setPinScale] = useState(1);
 
   // this isn't working, but that's fine
@@ -26,20 +26,20 @@ export default function ExploreInterpolatePosition() {
       setIsIncrementing((prev) => !prev);
     }
 
-    setPercentMovementLongitude((prev) => {
-      return isIncrementing ? prev + 1 : prev - 1;
-    });
-    setPercentMovementLatitude((prev) => {
-      return isIncrementing ? prev + 1 : prev - 1;
-    });
+    // setPercentMovementLongitude((prev) => {
+    //   return isIncrementing ? prev + 1 : prev - 1;
+    // });
+    // setPercentMovementLatitude((prev) => {
+    //   return isIncrementing ? prev + 1 : prev - 1;
+    // });
 
-    setHeading((prev) => {
-      return prev + 5 > 360 ? 0 : prev + 5;
-    });
+    // setHeading((prev) => {
+    //   return prev + 5 > 360 ? 0 : prev + 5;
+    // });
 
-    setPinScale((prev) => {
-      return prev + 0.01 > 3 ? 1 : prev + 0.1;
-    });
+    // setPinScale((prev) => {
+    //   return prev + 0.01 > 3 ? 1 : prev + 0.1;
+    // });
   }
 
   useEffect(() => {

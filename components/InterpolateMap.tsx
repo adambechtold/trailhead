@@ -9,7 +9,11 @@ import {
 import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
 
 import { Pin, Location, Point, ReferencePin } from "@/types/Vector";
-import { convertPoint, createReferenecPin } from "@/utils/vector";
+import {
+  convertPoint,
+  createReferenecPin,
+  ConverstionStrategy,
+} from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/InterpolateMap.module.css";
@@ -17,6 +21,7 @@ import styles from "@/components/InterpolateMap.module.css";
 type Props = {
   pins?: Pin[];
   userLocation?: Location;
+  conversionStrategy?: ConverstionStrategy;
   userHeading?: number;
   mapURL: string;
   scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
@@ -30,6 +35,7 @@ export default function InterpolateMap(props: Props) {
   const {
     pins,
     userLocation,
+    conversionStrategy,
     userHeading,
     mapURL,
     scale,
@@ -128,6 +134,13 @@ export default function InterpolateMap(props: Props) {
     }
   }, [mapURL]);
 
+  const strategy: ConverstionStrategy = conversionStrategy
+    ? conversionStrategy
+    : {
+        scalerStrategy: "MOST-X_MOST-Y",
+        originStrategy: "CLOSEST_POINT",
+      };
+
   return (
     <TransformWrapper
       limitToBounds={false}
@@ -161,7 +174,7 @@ export default function InterpolateMap(props: Props) {
               ))}
             {canFindUserLocation && (
               <PinComponent
-                pin={getUserPin(referencePins, userLocation)}
+                pin={getUserPin(referencePins, userLocation, strategy)}
                 type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
                 heading={userHeading}
                 scale={pinScale}
@@ -177,7 +190,8 @@ export default function InterpolateMap(props: Props) {
 
 function getUserPin(
   referencePins: ReferencePin[],
-  userLocation: Location
+  userLocation: Location,
+  conversionStrategy: ConverstionStrategy
 ): Pin {
   const userLocationCoordinatesPoint: Point = {
     x: userLocation.coordinates.longitude,
@@ -190,7 +204,8 @@ function getUserPin(
 
   const { x, y } = convertPoint(
     referencePins as [ReferencePin, ReferencePin],
-    userLocationCoordinatesPoint
+    userLocationCoordinatesPoint,
+    conversionStrategy
   );
 
   const userPin: Pin = {
@@ -205,7 +220,6 @@ function getUserPin(
       },
     },
   };
-  console.log("User Pin: ", userPin);
 
   return userPin;
 }

@@ -39,6 +39,18 @@ export const configurations: Configuration[] = [
           },
         },
       },
+      {
+        mapPoint: {
+          x: 419.24,
+          y: -770.76,
+        },
+        location: {
+          coordinates: {
+            longitude: -72.68396,
+            latitude: 41.33695,
+          },
+        },
+      },
     ],
     url: overlayURL,
     actualBounds: actualOverlayBounds,

@@ -60,7 +60,7 @@ export function convertCoordinates(
 
 type ScalerStrategy = "MOST-X_MOST-Y" | "FIRST_TWO_POINTS";
 type OriginStrategy = "FIRST_POINT" | "CLOSEST_POINT";
-type ConverstionStrategy = {
+export type ConverstionStrategy = {
   scalerStrategy: ScalerStrategy;
   originStrategy: OriginStrategy;
 };

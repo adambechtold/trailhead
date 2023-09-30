@@ -105,6 +105,11 @@ export default function DisplayMapData() {
             START WATCHING HEADING
           </Button>
         )}
+        {!!window && (
+          <Button onClick={() => router.reload()} isElevated={false}>
+            RELOAD APP
+          </Button>
+        )}
         {version && `Version: ${version}`}
       </div>
     </div>

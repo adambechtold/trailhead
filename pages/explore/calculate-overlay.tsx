@@ -82,7 +82,13 @@ function createOverlay(start: Pin, end: Pin, overlayURL: string): Overlay {
 
 type Path = Coordinates[];
 function generatePath(configuration: Configuration): Path {
-  const { start, end, url, actualBounds } = configuration;
+  if (configuration.pins.length < 2) {
+    return [];
+  }
+  const { pins, url, actualBounds } = configuration;
+
+  const start = pins[0];
+  const end = pins[1];
 
   const overlay = createOverlay(start, end, url);
 
@@ -113,8 +119,8 @@ function generatePath(configuration: Configuration): Path {
 const content = configurations.map((configuration, index) => {
   const path = generatePath(configuration);
   const overlay = createOverlay(
-    configuration.start,
-    configuration.end,
+    configuration.pins[0],
+    configuration.pins[1],
     configuration.url
   );
   return { path, overlay, index };

@@ -8,15 +8,14 @@ import {
 
 import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
 
-import { Pin, Location, Point } from "@/types/Vector";
-import { convertCoordinates } from "@/utils/vector";
+import { Pin, Location, Point, ReferencePin } from "@/types/Vector";
+import { convertPoint, createReferenecPin } from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/InterpolateMap.module.css";
 
 type Props = {
-  start?: Pin;
-  end?: Pin;
+  pins?: Pin[];
   userLocation?: Location;
   userHeading?: number;
   mapURL: string;
@@ -29,8 +28,7 @@ type Props = {
 export default function InterpolateMap(props: Props) {
   // TODO: Make this a default export and update import statements
   const {
-    start,
-    end,
+    pins,
     userLocation,
     userHeading,
     mapURL,
@@ -42,7 +40,13 @@ export default function InterpolateMap(props: Props) {
   const mapReference = useRef<HTMLImageElement>(null);
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
 
-  const canFindUserLocation = !!start && !!end && !!userLocation;
+  let referencePins: ReferencePin[] = [];
+  if (pins) {
+    referencePins = pins.map((pin) => createReferenecPin(pin));
+  }
+
+  const canFindUserLocation = referencePins.length > 1 && !!userLocation;
+  console.log("We can find user location: ", canFindUserLocation);
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
@@ -144,13 +148,20 @@ export default function InterpolateMap(props: Props) {
           })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
-            {start && (
-              <PinComponent pin={start} type={"PIN"} scale={pinScale} />
-            )}
-            {end && <PinComponent pin={end} type={"PIN"} scale={pinScale} />}
+            {pins &&
+              pins.map((pin, index) => (
+                <div key={`pin-${index}`}>
+                  <PinComponent
+                    key={pin.location.coordinates.longitude}
+                    pin={pin}
+                    type={"PIN"}
+                    scale={pinScale}
+                  />
+                </div>
+              ))}
             {canFindUserLocation && (
               <PinComponent
-                pin={getUserPin(start, end, userLocation)}
+                pin={getUserPin(referencePins, userLocation)}
                 type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
                 heading={userHeading}
                 scale={pinScale}
@@ -164,26 +175,24 @@ export default function InterpolateMap(props: Props) {
   );
 }
 
-function getUserPin(start: Pin, end: Pin, userLocation: Location) {
-  const startCoordinatesPoint: Point = {
-    x: start.location.coordinates.longitude,
-    y: start.location.coordinates.latitude,
-  };
-  const endCoordinatesPoint: Point = {
-    x: end.location.coordinates.longitude,
-    y: end.location.coordinates.latitude,
-  };
+function getUserPin(
+  referencePins: ReferencePin[],
+  userLocation: Location
+): Pin {
   const userLocationCoordinatesPoint: Point = {
     x: userLocation.coordinates.longitude,
     y: userLocation.coordinates.latitude,
   };
 
-  const { x, y } = convertCoordinates(
-    startCoordinatesPoint,
-    start.mapPoint,
-    endCoordinatesPoint,
-    end.mapPoint,
-    userLocationCoordinatesPoint
+  if (referencePins.length < 2) {
+    throw new Error("There must be at least two reference pins");
+  }
+
+  const { x, y } = convertPoint(
+    referencePins as [ReferencePin, ReferencePin],
+    userLocationCoordinatesPoint,
+    "FIRST_TWO_POINTS",
+    "FIRST_POINT"
   );
 
   const userPin: Pin = {
@@ -198,6 +207,7 @@ function getUserPin(start: Pin, end: Pin, userLocation: Location) {
       },
     },
   };
+  console.log("User Pin: ", userPin);
 
   return userPin;
 }

@@ -5,14 +5,12 @@
 // we can add x markers for pins and a path of the user
 
 import InterpolateMap from "@/components/InterpolateMap";
-import { Pin } from "@/types/Vector";
-import { configurations } from "../../types/overlay.configurations";
+import { configurations } from "../../../types/overlay.configurations";
 import { useEffect, useState } from "react";
 
 export default function ExploreInterpolatePosition() {
   const configuration = configurations[0];
-  const start: Pin = configuration.start;
-  const end: Pin = configuration.end;
+  const pins = configuration.pins;
 
   const [percentMovementLongitude, setPercentMovementLongitude] = useState(50);
   const [percentMovementLatitude, setPercentMovementLatitude] = useState(50);
@@ -52,6 +50,8 @@ export default function ExploreInterpolatePosition() {
     return () => clearInterval(intervalID);
   }, [isIncrementing]);
 
+  const start = pins[0];
+  const end = pins[1];
   const differenceLongitude =
     end.location.coordinates.longitude - start.location.coordinates.longitude;
   const differenceLatitude =
@@ -72,8 +72,7 @@ export default function ExploreInterpolatePosition() {
   return (
     <div>
       <InterpolateMap
-        start={start}
-        end={end}
+        pins={pins}
         userLocation={currentUserLocation}
         userHeading={heading}
         mapURL={MAP_URL}

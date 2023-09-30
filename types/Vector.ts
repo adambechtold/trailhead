@@ -27,6 +27,12 @@ export interface Vector {
   angleDegrees: number;
 }
 
+export type ReferencePin = {
+  // a known Point in both coordinate systems
+  aPoint: Point;
+  bPoint: Point;
+};
+
 export class Vector {
   constructor(x: number, y: number) {
     this.x = x;

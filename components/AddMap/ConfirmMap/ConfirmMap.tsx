@@ -24,6 +24,10 @@ export default function ConfirmMap({
   const handleConfirmMap = () => onConfirmSelection();
   const handleCancelSelection = () => onCancelSelection();
 
+  const pins = [];
+  if (previewMap.start) pins.push(previewMap.start);
+  if (previewMap.end) pins.push(previewMap.end);
+
   return (
     <>
       <div
@@ -43,8 +47,7 @@ export default function ConfirmMap({
       </div>
       <InterpolateMap
         mapURL={previewMap.url}
-        start={previewMap.start}
-        end={previewMap.end}
+        pins={pins}
         userLocation={userLocation}
       />
     </>

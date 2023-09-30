@@ -190,9 +190,7 @@ function getUserPin(
 
   const { x, y } = convertPoint(
     referencePins as [ReferencePin, ReferencePin],
-    userLocationCoordinatesPoint,
-    "FIRST_TWO_POINTS",
-    "FIRST_POINT"
+    userLocationCoordinatesPoint
   );
 
   const userPin: Pin = {

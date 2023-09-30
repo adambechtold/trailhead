@@ -17,13 +17,10 @@ export default function CurrentMap() {
   };
 
   if (!map) return null;
-  const pins = [];
-  if (map.start) pins.push(map.start);
-  if (map.end) pins.push(map.end);
 
   return (
     <InterpolateMap
-      pins={pins}
+      pins={map.pins}
       userLocation={
         currentAcceptedUserLocation ? currentAcceptedUserLocation : undefined
       }

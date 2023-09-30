@@ -36,7 +36,7 @@ export default function Navigate() {
     if (!isWatchingLocation) startWatchingUserLocation();
   }, []);
 
-  const canDisplayResetButton = !!(map && (map.start || map.end));
+  const canDisplayResetButton = !!(map && map.pins && map.pins.length > 0);
   const canDisplayAccuracyIndicator =
     currentAcceptedUserLocation || isWatchingLocation || userLocationError;
   let accuracyToDisplay = currentAcceptedUserLocation?.accuracy;

@@ -1,4 +1,4 @@
-import { Map } from "./Map";
+import { Map, convertToLatestVerionMap } from "./Map";
 
 type StorageStrategy = "LOCAL_STORAGE" | "INDEXED_DB";
 
@@ -26,12 +26,15 @@ export class MapStorageManager {
         this.deleteMapByKey = deleteMapFromLocalStorage;
         break;
       case "INDEXED_DB":
+        updateAllMapsInIndexedDB();
+
         this.getMapKeys = getMapKeysFromIndexedDB;
         this.getMaps = getMapsFromIndexedDB;
         this.getMapByKey = getMapFromIndexedDB;
         this.addMap = (map: Map) => saveMapToIndexedDB(map, false);
         this.putMap = (map: Map) => saveMapToIndexedDB(map, true);
         this.deleteMapByKey = deleteMapFromIndexedDB;
+
         // Load Maps from Local Storage into IndexedDB
         updateLocalStorageToLatest().then(() => {
           getMapsFromLocalStorage().then((maps) => {
@@ -197,13 +200,21 @@ const onIndexDBRequestError = (event: Event) => {
   console.error("error: ", event);
 };
 
+async function updateAllMapsInIndexedDB() {
+  const maps = await getMapsFromIndexedDB();
+  const updatedMaps = maps.map(convertToLatestVerionMap);
+  updatedMaps.forEach((map) => {
+    saveMapToIndexedDB(map, true);
+  });
+}
+
 // ========== LOCAL STORAGE UTILS ==========
 const updateLocalStorageToLatest = async () => {
   const currentVersion = localStorage.getItem("version") || "0.0.0";
   switch (currentVersion) {
     case "0.0.0":
       const mapKeys = await getMapKeysFromLocalStorage();
-      const updateMap = (key: string) => {
+      const updateMapKey = (key: string) => {
         const map = localStorage.getItem(key);
         const parsedMap = map ? JSON.parse(map) : undefined;
         if (!map) return;
@@ -213,8 +224,15 @@ const updateLocalStorageToLatest = async () => {
         );
         localStorage.removeItem(key);
       };
-      mapKeys.forEach(updateMap);
-      localStorage.setItem("version", "0.0.1");
+      mapKeys.forEach(updateMapKey);
+      localStorage.setItem("version", "0.0.2");
+    case "0.0.1":
+      const maps = await getMapsFromLocalStorage();
+      const updatedMaps = maps.map(convertToLatestVerionMap);
+      updatedMaps.forEach((map) => {
+        saveMapToLocalStorage(map, true);
+      });
+      localStorage.setItem("version", "0.0.2");
       break;
     default:
       break;

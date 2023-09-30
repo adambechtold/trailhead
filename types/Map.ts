@@ -1,13 +1,12 @@
 import shortHash from "short-hash";
 import { Pin } from "./Vector";
 
-type MapFormatVersion = "0.1";
+type MapFormatVersion = "0.1" | "0.2";
 
 export type Map = {
   url: string;
   key: string;
-  start?: Pin;
-  end?: Pin;
+  pins?: Pin[];
   formatVersion: MapFormatVersion;
   isSaved?: boolean;
   pinScale?: number;
@@ -30,17 +29,44 @@ export function isMap(obj: any): boolean {
   );
 }
 
-export function createMapFromUrl(url: string): Map {
+export function createMapFromUrl(
+  url: string,
+  version: MapFormatVersion = "0.2"
+): Map {
   return {
     url,
     key: generateMapKey(url),
-    formatVersion: version1,
+    formatVersion: version,
     pinScale: 1,
   };
 }
 
-const version1: MapFormatVersion = "0.1"; // it's not clear why we need to make this a variable, but it's the only way to get the type to be inferred correctly
 export const EXAMPLE_MAPS: Map[] = [
   "/images/trailmap-timberlands-precise-1.jpeg",
   "/images/trailmap-timberlands-precise-2.jpeg",
-].map((url) => createMapFromUrl(url));
+].map((url) => createMapFromUrl(url, "0.2"));
+
+export function convertToLatestVerionMap(maybeMap: any): Map {
+  const start = maybeMap.start;
+  const end = maybeMap.end;
+  delete maybeMap.start;
+  delete maybeMap.end;
+  if (isMap(maybeMap)) {
+    const map = maybeMap as Map;
+    if (map.formatVersion === "0.1") {
+      map.url = maybeMap.url;
+      map.key = maybeMap.key;
+      map.formatVersion = "0.2";
+      map.pinScale = maybeMap.pinScale || 1;
+      map.pins = [];
+      if (start) {
+        map.pins.push(start);
+      }
+      if (end) {
+        map.pins.push(end);
+      }
+    }
+    return map;
+  }
+  throw new Error("Invalid map");
+}

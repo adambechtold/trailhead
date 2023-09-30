@@ -58,9 +58,9 @@ export function convertCoordinates(
   return new_C2;
 }
 
-type ScalerStrategy = "MOST-X_MOST-Y" | "FIRST_TWO_POINTS";
-type OriginStrategy = "FIRST_POINT" | "CLOSEST_POINT";
-export type ConverstionStrategy = {
+export type ScalerStrategy = "MOST-X_MOST-Y" | "FIRST_TWO_POINTS";
+export type OriginStrategy = "FIRST_POINT" | "CLOSEST_POINT";
+export type ConversionStrategy = {
   scalerStrategy: ScalerStrategy;
   originStrategy: OriginStrategy;
 };
@@ -68,7 +68,7 @@ export type ConverstionStrategy = {
 export function convertPoint(
   referencePins: [ReferencePin, ReferencePin], // Known Points in both coordinate systems (A & B)
   newPoint: Point, // Point in the A coordinate system with unknown B coordinate
-  converstionStrategy: ConverstionStrategy = {
+  conversionStrategy: ConversionStrategy = {
     scalerStrategy: "FIRST_TWO_POINTS",
     originStrategy: "FIRST_POINT",
   }
@@ -77,7 +77,7 @@ export function convertPoint(
   let yScaler = 0;
   let scalers;
 
-  switch (converstionStrategy.scalerStrategy) {
+  switch (conversionStrategy.scalerStrategy) {
     case "FIRST_TWO_POINTS":
       const vectorA = getVectorBetweenPoints(
         referencePins[0].aPoint,
@@ -133,7 +133,7 @@ export function convertPoint(
 
   let origin: ReferencePin = referencePins[0];
 
-  switch (converstionStrategy.originStrategy) {
+  switch (conversionStrategy.originStrategy) {
     case "FIRST_POINT":
       origin = referencePins[0];
       break;

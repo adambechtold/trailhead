@@ -12,7 +12,7 @@ import { Pin, Location, Point, ReferencePin } from "@/types/Vector";
 import {
   convertPoint,
   createReferenecPin,
-  ConverstionStrategy,
+  ConversionStrategy,
 } from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
@@ -22,7 +22,7 @@ type Props = {
   pins?: Pin[];
   userLocation?: Location;
   userPath?: Location[];
-  conversionStrategy?: ConverstionStrategy;
+  conversionStrategy?: ConversionStrategy;
   userHeading?: number;
   mapURL: string;
   scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
@@ -135,7 +135,7 @@ export default function InterpolateMap(props: Props) {
     }
   }, [mapURL]);
 
-  const strategy: ConverstionStrategy = conversionStrategy
+  const strategy: ConversionStrategy = conversionStrategy
     ? conversionStrategy
     : {
         scalerStrategy: "MOST-X_MOST-Y",
@@ -199,7 +199,7 @@ export default function InterpolateMap(props: Props) {
 function getUserPin(
   referencePins: ReferencePin[],
   userLocation: Location,
-  conversionStrategy: ConverstionStrategy
+  conversionStrategy: ConversionStrategy
 ): Pin {
   const userLocationCoordinatesPoint: Point = {
     x: userLocation.coordinates.longitude,

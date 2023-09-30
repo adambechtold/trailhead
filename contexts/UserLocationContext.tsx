@@ -16,6 +16,7 @@ import {
 } from "./userHeadingReducer";
 
 import { Location } from "@/types/Vector";
+import { ConversionStrategy } from "@/utils/vector";
 
 type UserLocationContextProviderProps = {
   children: React.ReactNode;
@@ -32,6 +33,8 @@ type UserLocationContext = {
   isWatchingLocation: boolean;
   error: string | null;
   startWatchingUserLocation: () => void;
+  currentConversionStrategy: ConversionStrategy;
+  setLocationConversionStrategy: (strategy: ConversionStrategy) => void;
 };
 
 export const UserLocationContext = createContext<UserLocationContext | null>(
@@ -200,6 +203,13 @@ export default function UserLocationContextProvider({
     }
   }
 
+  function setLocationConversionStrategy(strategy: ConversionStrategy) {
+    userLocationContextDispatch({
+      type: "SET_CONVERSION_STRATEGY",
+      payload: strategy,
+    });
+  }
+
   const { currentLocationIndex, userLocations, isWatchingLocation, error } =
     userLocationState;
 
@@ -223,6 +233,8 @@ export default function UserLocationContextProvider({
         isWatchingLocation,
         error,
         startWatchingUserLocation,
+        currentConversionStrategy: userLocationState.locationConversionStrategy,
+        setLocationConversionStrategy,
       }}
     >
       {children}

@@ -4,6 +4,11 @@ import { useRouter } from "next/router";
 
 import { Map } from "@/types/Map";
 import { Location } from "@/types/Vector";
+import {
+  ConversionStrategy,
+  ScalerStrategy,
+  OriginStrategy,
+} from "@/utils/vector";
 
 import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
@@ -26,6 +31,8 @@ export default function DisplayMapData() {
     isWatchingLocation,
     error,
     startWatchingUserLocation,
+    currentConversionStrategy,
+    setLocationConversionStrategy,
   } = useUserLocationContext();
   const { map, deletePin } = useMapContext();
   const router = useRouter();
@@ -60,7 +67,6 @@ export default function DisplayMapData() {
 
   return (
     <div className={styles.container}>
-      {map && <MapData map={map} deletePin={deletePin} />}
       <UserLocationData
         currentAcceptedUserLocation={currentAcceptedUserLocation}
         currentHeading={currentHeading}
@@ -70,6 +76,11 @@ export default function DisplayMapData() {
         mostRecentLocation={mostRecentLocation}
         isWatchingLocation={isWatchingLocation}
         error={error}
+      />
+      {map && <MapData map={map} deletePin={deletePin} />}
+      <ChooseStrategy
+        selectedConversionStrategy={currentConversionStrategy}
+        onUpdate={setLocationConversionStrategy}
       />
       <div className={styles["button-container"]}>
         <Button onClick={returnToNavigate} isElevated={false}>
@@ -124,7 +135,7 @@ function MapData({ map, deletePin }: MapDataProps) {
       {map.pins &&
         map.pins.map((pin, index) => (
           <div className={styles.pin}>
-            <p>{displayObject(flattenObject(pin), `Pin ${index + 1}`)}</p>
+            {displayObject(flattenObject(pin), `Pin ${index + 1}`)}
             <div className={styles["delete-button"]}>
               <Button
                 onClick={() => onDeletePin(index)}
@@ -190,6 +201,60 @@ function UserLocationData({
         )}
       {error && <div>Error: {error}</div>}
       {headingError && <div>Heading Error: {headingError}</div>}
+    </div>
+  );
+}
+
+type ChooseStrategyProps = {
+  selectedConversionStrategy: ConversionStrategy;
+  onUpdate: (strategy: ConversionStrategy) => void;
+};
+
+function ChooseStrategy({
+  selectedConversionStrategy,
+  onUpdate,
+}: ChooseStrategyProps) {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
+
+    if (value === "FIRST_POINT" || value !== "CLOSEST_POINT") {
+      onUpdate({
+        scalerStrategy: selectedConversionStrategy.scalerStrategy,
+        originStrategy: value as OriginStrategy,
+      });
+    }
+
+    if (value === "FIRST_TWO_POINTS" || value === "MOST-X_MOST-Y") {
+      onUpdate({
+        scalerStrategy: value as ScalerStrategy,
+        originStrategy: selectedConversionStrategy.originStrategy,
+      });
+    }
+  };
+
+  return (
+    <div className={styles.section}>
+      <h3>Choose Conversion Strategy</h3>
+      <div className={styles["strategy-container"]}>
+        <label htmlFor="origin-strategy">Origin Strategy</label>
+        <select
+          id="origin-strategy"
+          value={selectedConversionStrategy.originStrategy.toString()}
+          onChange={handleChange}
+        >
+          <option value="FIRST_POINT">First Point</option>
+          <option value="CLOSEST_POINT">Closest Point</option>
+        </select>
+        <label htmlFor="scaler-strategy">Scaler Strategy</label>
+        <select
+          id="scaler-strategy"
+          value={selectedConversionStrategy.scalerStrategy.toString()}
+          onChange={handleChange}
+        >
+          <option value="FIRST_TWO_POINTS">First Two Points</option>
+          <option value="MOST-X_MOST-Y">Most X / Most Y</option>
+        </select>
+      </div>
     </div>
   );
 }

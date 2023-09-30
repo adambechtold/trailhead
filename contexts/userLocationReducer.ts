@@ -1,4 +1,5 @@
 import { Location } from "@/types/Vector";
+import { ConversionStrategy } from "@/utils/vector";
 
 const NUMBER_OF_LOCATIONS_TO_SAVE = 1000;
 
@@ -13,6 +14,7 @@ export type UserLocationState = {
   userLocations: LocationAndTime[]; // sorted list of locations (newest first) - capped at last 1000
   isWatchingLocation: boolean;
   error: string | null;
+  locationConversionStrategy: ConversionStrategy;
 };
 
 type Action =
@@ -26,13 +28,18 @@ type Action =
         time: Date;
         useLocation: boolean;
       };
-    };
+    }
+  | { type: "SET_CONVERSION_STRATEGY"; payload: ConversionStrategy };
 
 export const INITIAL_STATE: UserLocationState = {
   currentLocationIndex: null,
   userLocations: [],
   isWatchingLocation: false,
   error: null,
+  locationConversionStrategy: {
+    scalerStrategy: "MOST-X_MOST-Y",
+    originStrategy: "FIRST_POINT",
+  },
 };
 
 export const userLocationReducer = (
@@ -79,6 +86,8 @@ export const userLocationReducer = (
         userLocations: locationsToKeep,
         currentLocationIndex: newCurrentLocationIndex,
       };
+    case "SET_CONVERSION_STRATEGY":
+      return { ...state, locationConversionStrategy: action.payload };
     default:
       return state;
   }

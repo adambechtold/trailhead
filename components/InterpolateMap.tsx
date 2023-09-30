@@ -21,6 +21,7 @@ import styles from "@/components/InterpolateMap.module.css";
 type Props = {
   pins?: Pin[];
   userLocation?: Location;
+  userPath?: Location[];
   conversionStrategy?: ConverstionStrategy;
   userHeading?: number;
   mapURL: string;
@@ -35,6 +36,7 @@ export default function InterpolateMap(props: Props) {
   const {
     pins,
     userLocation,
+    userPath,
     conversionStrategy,
     userHeading,
     mapURL,
@@ -52,7 +54,6 @@ export default function InterpolateMap(props: Props) {
   }
 
   const canFindUserLocation = referencePins.length > 1 && !!userLocation;
-  console.log("We can find user location: ", canFindUserLocation);
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
@@ -180,6 +181,13 @@ export default function InterpolateMap(props: Props) {
                 scale={pinScale}
               />
             )}
+            {userPath && userPath.length > 0 && (
+              <Path
+                path={userPath.map((location) =>
+                  getUserPin(referencePins, location, strategy)
+                )}
+              />
+            )}
             <img src={mapURL} alt="Trail Map" ref={mapReference} />
           </TransformComponent>
         </>
@@ -254,4 +262,24 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
   style.height = scale ? `${scale * 24}px` : "24px";
 
   return <img src={imgURL} alt="Pin" className={styles.mapPin} style={style} />;
+};
+
+interface PathProps {
+  path: Pin[];
+}
+const Path: React.FC<PathProps> = ({ path }) => {
+  return (
+    <div>
+      {path.map((pin, index) => (
+        <div key={`pin-${index}`}>
+          <PinComponent
+            key={pin.location.coordinates.longitude}
+            pin={pin}
+            type={"USER_NO_DIRECTION"}
+            scale={0.5}
+          />
+        </div>
+      ))}
+    </div>
+  );
 };

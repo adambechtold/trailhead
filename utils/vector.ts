@@ -79,7 +79,6 @@ export function convertPoint(
 
   switch (converstionStrategy.scalerStrategy) {
     case "FIRST_TWO_POINTS":
-      console.log("first two points!");
       const vectorA = getVectorBetweenPoints(
         referencePins[0].aPoint,
         referencePins[1].aPoint
@@ -132,8 +131,6 @@ export function convertPoint(
       throw new Error("Invalid scaler strategy");
   }
 
-  console.log("xScaler", xScaler, "yScaler", yScaler);
-
   let origin: ReferencePin = referencePins[0];
 
   switch (converstionStrategy.originStrategy) {
@@ -145,14 +142,15 @@ export function convertPoint(
         newPoint,
         referencePins.map((pin) => pin.aPoint)
       );
+      console.log("closest pins is", indexOfClosestReferencePin);
       origin = referencePins[indexOfClosestReferencePin];
       break;
     default:
       throw new Error("Invalid origin strategy");
   }
 
-  console.log("origin", origin);
   const vector_originToNew_CA = getVectorBetweenPoints(origin.aPoint, newPoint);
+  console.log("vector_originToNew_CA", vector_originToNew_CA);
 
   const newPoint_CB: Point = {
     x: origin.bPoint.x + vector_originToNew_CA.x * xScaler,

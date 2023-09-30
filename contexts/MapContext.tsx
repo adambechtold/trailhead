@@ -142,12 +142,7 @@ export default function MapContextProvider({
 
   const deletePinFromMap = (map: Map, index: number) => {
     // TODO: include the ability to overwrite all pins
-    if (map.pins && index === 0) {
-      map.pins = map.pins.splice(0, 1);
-    }
-    if (map.pins && index === 1) {
-      map.pins = map.pins.splice(1, 1);
-    }
+    map.pins?.splice(index, 1);
 
     mapContextDispatch({
       type: "OVERWRITE_MAP",

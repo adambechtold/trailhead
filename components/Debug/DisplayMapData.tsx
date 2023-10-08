@@ -222,7 +222,7 @@ function ChooseStrategy({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
 
-    if (value === "FIRST_POINT" || value !== "CLOSEST_POINT") {
+    if (value === "FIRST_POINT" || value === "CLOSEST_POINT") {
       onUpdate({
         scalerStrategy: selectedConversionStrategy.scalerStrategy,
         originStrategy: value as OriginStrategy,

@@ -139,7 +139,7 @@ function MapData({ map, deletePin }: MapDataProps) {
       <h4>Pins</h4>
       {map.pins &&
         map.pins.map((pin, index) => (
-          <div className={styles.pin}>
+          <div className={styles.pin} key={`pin-${index + 1}`}>
             {displayObject(flattenObject(pin), `Pin ${index + 1}`)}
             <div className={styles["delete-button"]}>
               <Button

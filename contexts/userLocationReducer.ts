@@ -15,6 +15,7 @@ export type UserLocationState = {
   isWatchingLocation: boolean;
   error: string | null;
   locationConversionStrategy: ConversionStrategy;
+  isUserPathDisplayed: boolean; // TODO: Consider moving this into a kind of configuration state; This should just hold data about the user location
 };
 
 type Action =
@@ -29,7 +30,9 @@ type Action =
         useLocation: boolean;
       };
     }
-  | { type: "SET_CONVERSION_STRATEGY"; payload: ConversionStrategy };
+  | { type: "SET_CONVERSION_STRATEGY"; payload: ConversionStrategy }
+  | { type: "SHOW_USER_PATH" }
+  | { type: "HIDE_USER_PATH" };
 
 export const INITIAL_STATE: UserLocationState = {
   currentLocationIndex: null,
@@ -40,6 +43,7 @@ export const INITIAL_STATE: UserLocationState = {
     scalerStrategy: "MOST-X_MOST-Y",
     originStrategy: "FIRST_POINT",
   },
+  isUserPathDisplayed: false,
 };
 
 export const userLocationReducer = (
@@ -88,6 +92,10 @@ export const userLocationReducer = (
       };
     case "SET_CONVERSION_STRATEGY":
       return { ...state, locationConversionStrategy: action.payload };
+    case "SHOW_USER_PATH":
+      return { ...state, isUserPathDisplayed: true };
+    case "HIDE_USER_PATH":
+      return { ...state, isUserPathDisplayed: false };
     default:
       return state;
   }

@@ -181,7 +181,7 @@ export default function InterpolateMap(props: Props) {
                 scale={pinScale}
               />
             )}
-            {userPath && userPath.length > 0 && (
+            {userPath && userPath.length > 0 && canFindUserLocation && (
               <Path
                 path={userPath.map((location) =>
                   getUserPin(referencePins, location, strategy)
@@ -276,7 +276,7 @@ const Path: React.FC<PathProps> = ({ path }) => {
             key={pin.location.coordinates.longitude}
             pin={pin}
             type={"USER_NO_DIRECTION"}
-            scale={0.5}
+            scale={0.3}
           />
         </div>
       ))}

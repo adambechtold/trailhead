@@ -8,6 +8,7 @@ import React, {
 import {
   userLocationReducer,
   INITIAL_STATE as INITIAL_LOCATION_STATE,
+  LocationAndTime,
 } from "./userLocationReducer";
 import {
   userHeadingReducer,
@@ -25,6 +26,10 @@ type UserLocationContextProviderProps = {
 type UserLocationContext = {
   currentAcceptedUserLocation: Location | null;
   currentHeading: number | null;
+  locationHistory: LocationAndTime[];
+  isUserPathDisplayed: boolean;
+  showUserPath: () => void;
+  hideUserPath: () => void;
   isWatchingHeading: boolean;
   canWatchUserHeading: boolean;
   headingError: HeadingError | null;
@@ -210,8 +215,25 @@ export default function UserLocationContextProvider({
     });
   }
 
-  const { currentLocationIndex, userLocations, isWatchingLocation, error } =
-    userLocationState;
+  function showUserPath() {
+    userLocationContextDispatch({
+      type: "SHOW_USER_PATH",
+    });
+  }
+
+  function hideUserPath() {
+    userLocationContextDispatch({
+      type: "HIDE_USER_PATH",
+    });
+  }
+
+  const {
+    currentLocationIndex,
+    userLocations,
+    isUserPathDisplayed,
+    isWatchingLocation,
+    error,
+  } = userLocationState;
 
   const currentUserLocation: Location | null =
     userLocations.length > 0 && currentLocationIndex !== null
@@ -225,6 +247,10 @@ export default function UserLocationContextProvider({
       value={{
         currentAcceptedUserLocation: currentUserLocation,
         currentHeading: userHeadingState.heading,
+        locationHistory: userLocations,
+        showUserPath: showUserPath,
+        hideUserPath: hideUserPath,
+        isUserPathDisplayed: isUserPathDisplayed,
         canWatchUserHeading: userHeadingState.canWatchUserHeading,
         isWatchingHeading: userHeadingState.isWatchingHeading,
         headingError: userHeadingState.error,

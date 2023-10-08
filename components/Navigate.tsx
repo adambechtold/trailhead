@@ -24,6 +24,9 @@ export default function Navigate() {
   const {
     isWatchingLocation,
     currentAcceptedUserLocation,
+    isUserPathDisplayed,
+    showUserPath,
+    hideUserPath,
     canWatchUserHeading,
     isWatchingHeading,
     startWatchingHeading,
@@ -56,6 +59,14 @@ export default function Navigate() {
     endCreatePin();
   };
 
+  const onToggleUserPathDisplayed = () => {
+    if (isUserPathDisplayed) {
+      hideUserPath();
+    } else {
+      showUserPath();
+    }
+  };
+
   return (
     <>
       <div className={styles["button-container"]}>
@@ -79,6 +90,8 @@ export default function Navigate() {
               setPinScale={(scale: number) => setPinScale(map, scale)}
               canResetPins={canDisplayResetButton}
               resetPins={onReset}
+              isUserPathDisplayed={isUserPathDisplayed}
+              onToggleUserPathDisplayed={onToggleUserPathDisplayed}
               showEnableCompass={canWatchUserHeading && !isWatchingHeading}
               startWatchingUserHeading={startWatchingHeading}
             />

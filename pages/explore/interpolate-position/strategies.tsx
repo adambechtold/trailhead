@@ -33,9 +33,6 @@ export default function ExploreInterpolatePositionStrategies() {
     });
   }
 
-  console.log("userPath: ", userPath);
-  console.log("userLocation: ", currentUserLocation);
-
   return (
     <div>
       <h1>Let's Explore Interpolation Strategies</h1>

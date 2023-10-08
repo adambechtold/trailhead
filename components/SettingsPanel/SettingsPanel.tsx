@@ -13,6 +13,8 @@ type Props = {
   resetPins: () => void;
   showEnableCompass: boolean;
   startWatchingUserHeading: () => void;
+  isUserPathDisplayed: boolean;
+  onToggleUserPathDisplayed: () => void;
 };
 
 export default function ControlPinScale({
@@ -22,6 +24,8 @@ export default function ControlPinScale({
   resetPins,
   showEnableCompass,
   startWatchingUserHeading,
+  isUserPathDisplayed,
+  onToggleUserPathDisplayed,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,6 +56,9 @@ export default function ControlPinScale({
           {showEnableCompass && (
             <EnableCompassButton onClick={startWatchingUserHeading} />
           )}
+          <Button onClick={onToggleUserPathDisplayed} type="opaque">
+            {isUserPathDisplayed ? "HIDE USER PATH" : "SHOW USER PATH"}
+          </Button>
           {canResetPins && (
             <div
               className={[styles["background-container"], "elevated"].join(" ")}

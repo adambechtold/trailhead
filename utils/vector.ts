@@ -142,7 +142,6 @@ export function convertPoint(
         newPoint,
         referencePins.map((pin) => pin.aPoint)
       );
-      console.log("closest pins is", indexOfClosestReferencePin);
       origin = referencePins[indexOfClosestReferencePin];
       break;
     default:
@@ -150,7 +149,6 @@ export function convertPoint(
   }
 
   const vector_originToNew_CA = getVectorBetweenPoints(origin.aPoint, newPoint);
-  console.log("vector_originToNew_CA", vector_originToNew_CA);
 
   const newPoint_CB: Point = {
     x: origin.bPoint.x + vector_originToNew_CA.x * xScaler,

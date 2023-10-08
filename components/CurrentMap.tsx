@@ -7,8 +7,12 @@ import { MapPosition } from "@/types/MapPosition";
 
 export default function CurrentMap() {
   const { map, mapPosition, setMapPosition } = useMapContext();
-  const { currentAcceptedUserLocation, currentHeading } =
-    useUserLocationContext();
+  const {
+    currentAcceptedUserLocation,
+    currentHeading,
+    locationHistory,
+    showUserPath,
+  } = useUserLocationContext();
 
   const scale = mapPosition?.scale || 0.4;
 
@@ -17,6 +21,10 @@ export default function CurrentMap() {
   };
 
   if (!map) return null;
+
+  const userLocations = locationHistory.map(
+    (locationAndTime) => locationAndTime.location
+  );
 
   return (
     <InterpolateMap
@@ -27,6 +35,7 @@ export default function CurrentMap() {
       userHeading={currentHeading != null ? currentHeading : undefined}
       mapURL={map.url}
       scale={scale}
+      userPath={showUserPath ? userLocations : undefined}
       pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
     />

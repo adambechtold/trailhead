@@ -11,7 +11,7 @@ export default function CurrentMap() {
     currentAcceptedUserLocation,
     currentHeading,
     locationHistory,
-    showUserPath,
+    isUserPathDisplayed,
   } = useUserLocationContext();
 
   const scale = mapPosition?.scale || 0.4;
@@ -35,7 +35,7 @@ export default function CurrentMap() {
       userHeading={currentHeading != null ? currentHeading : undefined}
       mapURL={map.url}
       scale={scale}
-      userPath={showUserPath ? userLocations : undefined}
+      userPath={isUserPathDisplayed ? userLocations : undefined}
       pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
     />

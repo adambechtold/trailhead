@@ -8,9 +8,9 @@ const MapContextProvider = dynamic(() => import("@/contexts/MapContext"), {
   ssr: false,
 });
 
-import { Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }) {
   return (
@@ -46,7 +46,7 @@ export default function App({ Component, pageProps }) {
       <UserLocationProvider>
         <UserAgreementContextProvider>
           <MapContextProvider>
-            <main className={montserrat.className}>
+            <main className={inter.className}>
               <Component {...pageProps} />
             </main>
           </MapContextProvider>

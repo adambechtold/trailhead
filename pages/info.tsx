@@ -5,11 +5,14 @@ import styles from "./info.module.css";
 import Button from "@/components/Button/Button";
 import Logo from "@/components/Logo/Logo";
 
+import { Montserrat } from "next/font/google";
+const montserrat = Montserrat({ subsets: ["latin"] });
+
 export default function Info() {
   const router = useRouter();
 
   return (
-    <div className={styles.container}>
+    <div className={[styles.container, montserrat.className].join(" ")}>
       <div className={styles.content}>
         <div className={styles["position-logo"]}>
           <Logo />

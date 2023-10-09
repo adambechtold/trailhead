@@ -32,11 +32,11 @@ export default function ConfirmMap({
           styles["horizontal-container"],
         ].join(" ")}
       >
-        <Button onClick={handleCancelSelection} type="opaque">
+        <Button onClick={handleCancelSelection} type="opaque" size={"medium"}>
           <CancelIcon />
           SELECT NEW IMAGE
         </Button>
-        <Button onClick={handleConfirmMap} type="opaque">
+        <Button onClick={handleConfirmMap} type="opaque" size={"medium"}>
           <ConfirmIcon />
           CONFIRM
         </Button>

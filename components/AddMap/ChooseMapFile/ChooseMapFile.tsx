@@ -39,7 +39,7 @@ export default function ChooseMapFile({
       ].join(" ")}
     >
       <div className={styles["add-map-container"]}>
-        <Button onClick={handleSelectMapFile} isElevated={false}>
+        <Button onClick={handleSelectMapFile} size="medium" type="clear">
           ADD MAP PHOTO
         </Button>
         <input
@@ -63,7 +63,7 @@ export default function ChooseMapFile({
         </div>
       </div>
       {hasSavedMaps && (
-        <Button onClick={onCancelChooseMap} isElevated={false}>
+        <Button onClick={onCancelChooseMap} size={"medium"} type={"opaque"}>
           USE SAVED MAPS
         </Button>
       )}

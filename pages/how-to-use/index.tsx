@@ -17,7 +17,13 @@ export default function HowToUsePage() {
     <div className={styles.container}>
       <HowToUse />
       <div className={styles["button-container"]}>
-        <Button onClick={onClickToNavigate}>START NAVIGATING</Button>
+        <Button
+          onClick={onClickToNavigate}
+          type="gradient-primary"
+          size="medium"
+        >
+          START NAVIGATING
+        </Button>
       </div>
     </div>
   );

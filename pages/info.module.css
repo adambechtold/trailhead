@@ -1,0 +1,52 @@
+.position-logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.container {
+  padding-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  max-width: 800px;
+  position: relative;
+
+  padding-top: 5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+}
+
+.content-section {
+  display: grid;
+  place-items: center;
+  grid-gap: 0.2rem;
+}
+
+.signature {
+  padding-top: 2rem;
+}
+
+@media (min-width: 900px) and (min-height: 1000px) {
+  .signature {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

@@ -19,7 +19,9 @@ export default function Offline() {
       <p>Reload Trailhead when you're connected to cache the site.</p>
       <HowToSaveOffline />
       <div className={styles["return-container"]}>
-        <Button onClick={onClickToNavigate}>RETURN TO NAVIGATION</Button>
+        <Button onClick={onClickToNavigate} type="clear" size="medium">
+          RETURN TO NAVIGATION
+        </Button>
       </div>
     </div>
   );

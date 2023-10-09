@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import { useMapContext } from "@/contexts/MapContext";
 import { useCreatePinContext } from "@/contexts/CreatePinContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
@@ -58,6 +60,7 @@ export default function Navigate() {
 
   return (
     <>
+      <CheckUserAgreement />
       <div className={styles["accuracy-indicator-container"]}>
         {canDisplayAccuracyIndicator && (
           <AccuracyIndicator
@@ -88,4 +91,17 @@ export default function Navigate() {
       <MenuTray />
     </>
   );
+}
+
+function CheckUserAgreement() {
+  const router = useRouter();
+  const { hasAgreedToUserAgreement } = useUserAgreementContext();
+
+  useEffect(() => {
+    if (!hasAgreedToUserAgreement) {
+      router.push({ pathname: "/disclaimer" });
+    }
+  }, [hasAgreedToUserAgreement]);
+
+  return <></>;
 }

@@ -48,18 +48,27 @@ export default function DisclaimerPage() {
       </div>
       <div className={styles["button-container"]}>
         {!hasAgreedToUserAgreement && (
-          <Button onClick={onAgreeToUserAgreement} isElevated={false}>
+          <Button
+            onClick={onAgreeToUserAgreement}
+            type="gradient-primary"
+            size="medium"
+          >
             I UNDERSTAND
           </Button>
         )}
         {hasAgreedToUserAgreement && (
           <>
-            <Button onClick={() => router.push("/navigate")} isElevated={false}>
+            <Button
+              onClick={() => router.push("/navigate")}
+              type="gradient-primary"
+              size="medium"
+            >
               START NAVIGATING
             </Button>
             <Button
               onClick={() => router.push("/how-to-use")}
-              isElevated={false}
+              type={"gradient-secondary"}
+              size="medium"
             >
               HOW TO USE TRAILHEAD
             </Button>

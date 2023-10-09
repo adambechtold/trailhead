@@ -1,17 +1,16 @@
 import "@/styles/globals.css";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-//import MapContextProvider from "@/contexts/MapContext";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
-import UserAgreementContextProvider, {
-  useUserAgreementContext,
-} from "@/contexts/UserAgreementContext";
-import { useEffect } from "react";
+import UserAgreementContextProvider from "@/contexts/UserAgreementContext";
 
 const MapContextProvider = dynamic(() => import("@/contexts/MapContext"), {
   ssr: false,
 });
+
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }) {
   return (
@@ -47,26 +46,12 @@ export default function App({ Component, pageProps }) {
       <UserLocationProvider>
         <UserAgreementContextProvider>
           <MapContextProvider>
-            <>
-              <CheckUserAgreement />
+            <main className={montserrat.className}>
               <Component {...pageProps} />
-            </>
+            </main>
           </MapContextProvider>
         </UserAgreementContextProvider>
       </UserLocationProvider>
     </>
   );
-}
-
-function CheckUserAgreement() {
-  const router = useRouter();
-  const { hasAgreedToUserAgreement } = useUserAgreementContext();
-
-  useEffect(() => {
-    if (!hasAgreedToUserAgreement) {
-      router.push({ pathname: "/disclaimer" });
-    }
-  }, [hasAgreedToUserAgreement]);
-
-  return <></>;
 }

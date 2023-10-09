@@ -39,7 +39,9 @@ export default function RefectMapFile({
           </div>
         </div>
         <div className={styles["button-container"]}>
-          <Button onClick={onConfirmRejection}>OK</Button>
+          <Button onClick={onConfirmRejection} type="clear" size="medium">
+            OK
+          </Button>
         </div>
       </div>
       <InterpolateMap mapURL={previewSrc} />

@@ -15,7 +15,7 @@ export default function HelpButton() {
   };
 
   return (
-    <Button onClick={handleHelpClick} type="opaque">
+    <Button onClick={handleHelpClick} type="opaque" size="medium" isElevated>
       <QuestionIcon />
     </Button>
   );

@@ -78,16 +78,17 @@ export default function DisplayMapData() {
         error={error}
       />
       <div className={styles["button-container"]}>
-        <Button onClick={returnToNavigate} isElevated={false}>
+        <Button onClick={returnToNavigate} type="clear" size="medium">
           RETURN TO NAVIGATE
         </Button>
-        <Button onClick={clearLocalStorage} isElevated={false}>
+        <Button onClick={clearLocalStorage} type="clear" size="medium">
           CLEAR LOCAL STORAGE
         </Button>
         <Button
           onClick={startWatchingUserLocation}
           disabled={isWatchingLocation}
-          isElevated={false}
+          type="clear"
+          size="medium"
         >
           START WATCHING LOCATION
         </Button>
@@ -95,12 +96,14 @@ export default function DisplayMapData() {
           <Button
             onClick={startWatchingHeading}
             disabled={isWatchingHeading}
-            isElevated={false}
+            type="clear"
+            size="medium"
           >
             START WATCHING HEADING
           </Button>
         )}
         {version && `Version: ${version}`}
+        <a href="./info">Info Page</a>
       </div>
     </div>
   );
@@ -136,7 +139,7 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
             <Button
               onClick={() => onDeletePin("start")}
               size="small"
-              isElevated={false}
+              type="clear"
             >
               <TrashIcon />
             </Button>
@@ -152,7 +155,7 @@ function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
             <Button
               onClick={() => onDeletePin("end")}
               size="small"
-              isElevated={false}
+              type="clear"
             >
               <TrashIcon />
             </Button>

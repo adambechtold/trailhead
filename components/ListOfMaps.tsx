@@ -115,7 +115,7 @@ function AddMapOption({ onClick }: { onClick: () => void }) {
 
 function DeleteButton({ onClick }: { onClick: () => void }) {
   return (
-    <Button onClick={onClick} size={"small"} isElevated={false}>
+    <Button onClick={onClick} size={"small"} isElevated={false} type="clear">
       <TrashIcon />
     </Button>
   );
@@ -123,7 +123,7 @@ function DeleteButton({ onClick }: { onClick: () => void }) {
 
 function ShareButton({ onClick }: { onClick: () => void }) {
   return (
-    <Button onClick={onClick} size={"small"} isElevated={false}>
+    <Button onClick={onClick} size={"small"} isElevated={false} type="clear">
       <ShareIcon />
     </Button>
   );

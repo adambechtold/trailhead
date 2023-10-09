@@ -44,6 +44,7 @@ export default function ControlPinScale({
         onClick={() => setIsOpen((prev) => !prev)}
         type={isOpen ? "clear" : "opaque"}
         isElevated={!isOpen}
+        size="medium"
       >
         <GearIcon />
       </Button>
@@ -58,27 +59,17 @@ export default function ControlPinScale({
             >
               <span className={styles.title}>Pin Size</span>
               <div className={styles["plus-minus-container"]}>
-                <Button
-                  onClick={decrementPinScale}
-                  type="clear"
-                  size="small"
-                  isElevated={false}
-                >
+                <Button onClick={decrementPinScale} type="clear" size="small">
                   <MinusIcon size="small" />
                 </Button>
-                <Button
-                  onClick={incrementPinScale}
-                  type="clear"
-                  size="small"
-                  isElevated={false}
-                >
+                <Button onClick={incrementPinScale} type="clear" size="small">
                   <PlusIcon size="small" />
                 </Button>
               </div>
             </div>
           )}
           {canResetPins && (
-            <Button onClick={resetPins} type="opaque" size="small">
+            <Button onClick={resetPins} type="opaque" size="small" isElevated>
               RESET PINS
             </Button>
           )}

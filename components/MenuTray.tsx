@@ -204,7 +204,12 @@ export default function MenuTray() {
             onShareMap={downloadMap}
           />
           <div className={styles["lower-buttons-container"]}>
-            <Button onClick={showDebuggingContent} isElevated={false}>
+            <Button
+              onClick={showDebuggingContent}
+              isElevated={false}
+              type="clear"
+              size="medium"
+            >
               INSPECT DATA
             </Button>
           </div>

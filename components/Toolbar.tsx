@@ -74,17 +74,32 @@ export default function Toolbar() {
   return (
     <div className={styles.container}>
       {canDisplaySetPin && (
-        <Button onClick={toggleIsCreatingPin} type="opaque">
+        <Button
+          onClick={toggleIsCreatingPin}
+          type="opaque"
+          size="medium"
+          isElevated
+        >
           SET PIN
         </Button>
       )}
       {canDisplayConfirmLocation && (
         <>
-          <Button onClick={toggleIsCreatingPin} type="opaque">
+          <Button
+            onClick={toggleIsCreatingPin}
+            type="opaque"
+            size="medium"
+            isElevated
+          >
             <CancelIcon />
             CANCEL
           </Button>
-          <Button onClick={handleConfirmLocation} type="opaque">
+          <Button
+            onClick={handleConfirmLocation}
+            type="opaque"
+            size="medium"
+            isElevated
+          >
             <ConfirmIcon />
             CONFIRM
           </Button>

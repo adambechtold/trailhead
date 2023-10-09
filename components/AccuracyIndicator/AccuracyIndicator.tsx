@@ -65,15 +65,6 @@ export default function AccuracyIndicator({
   const glowRef = useRef<HTMLDivElement>(null);
   setGlowBackground(glowRef, !!error, accuracy);
 
-  let className = styles.container;
-  if (isUpdating) {
-    className += " " + styles["is-updating"];
-  }
-
-  if (accuracy || error) {
-    className += " " + getAccuracyClass(error, accuracy);
-  }
-
   const glowClassName = [
     styles["accuracy-updating-glow"],
     isUpdating ? styles["spin"] : "",
@@ -84,10 +75,15 @@ export default function AccuracyIndicator({
   }
 
   return (
-    <div className={glowClassName} ref={glowRef}>
-      <div className={className}>
+    <div className={styles.container}>
+      <div
+        className={[styles.content, getAccuracyClass(error, accuracy)].join(
+          " "
+        )}
+      >
         {accuracy ? accuracy.toFixed(1) + "m" : "X"}
       </div>
+      <div className={glowClassName} ref={glowRef} />
     </div>
   );
 }

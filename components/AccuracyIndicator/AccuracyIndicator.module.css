@@ -1,4 +1,8 @@
 .container {
+  position: relative;
+}
+
+.content {
   width: 4rem;
   height: 3rem;
   border-radius: 1rem;
@@ -8,10 +12,12 @@
 
   display: grid;
   place-items: center;
-}
 
-.is-updating {
-  animation: anti-spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 .accuracy-updating-glow {
@@ -32,12 +38,6 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes anti-spin {
-  to {
-    transform: rotate(-360deg);
   }
 }
 

@@ -58,15 +58,13 @@ export default function Navigate() {
 
   return (
     <>
-      <div className={styles["button-container"]}>
+      <div className={styles["accuracy-indicator-container"]}>
         {canDisplayAccuracyIndicator && (
-          <div className={styles["position-accuracy-indicator"]}>
-            <AccuracyIndicator
-              accuracy={accuracyToDisplay}
-              isUpdating={isWatchingLocation}
-              error={!!userLocationError}
-            />
-          </div>
+          <AccuracyIndicator
+            accuracy={accuracyToDisplay}
+            isUpdating={isWatchingLocation}
+            error={!!userLocationError}
+          />
         )}
       </div>
       <div className={styles["position-settings-panel"]}>

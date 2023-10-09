@@ -59,20 +59,20 @@ export default function ControlPinScale({
               <span className={styles.title}>Pin Size</span>
               <div className={styles["plus-minus-container"]}>
                 <Button
-                  onClick={incrementPinScale}
-                  type="clear"
-                  size="small"
-                  isElevated={false}
-                >
-                  <PlusIcon size="small" />
-                </Button>
-                <Button
                   onClick={decrementPinScale}
                   type="clear"
                   size="small"
                   isElevated={false}
                 >
                   <MinusIcon size="small" />
+                </Button>
+                <Button
+                  onClick={incrementPinScale}
+                  type="clear"
+                  size="small"
+                  isElevated={false}
+                >
+                  <PlusIcon size="small" />
                 </Button>
               </div>
             </div>

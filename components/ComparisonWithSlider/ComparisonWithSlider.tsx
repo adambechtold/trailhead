@@ -50,16 +50,14 @@ export default function ComparisonWithSlider({
       return;
     }
 
-    const position = e.pageX - 44;
+    const position = e.pageX;
     moveToPosition(position);
   };
 
   const moveToPosition = (xPosition: number) => {
-    const { handleWidth, containerOffsetLeft, containerWidth } =
-      getElementSizes();
+    const { containerWidth, containerX } = getElementSizes();
     const xPositionOnPage = xPosition;
-    const xPositionWithinContainer =
-      xPositionOnPage - containerOffsetLeft - handleWidth;
+    const xPositionWithinContainer = xPositionOnPage - containerX;
 
     if (xPositionWithinContainer < 0) {
       return;
@@ -88,17 +86,23 @@ export default function ComparisonWithSlider({
   const getElementSizes = () => {
     const handleWidth = dragElementRef.current?.offsetWidth || 0;
     const containerWidth = containerRef.current?.offsetWidth || 0;
-    const containerOffsetLeft = containerRef.current?.offsetLeft || 0;
-    const minLeft = containerOffsetLeft + 10; // TODO: why is this 10?
-    const maxLeft = containerOffsetLeft + containerWidth - handleWidth - 10; // TODO: why is this 10?
+    const containerX = getElementXPosition(containerRef.current as HTMLElement);
 
     return {
       handleWidth,
       containerWidth,
-      containerOffsetLeft,
-      minLeft,
-      maxLeft,
+      containerX,
     };
+  };
+
+  const getElementXPosition = (element: HTMLElement): number => {
+    let x = element.offsetLeft;
+    let parent = element.offsetParent as HTMLElement;
+    while (parent != null) {
+      x += parent.offsetLeft;
+      parent = parent.offsetParent as HTMLElement;
+    }
+    return x;
   };
 
   return (

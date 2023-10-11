@@ -63,7 +63,7 @@ export default function ChooseMapFile({
         </div>
       </div>
       {hasSavedMaps && (
-        <Button onClick={onCancelChooseMap} size={"medium"} type={"opaque"}>
+        <Button onClick={onCancelChooseMap} size={"medium"} type={"clear"}>
           USE SAVED MAPS
         </Button>
       )}

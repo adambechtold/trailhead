@@ -50,3 +50,8 @@
     right: 1rem;
   }
 }
+
+.slider-container {
+  padding-top: 1rem;
+  width: 300px;
+}

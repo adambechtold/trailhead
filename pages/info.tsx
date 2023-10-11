@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import styles from "./info.module.css";
 import Button from "@/components/Button/Button";
 import Logo from "@/components/Logo/Logo";
+import ComparisonWithSlider from "@/components/ComparisonWithSlider/ComparisonWithSlider";
 
 import { Montserrat } from "next/font/google";
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -47,6 +48,12 @@ export default function Info() {
             Find scenic lookouts, trail colors, and property boundaries that
             AllTrails and Gaia leave behind.
           </p>
+          <div className={styles["slider-container"]}>
+            <ComparisonWithSlider
+              beforeImageURL="/images/timberlands-alltrails.large.png"
+              afterImageURL="/images/timberlands-kiosk.large.png"
+            />
+          </div>
         </div>
         <div className={styles["content-section"]}>
           <h2>More to Come.</h2>

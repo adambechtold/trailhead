@@ -2,6 +2,10 @@
   position: relative;
 }
 
+.container img {
+  border-radius: 0.5rem;
+}
+
 .original-image {
   max-width: 100%;
   width: 100%;
@@ -33,7 +37,7 @@
   color: white;
   background-color: var(--clear-button-text-color);
   padding: 0.3rem;
-  border-radius: 0.4rem;
+  border-radius: 0.5rem;
 }
 
 .bottom-left {

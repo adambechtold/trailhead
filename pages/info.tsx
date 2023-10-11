@@ -51,7 +51,7 @@ export default function Info() {
           <div className={styles["slider-container"]}>
             <ComparisonWithSlider
               beforeImageURL="/images/timberlands-alltrails.large.png"
-              afterImageURL="/images/timberlands-kiosk.large.png"
+              afterImageURL="/images/timberlands-kiosk.large.jpeg"
             />
           </div>
         </div>

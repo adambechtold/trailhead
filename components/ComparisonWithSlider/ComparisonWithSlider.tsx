@@ -39,7 +39,9 @@ export default function ComparisonWithSlider({
       return;
     }
 
-    moveToPosition(e.touches[0].pageX);
+    const { handleWidth } = getElementSizes();
+    const position = e.touches[0].pageX + handleWidth / 2;
+    moveToPosition(position);
   };
 
   const containerOnMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -48,7 +50,8 @@ export default function ComparisonWithSlider({
       return;
     }
 
-    moveToPosition(e.pageX);
+    const position = e.pageX - 44;
+    moveToPosition(position);
   };
 
   const moveToPosition = (xPosition: number) => {

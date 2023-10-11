@@ -1,7 +1,7 @@
 import React from "react";
 
 import Button from "@/components/Button/Button";
-import PictureGuidlines from "@/components/HowTo/PictureGuidelines";
+import PictureGuidelines from "@/components/HowTo/PictureGuidelines";
 
 import styles from "./ChooseMapFile.module.css";
 
@@ -58,7 +58,7 @@ export default function ChooseMapFile({
               paddingTop: "0.3rem",
             }}
           >
-            <PictureGuidlines />
+            <PictureGuidelines />
           </div>
         </div>
       </div>

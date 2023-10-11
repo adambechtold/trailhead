@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import getConfig from "next/config";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
@@ -7,10 +8,17 @@ import UserAgreementContextProvider from "@/contexts/UserAgreementContext";
 const MapContextProvider = dynamic(() => import("@/contexts/MapContext"), {
   ssr: false,
 });
+const GoogleAnalytics = dynamic(
+  () => import("@/components/GoogleAnalytics/GoogleAnalytics"),
+  {
+    ssr: false,
+  }
+);
 
 import { Inter } from "next/font/google";
-
 const inter = Inter({ subsets: ["latin"] });
+
+const { publicRuntimeConfig } = getConfig();
 
 export default function App({ Component, pageProps }) {
   return (
@@ -43,6 +51,7 @@ export default function App({ Component, pageProps }) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="manifest" href="/manifest.webmanifest" />
       </Head>
+      <GoogleAnalytics GA_TRACKING_ID={publicRuntimeConfig.GA_TRACKING_ID} />
       <UserLocationProvider>
         <UserAgreementContextProvider>
           <MapContextProvider>

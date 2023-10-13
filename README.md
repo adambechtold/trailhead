@@ -10,41 +10,31 @@ Just a few setup steps:
 2. Walk to the first fork in the trail, and select your current position on the map.
 3. That's it! Enjoy the hike!
 
-### Give it a Try
-
-[trailhead.adambechtold.xyz](https://trailhead.adambechtold.xyz)
+### [Try it Out Now](https://trailhead.adambechtold.xyz)
 
 ### Demo
 
-<img src="public/demo.gif" width="300" alt="demonstration of trailhead" />
+https://github.com/adambechtold/trailhead/assets/22563063/e427b88b-9c83-41af-abe7-1f6147ef39c2
 
-## Roadmap
+# Offline Use
 
-1. ➡️ Prototype Low-Bandwidth Online Version
-2. Support Offline Mode
-3. Research and Prioritize Features
+Trailhead is a Progressive Web App. It caches itself on your phone so you can use it offline, including any maps you've saved from previous hikes.
 
-### 1 - Prototype a Low-Bandwidth Online Version
+Consider adding it to your homescreen for an app-like experience ([iOS](https://trailhead.adambechtold.xyz/videos/demo-trailhead.large.mp4) / [Android](https://www.androidauthority.com/add-website-android-iphone-home-screen-3181682/)).
 
-I'm most familiar with building applications in React, so I'll build a simple web app to prototype the user experience and calibration logic.
+# Roadmap
 
-This approach misses the most important use case for the app, offline use, but prototyping should be much faster than if I needed to learn new tech at the same time. If we keep the payload light, it may still be useful in low-bandwidth settings.
+## 1) 🔄 Polish Offline Use
+Trailhead works offline, but there are a few rough edges. 
 
-### 2 - Support Offline Mode
+1) Allow Users to Add More than 2 Pins
+2) Create Prompts to Guide First-time Users
 
-Trailhead becomes truly useful once it operates offline. I'll likely implement this with a Progressive Web App (PWA), so we leverage as much of the existing functionality as possible.
+## 2) Integrate into Online Trail Maps
+Place a Trailhead QR code on trail maps so hikers can rapidly access pre-configured maps. 
 
-### 3 - Research and Prioritize Features
-
-With a basic prototype in hand, we determine what's important to build next.
-
-Some things to prioritize are—
-
-- Feature - Rectify User-provided Images (i.e. Integrate Geo-rectification tooling, like [Mapwarper](https://github.com/timwaters/mapwarper))
-- Feature - Share Maps
-- Exploration - Do more calibration points increase accuracy?
-- Exploration - Is the location accuracy of a native app different than a PWA?
-- Feature - Location Smoothing (i.e. handle temporary decreases in GPS accuracy)
+## 3) Integrate into Offline Trail Maps
+Create printable trail maps that already contain configuration information on them. Just add the piccture and Trailhead reads the configuration off the map.
 
 # Develop
 

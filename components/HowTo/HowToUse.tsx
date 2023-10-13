@@ -1,6 +1,6 @@
 import React from "react";
 
-import PictureGuidlines from "./PictureGuidelines";
+import PictureGuidelines from "./PictureGuidelines";
 
 import styles from "./HowToUse.module.css";
 
@@ -11,10 +11,10 @@ export default function HowToUse() {
       <ol className={styles["main-step"]}>
         <li className={styles["main-step"]}>
           <span className={styles["title"]}>
-            📸 Take a Picture of a Trailmap
+            📸 Take a Picture of a Trail Map
           </span>
           <p>Make sure that...</p>
-          <PictureGuidlines />
+          <PictureGuidelines />
         </li>
         <li>
           <span className={styles["title"]}>📍 Pin Your Current Location</span>
@@ -37,8 +37,8 @@ export default function HowToUse() {
         <li>
           <span className={styles["title"]}>🗺️ Enjoy Your Hike!</span>
           <p>
-            You've succesfully configured your map! View it any time to see your
-            current position.
+            You've successfully configured your map! View it any time to see
+            your current position.
           </p>
         </li>
       </ol>

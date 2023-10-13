@@ -10,11 +10,10 @@ Just a few setup steps:
 2. Walk to the first fork in the trail, and select your current position on the map.
 3. That's it! Enjoy the hike!
 
-### [Try it Out Now](https://trailhead.adambechtold.xyz)
+## [Try it Out Now](https://trailhead.adambechtold.xyz)
 
-### Demo
-
-https://github.com/adambechtold/trailhead/assets/22563063/e427b88b-9c83-41af-abe7-1f6147ef39c2
+## Demo
+https://github.com/adambechtold/trailhead/assets/22563063/74184fa5-545e-41a4-a7fa-2f3c59d61b0c
 
 # Offline Use
 

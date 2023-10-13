@@ -34,7 +34,7 @@ export default function Info() {
           Start Navigating
         </Button>
         <div className={styles["content-section"]}>
-          <h2>Easy as 1, 2, 3...</h2>
+          <h2>Easy as 1, 2, 3.</h2>
           <p>
             Configure a trail map in 3 steps:
             <ol>

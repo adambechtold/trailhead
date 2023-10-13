@@ -1,4 +1,24 @@
 {
   "editor.tabSize": 2,
-  "cSpell.words": ["Crosshairs", "Trailhead"]
+  "cSpell.words": ["Crosshairs", "Trailhead"],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#6da3f9",
+    "activityBar.background": "#6da3f9",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#d60958",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#6da3f9",
+    "statusBar.background": "#3c84f7",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#6da3f9",
+    "statusBarItem.remoteBackground": "#3c84f7",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#3c84f7",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#3c84f799",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#3C84F7"
 }

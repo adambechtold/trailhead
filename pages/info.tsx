@@ -32,6 +32,20 @@ export default function Info() {
           Start Navigating
         </Button>
         <div className={styles["content-section"]}>
+          <h2>Easy as 1, 2, 3...</h2>
+          <p>
+            Configure a trail map in 3 steps:
+            <ol>
+              <li>📸 Take a Picture of a Trail Map</li>
+              <li>📍 Pin Your Current Location</li>
+              <li>📍 Pin One Other Location</li>
+            </ol>
+            <p className={styles["demo-paragraph"]}>
+              See <a href={"www.google.com"}>Demo</a>
+            </p>
+          </p>
+        </div>
+        <div className={styles["content-section"]}>
           <h2>No Service? No Problem.</h2>
           <p>
             Trailhead is completely offline. No need to download anything before

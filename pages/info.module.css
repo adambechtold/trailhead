@@ -39,6 +39,20 @@
   grid-gap: 0.2rem;
 }
 
+.content-section ol {
+  text-align: left;
+  padding-left: 2rem;
+  padding-top: 1rem;
+}
+
+.content-section ol li {
+  margin-top: 0.3rem;
+}
+
+.demo-paragraph {
+  padding-top: 1.2rem;
+}
+
 .signature {
   padding-top: 2rem;
 }

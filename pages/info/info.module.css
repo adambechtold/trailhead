@@ -1,7 +1,9 @@
-.position-logo {
+.position-header {
   position: absolute;
   top: 1rem;
-  left: 1rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 90%;
 }
 
 .container {
@@ -13,6 +15,7 @@
 }
 
 .content {
+  width: 100%;
   max-width: 800px;
   position: relative;
 

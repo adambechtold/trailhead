@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 import styles from "./info.module.css";
@@ -11,9 +11,11 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function Info() {
   const router = useRouter();
+  const [showDemo, setShowDemo] = useState(false);
 
   return (
     <div className={[styles.container, montserrat.className].join(" ")}>
+      {showDemo && <DemoModal onClose={() => setShowDemo(false)} />}
       <div className={styles.content}>
         <div className={styles["position-logo"]}>
           <Logo />
@@ -41,7 +43,10 @@ export default function Info() {
               <li>📍 Pin One Other Location</li>
             </ol>
             <p className={styles["demo-paragraph"]}>
-              See <a href={"www.google.com"}>Demo</a>
+              See{" "}
+              <a href={"#"} onClick={() => setShowDemo(true)}>
+                Demo
+              </a>
             </p>
           </p>
         </div>
@@ -88,6 +93,31 @@ export default function Info() {
         </Button>
         <div className={styles.signature}>
           From <a href="https://www.adambechtold.xyz">Adam Bechtold</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type DemoModalProps = {
+  onClose: () => void;
+};
+
+function DemoModal({ onClose }: DemoModalProps) {
+  return (
+    <div className={styles["modal-background"]} onClick={onClose}>
+      <div
+        className={styles["modal-content"]}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className={styles["close-button"]} onClick={onClose}>
+          &times;
+        </div>
+        <div className={styles["video-container"]}>
+          <video controls autoPlay style={{ maxHeight: "100%" }}>
+            <source src="/videos/demo-trailhead.large.mp4" type="video/mp4" />
+            Your Browser Does Not Support This Video
+          </video>
         </div>
       </div>
     </div>

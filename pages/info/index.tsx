@@ -117,9 +117,8 @@ function InfoForHikers() {
         <h2>More to Come.</h2>
         <p>New features delivered every week.</p>
         <h3>Up Next:</h3>
-        <p>🧭 Multiple Pins Increase Accuracy</p>
-        <p>📍 Zoom to User </p>
-        <p>🐛 Some Users Are Not Prompted for Location Access</p>
+        <p>🧭 Keep Adding More Pins to Increase Accuracy</p>
+        <p>📍 Zoom Map to Your Current Location </p>
       </div>
       <Button
         type="gradient-secondary"
@@ -130,7 +129,6 @@ function InfoForHikers() {
       >
         Request Feature
       </Button>
-      ;
     </>
   );
 }

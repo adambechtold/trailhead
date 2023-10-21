@@ -76,20 +76,21 @@ function InfoForHikers() {
       </Button>
       <div className={styles["content-section"]}>
         <h2>Easy as 1, 2, 3.</h2>
-        <p>
-          Configure a trail map in 3 steps:
-          <ol>
-            <li>📸 Take a Picture of a Trail Map</li>
-            <li>📍 Pin Your Current Location</li>
-            <li>📍 Pin One Other Location</li>
-          </ol>
-          <p className={styles["demo-paragraph"]}>
-            See{" "}
-            <a href={"#"} onClick={() => setShowDemo(true)}>
-              Demo
-            </a>
-          </p>
-        </p>
+        <p>Configure a trail map in 3 steps:</p>
+        <ol>
+          <li>📸 Take a Picture of a Trail Map</li>
+          <li>📍 Pin Your Current Location</li>
+          <li>📍 Pin One Other Location</li>
+        </ol>
+        <div className={styles["demo-container"]}>
+          <Button
+            type="gradient-secondary"
+            size="medium"
+            onClick={() => setShowDemo(true)}
+          >
+            Watch the Demo
+          </Button>
+        </div>
       </div>
       <div className={styles["content-section"]}>
         <h2>No Service? No Problem.</h2>
@@ -121,13 +122,11 @@ function InfoForHikers() {
         <p>📍 Zoom Map to Your Current Location </p>
       </div>
       <Button
-        type="gradient-secondary"
+        type="gradient-primary"
         size="medium"
-        onClick={() => {
-          window.location.href = "mailto:feedback@adambechtold.xyz";
-        }}
+        onClick={() => router.push("navigate")}
       >
-        Request Feature
+        Start Navigating
       </Button>
     </>
   );

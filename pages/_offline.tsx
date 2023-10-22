@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/router";
 
 import HowToSaveOffline from "@/components/HowTo/HowToSaveOffline";
-import Button from "@/components/Button/Button";
+import Button from "@/components/Buttons/Button";
 
 import styles from "./_offline.module.css";
 

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import styles from "./index.module.css";
-import Button from "@/components/Button/Button";
+import Button from "@/components/Buttons/Button";
 
 export default function DisclaimerPage() {
   const router = useRouter();

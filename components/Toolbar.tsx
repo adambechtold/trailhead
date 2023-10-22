@@ -5,7 +5,7 @@ import { useCreatePinContext } from "@/contexts/CreatePinContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import { CancelIcon, ConfirmIcon } from "./Icons/Icons";
 
-import Button from "./Button/Button";
+import Button from "./Buttons/Button";
 
 import styles from "@/components/Toolbar.module.css";
 

@@ -1,6 +1,7 @@
 import React from "react";
 
 import styles from "./MapControls.module.css";
+import ZoomToUserButton from "./Buttons/ZoomToUserButton/ZoomToUserButton";
 
 type Props = {
   zoomToImage?: () => void;
@@ -20,7 +21,7 @@ export default function MapControls({
       {zoomToImage && <button onClick={zoomToImage}>Zoom to Image</button>}
       {resetImage && <button onClick={resetImage}>Reset Transform</button>}
       {zoomToFit && <button onClick={zoomToFit}>View Whole Map</button>}
-      {zoomToUser && <button onClick={zoomToUser}>Zoom To User</button>}
+      {zoomToUser && <ZoomToUserButton zoomToUser={zoomToUser} />}
     </div>
   );
 }

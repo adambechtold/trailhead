@@ -2,7 +2,6 @@ import InterpolateMap from "@/components/InterpolateMap";
 import { Pin } from "@/types/Vector";
 import { configurations } from "../../types/overlay.configurations";
 import { useState } from "react";
-import MapControls from "@/components/MapControls";
 
 export default function ExploreInterpolatePosition() {
   const configuration = configurations[0];
@@ -30,9 +29,8 @@ export default function ExploreInterpolatePosition() {
         userHeading={heading}
         mapURL={MAP_URL}
         pinScale={pinScale}
-      >
-        <MapControls />
-      </InterpolateMap>
+        includeDefaultControls
+      />
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { convertCoordinates } from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/InterpolateMap.module.css";
+import ZoomToUserButton from "./Buttons/ZoomToUserButton/ZoomToUserButton";
 
 type Props = {
   start?: Pin;
@@ -23,6 +24,7 @@ type Props = {
   initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
   pinScale?: number;
+  includeDefaultControls?: boolean;
   children?: React.ReactNode;
 };
 
@@ -36,6 +38,7 @@ export default function InterpolateMap(props: Props) {
     initialScale,
     onMapStateUpdate,
     pinScale,
+    includeDefaultControls,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
@@ -124,9 +127,13 @@ export default function InterpolateMap(props: Props) {
   };
 
   const zoomToUser = () => {
+    const targetPinSize = 50; // px
+    const defaultPinSize = 24; // px // TODO: Either share this in a higher level component or implement fixed-pin-size
+    const currentPinSize = defaultPinSize * (pinScale || 1); // px
+    const targetScale = targetPinSize / currentPinSize;
+
     if (userPin) {
-      // TODO: Refactor the use of PinScale. Maybe it should be mandatory or have a more clear default
-      zoomToPoint(userPin?.mapPoint, mapScale); // Zoom to the user with the current map scale
+      zoomToPoint(userPin?.mapPoint, targetScale); // Zoom to the user with the current map scale
     }
   };
 
@@ -173,6 +180,9 @@ export default function InterpolateMap(props: Props) {
               mapReference,
             });
           })}
+          <div className={styles["position-default-controls"]}>
+            <ZoomToUserButton zoomToUser={zoomToUser} />
+          </div>
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
             {start && (

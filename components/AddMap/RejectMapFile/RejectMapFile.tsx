@@ -3,7 +3,7 @@ import React from "react";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import styles from "./RejectMapFile.module.css";
-import Button from "@/components/Button/Button";
+import Button from "@/components/Buttons/Button";
 
 type Props = {
   previewSrc: string;

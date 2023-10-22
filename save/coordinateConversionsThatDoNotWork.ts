@@ -109,7 +109,6 @@ function convertUserLocationToMapPosition({
     return empty();
   }
 
-  // TODO: Use more than 2 pins
   const pin1 = pins[0];
   const pin2 = pins[1];
 

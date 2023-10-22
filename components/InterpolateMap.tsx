@@ -13,7 +13,6 @@ import { convertCoordinates } from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/InterpolateMap.module.css";
-import ZoomToUserButton from "./Buttons/ZoomToUserButton/ZoomToUserButton";
 
 type Props = {
   start?: Pin;
@@ -24,7 +23,6 @@ type Props = {
   initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
   pinScale?: number;
-  includeDefaultControls?: boolean;
   children?: React.ReactNode;
 };
 
@@ -38,7 +36,6 @@ export default function InterpolateMap(props: Props) {
     initialScale,
     onMapStateUpdate,
     pinScale,
-    includeDefaultControls,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
@@ -180,9 +177,6 @@ export default function InterpolateMap(props: Props) {
               mapReference,
             });
           })}
-          <div className={styles["position-default-controls"]}>
-            <ZoomToUserButton zoomToUser={zoomToUser} />
-          </div>
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
             {start && (

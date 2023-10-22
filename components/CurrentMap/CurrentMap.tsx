@@ -4,6 +4,9 @@ import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import InterpolateMap from "@/components/InterpolateMap";
 import { MapPosition } from "@/types/MapPosition";
+import ZoomToUserButton from "../Buttons/ZoomToUserButton/ZoomToUserButton";
+
+import styles from "./CurrentMap.module.css";
 
 export default function CurrentMap() {
   const { map, mapPosition, setMapPosition } = useMapContext();
@@ -30,6 +33,8 @@ export default function CurrentMap() {
       initialScale={initialScale}
       pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
-    />
+    >
+      <ZoomToUserButton className={styles["position-zoom-to-user"]} />
+    </InterpolateMap>
   );
 }

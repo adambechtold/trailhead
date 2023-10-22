@@ -10,7 +10,7 @@ export default function CurrentMap() {
   const { currentAcceptedUserLocation, currentHeading } =
     useUserLocationContext();
 
-  const scale = mapPosition?.scale || 0.4;
+  const initialScale = mapPosition?.scale || 0.4;
 
   const handleMapStateUpdate = ({ x, y, scale }: MapPosition) => {
     setMapPosition({ x, y, scale });
@@ -27,7 +27,7 @@ export default function CurrentMap() {
       }
       userHeading={currentHeading != null ? currentHeading : undefined}
       mapURL={map.url}
-      scale={scale}
+      initialScale={initialScale}
       pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
     />

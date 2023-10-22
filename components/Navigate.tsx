@@ -22,7 +22,11 @@ const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
 
 export default function Navigate() {
   const { resetPins, map, setPinScale } = useMapContext();
-  const { endCreatePin } = useCreatePinContext();
+  const {
+    endCreatePin,
+    inProgress: isCreatingPin,
+    selectPositionElementName,
+  } = useCreatePinContext();
   const {
     isWatchingLocation,
     currentAcceptedUserLocation,
@@ -85,7 +89,9 @@ export default function Navigate() {
             />
           )}
       </div>
-      <Crosshairs />
+      {isCreatingPin && (
+        <Crosshairs selectPositionElementName={selectPositionElementName} />
+      )}
       {!map && <AddMap />}
       {map && <CurrentMap />}
       <MenuTray />

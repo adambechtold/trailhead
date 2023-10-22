@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   TransformComponent,
@@ -20,7 +20,7 @@ type Props = {
   userLocation?: Location;
   userHeading?: number;
   mapURL: string;
-  scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
+  initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
   pinScale?: number;
   children?: React.ReactNode;
@@ -33,13 +33,15 @@ export default function InterpolateMap(props: Props) {
     userLocation,
     userHeading,
     mapURL,
-    scale,
+    initialScale,
     onMapStateUpdate,
     pinScale,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
+  // TODO: Learn how to read scale off of the transform component. We shouldn't be tracking it manually.
+  const [mapScale, setMapScale] = useState(initialScale || 0.4);
 
   const canFindUserLocation = !!start && !!end && !!userLocation;
   const userPin: Pin | undefined = canFindUserLocation
@@ -49,6 +51,7 @@ export default function InterpolateMap(props: Props) {
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
     // This is useful when we need to create pins
+    setMapScale(scale);
     if (!mapReference.current) return;
 
     const mapNode = ReactDOM.findDOMNode(mapReference.current);
@@ -121,30 +124,27 @@ export default function InterpolateMap(props: Props) {
   };
 
   const zoomToUser = () => {
-    console.log("zoom to user");
     if (userPin) {
       // TODO: Refactor the use of PinScale. Maybe it should be mandatory or have a more clear default
-      zoomToPoint(userPin?.mapPoint, pinScale || 1);
+      zoomToPoint(userPin?.mapPoint, mapScale); // Zoom to the user with the current map scale
     }
   };
 
-  const zoomToPoint = (point: Point, pinScale: number) => {
-    console.log("zoom zoom zoom to point", point, pinScale);
+  const zoomToPoint = (point: Point, scale: number) => {
     const { x, y } = point;
     const left = x;
     const top = -y;
 
+    // TODO: don't use the whole window, use only the width of component in which the map is displayed
     const windowHeight = window.outerHeight;
     const windowWidth = window.outerWidth;
-    const offsetX = windowWidth / 2 - left;
-    const offsetY = windowHeight / 2 - top;
+    const offsetX = windowWidth / 2 - left * scale;
+    const offsetY = windowHeight / 2 - top * scale;
 
-    setMapPosition(offsetX, offsetY, 1);
+    setMapPosition(offsetX, offsetY, scale);
   };
 
   function setMapPosition(offsetX: number, offsetY: number, scale: number = 1) {
-    // TODO: don't use the whole window, use only the width of component in which the map is displayed
-
     transformComponentRef.current?.setTransform(offsetX, offsetY, scale);
   }
 
@@ -157,7 +157,7 @@ export default function InterpolateMap(props: Props) {
   return (
     <TransformWrapper
       limitToBounds={false}
-      initialScale={scale || 0.4}
+      initialScale={mapScale}
       minScale={0.1}
       maxScale={20}
       ref={transformComponentRef}

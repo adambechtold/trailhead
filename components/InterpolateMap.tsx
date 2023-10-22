@@ -27,7 +27,6 @@ type Props = {
 };
 
 export default function InterpolateMap(props: Props) {
-  // TODO: Make this a default export and update import statements
   const {
     start,
     end,
@@ -43,6 +42,9 @@ export default function InterpolateMap(props: Props) {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
 
   const canFindUserLocation = !!start && !!end && !!userLocation;
+  const userPin: Pin | undefined = canFindUserLocation
+    ? getUserPin(start, end, userLocation)
+    : undefined;
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
@@ -118,6 +120,34 @@ export default function InterpolateMap(props: Props) {
     transformComponentRef.current?.setTransform(x, y, scale);
   };
 
+  const zoomToUser = () => {
+    console.log("zoom to user");
+    if (userPin) {
+      // TODO: Refactor the use of PinScale. Maybe it should be mandatory or have a more clear default
+      zoomToPoint(userPin?.mapPoint, pinScale || 1);
+    }
+  };
+
+  const zoomToPoint = (point: Point, pinScale: number) => {
+    console.log("zoom zoom zoom to point", point, pinScale);
+    const { x, y } = point;
+    const left = x;
+    const top = -y;
+
+    const windowHeight = window.outerHeight;
+    const windowWidth = window.outerWidth;
+    const offsetX = windowWidth / 2 - left;
+    const offsetY = windowHeight / 2 - top;
+
+    setMapPosition(offsetX, offsetY, 1);
+  };
+
+  function setMapPosition(offsetX: number, offsetY: number, scale: number = 1) {
+    // TODO: don't use the whole window, use only the width of component in which the map is displayed
+
+    transformComponentRef.current?.setTransform(offsetX, offsetY, scale);
+  }
+
   useEffect(() => {
     if (mapReference.current) {
       zoomToFit();
@@ -139,6 +169,7 @@ export default function InterpolateMap(props: Props) {
               zoomToFit,
               zoomToImage,
               resetImage,
+              zoomToUser,
               mapReference,
             });
           })}
@@ -148,9 +179,9 @@ export default function InterpolateMap(props: Props) {
               <PinComponent pin={start} type={"PIN"} scale={pinScale} />
             )}
             {end && <PinComponent pin={end} type={"PIN"} scale={pinScale} />}
-            {canFindUserLocation && (
+            {userPin && (
               <PinComponent
-                pin={getUserPin(start, end, userLocation)}
+                pin={userPin}
                 type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
                 heading={userHeading}
                 scale={pinScale}

@@ -34,14 +34,6 @@ export default function CreatePinContextProvider({
     createPinContextDispatch({ type: "END_CREATE_PIN" });
   };
 
-  function getCenterPoint(element: HTMLElement): Point {
-    const rect = element.getBoundingClientRect();
-    return {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
-  }
-
   const getSelectedPosition = (): Point | null => {
     const element = document.getElementById(
       createPinState.selectPositionElementName
@@ -51,6 +43,13 @@ export default function CreatePinContextProvider({
     const centerPoint = getCenterPoint(element);
     return centerPoint;
   };
+  function getCenterPoint(element: HTMLElement): Point {
+    const rect = element.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    };
+  }
 
   return (
     <CreatePinContext.Provider

@@ -37,8 +37,14 @@ export default function Navigate() {
     mostRecentLocation,
     startWatchingUserLocation,
   } = useUserLocationContext();
+  const { hasAgreedToUserAgreement } = useUserAgreementContext();
+  const router = useRouter();
 
   useEffect(() => {
+    if (!hasAgreedToUserAgreement) {
+      router.push({ pathname: "/disclaimer" });
+      return;
+    }
     if (!isWatchingLocation) startWatchingUserLocation();
   }, []);
 
@@ -64,7 +70,6 @@ export default function Navigate() {
 
   return (
     <>
-      <CheckUserAgreement />
       <div className={styles["accuracy-indicator-container"]}>
         {canDisplayAccuracyIndicator && (
           <AccuracyIndicator
@@ -97,17 +102,4 @@ export default function Navigate() {
       <MenuTray />
     </>
   );
-}
-
-function CheckUserAgreement() {
-  const router = useRouter();
-  const { hasAgreedToUserAgreement } = useUserAgreementContext();
-
-  useEffect(() => {
-    if (!hasAgreedToUserAgreement) {
-      router.push({ pathname: "/disclaimer" });
-    }
-  }, [hasAgreedToUserAgreement]);
-
-  return <></>;
 }

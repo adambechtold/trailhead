@@ -1,8 +1,8 @@
 import React from "react";
 
-import { CancelIcon, ConfirmIcon } from "../../Icons/Icons";
-import Button from "../../Buttons/Button";
-import InterpolateMap from "../../InterpolateMap";
+import { CancelIcon, ConfirmIcon } from "@/components/Icons/Icons";
+import Button from "@/components/Buttons/Button";
+import InterpolateMap from "@/components/InterpolateMap";
 
 import styles from "./ConfirmMap.module.css";
 import { Map } from "@/types/Map";
@@ -32,11 +32,21 @@ export default function ConfirmMap({
           styles["horizontal-container"],
         ].join(" ")}
       >
-        <Button onClick={handleCancelSelection} type="opaque" size={"medium"}>
+        <Button
+          onClick={handleCancelSelection}
+          type="opaque"
+          size="medium"
+          isElevated
+        >
           <CancelIcon />
           SELECT NEW IMAGE
         </Button>
-        <Button onClick={handleConfirmMap} type="opaque" size={"medium"}>
+        <Button
+          onClick={handleConfirmMap}
+          type="opaque"
+          size="medium"
+          isElevated
+        >
           <ConfirmIcon />
           CONFIRM
         </Button>

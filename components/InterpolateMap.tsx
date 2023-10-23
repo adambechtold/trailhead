@@ -135,13 +135,15 @@ export default function InterpolateMap(props: Props) {
   };
 
   const zoomToPoint = (point: Point, scale: number) => {
+    if (!transformComponentRef.current) return;
+
     const { x, y } = point;
     const left = x;
     const top = -y;
 
-    // TODO: don't use the whole window, use only the width of component in which the map is displayed
-    const windowHeight = window.outerHeight;
-    const windowWidth = window.outerWidth;
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+
     const offsetX = windowWidth / 2 - left * scale;
     const offsetY = windowHeight / 2 - top * scale;
 

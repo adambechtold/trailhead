@@ -266,5 +266,7 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
   style.width = scale ? `${scale * 24}px` : "24px";
   style.height = scale ? `${scale * 24}px` : "24px";
 
-  return <img src={imgURL} alt="Pin" className={styles.mapPin} style={style} />;
+  return (
+    <img src={imgURL} alt="Pin" className={styles["map-pin"]} style={style} />
+  );
 };

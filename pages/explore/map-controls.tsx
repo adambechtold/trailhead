@@ -29,7 +29,6 @@ export default function ExploreInterpolatePosition() {
         userHeading={heading}
         mapURL={MAP_URL}
         pinScale={pinScale}
-        includeDefaultControls
       />
     </div>
   );

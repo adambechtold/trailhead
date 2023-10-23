@@ -4,7 +4,7 @@ import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import InterpolateMap from "@/components/InterpolateMap";
 import { MapPosition } from "@/types/MapPosition";
-import ZoomToUserButton from "../Buttons/ZoomToUserButton/ZoomToUserButton";
+import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 
 import styles from "./CurrentMap.module.css";
 

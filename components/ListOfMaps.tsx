@@ -1,7 +1,7 @@
 import React from "react";
 import { Map } from "@/types/Map";
 
-import Button from "./Buttons/Button";
+import Button from "@/components/Buttons/Button";
 import { ShareIcon, TrashIcon } from "./Icons/Icons";
 
 import styles from "@/components/ListOfMaps.module.css";

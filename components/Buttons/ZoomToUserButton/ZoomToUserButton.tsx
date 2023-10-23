@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../Button";
-import { CompassIcon } from "@/components/Icons/Icons";
+import { ArrowIcon } from "@/components/Icons/Icons";
 
 type Props = {
   zoomToUser?: () => void;
@@ -14,7 +14,7 @@ export default function ZoomToUserButton({ zoomToUser, className }: Props) {
   return (
     <div className={className}>
       <Button onClick={onClick} type="opaque" size="medium" isElevated>
-        <CompassIcon />
+        <ArrowIcon />
       </Button>
     </div>
   );

@@ -59,3 +59,11 @@ export function PlusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 export function MinusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"icons/minus-icon.svg"} />;
 }
+
+export function ArrowIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return (
+    <div style={{ transform: "rotate(45deg)" }}>
+      <Icon size={size} src={"icons/arrow.svg"} />
+    </div>
+  );
+}

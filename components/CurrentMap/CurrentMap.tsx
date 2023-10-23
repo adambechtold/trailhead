@@ -20,6 +20,8 @@ export default function CurrentMap() {
   };
 
   if (!map) return null;
+  const canFindUserLocationOnMap =
+    !!map.start && !!map.end && !!currentAcceptedUserLocation;
 
   return (
     <InterpolateMap
@@ -34,7 +36,9 @@ export default function CurrentMap() {
       pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
     >
-      <ZoomToUserButton className={styles["position-zoom-to-user"]} />
+      {canFindUserLocationOnMap && (
+        <ZoomToUserButton className={styles["position-zoom-to-user"]} />
+      )}
     </InterpolateMap>
   );
 }

@@ -4,7 +4,7 @@ import { CompassIcon } from "@/components/Icons/Icons";
 
 type Props = {
   zoomToUser?: () => void;
-  className: string;
+  className?: string;
 };
 
 export default function ZoomToUserButton({ zoomToUser, className }: Props) {

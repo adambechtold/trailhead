@@ -8,7 +8,7 @@ import { Location } from "@/types/Vector";
 import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
-import Button from "@/components/Button/Button";
+import Button from "@/components/Buttons/Button";
 
 import styles from "./DisplayMapData.module.css";
 import { TrashIcon } from "../Icons/Icons";

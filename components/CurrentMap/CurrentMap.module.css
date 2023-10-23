@@ -1,0 +1,6 @@
+.position-zoom-to-user {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 6rem;
+  z-index: 1;
+}

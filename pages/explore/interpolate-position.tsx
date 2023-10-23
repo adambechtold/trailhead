@@ -8,6 +8,7 @@ import InterpolateMap from "@/components/InterpolateMap";
 import { Pin } from "@/types/Vector";
 import { configurations } from "../../types/overlay.configurations";
 import { useEffect, useState } from "react";
+import MapControls from "@/components/MapControls";
 
 export default function ExploreInterpolatePosition() {
   const configuration = configurations[0];
@@ -70,15 +71,15 @@ export default function ExploreInterpolatePosition() {
   const MAP_URL = "/images/trailmap-timberlands-precise-1.jpeg";
 
   return (
-    <div>
-      <InterpolateMap
-        start={start}
-        end={end}
-        userLocation={currentUserLocation}
-        userHeading={heading}
-        mapURL={MAP_URL}
-        pinScale={pinScale}
-      />
-    </div>
+    <InterpolateMap
+      start={start}
+      end={end}
+      userLocation={currentUserLocation}
+      userHeading={heading}
+      mapURL={MAP_URL}
+      pinScale={pinScale}
+    >
+      <MapControls />
+    </InterpolateMap>
   );
 }

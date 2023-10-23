@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import Button from "./Button/Button";
+import Button from "./Buttons/Button";
 import { QuestionIcon } from "./Icons/Icons";
 
 export default function HelpButton() {

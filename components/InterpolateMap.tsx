@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import {
   TransformComponent,
@@ -20,33 +20,38 @@ type Props = {
   userLocation?: Location;
   userHeading?: number;
   mapURL: string;
-  scale?: number; // TODO: why do we pass in scale? It's constantly changing and only used to set initial scale
+  initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
   pinScale?: number;
   children?: React.ReactNode;
 };
 
 export default function InterpolateMap(props: Props) {
-  // TODO: Make this a default export and update import statements
   const {
     start,
     end,
     userLocation,
     userHeading,
     mapURL,
-    scale,
+    initialScale,
     onMapStateUpdate,
     pinScale,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
+  // TODO: Learn how to read scale off of the transform component. We shouldn't be tracking it manually.
+  const [mapScale, setMapScale] = useState(initialScale || 0.4);
 
   const canFindUserLocation = !!start && !!end && !!userLocation;
+  const userPin: Pin | undefined = canFindUserLocation
+    ? getUserPin(start, end, userLocation)
+    : undefined;
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
     // This is useful when we need to create pins
+    setMapScale(scale);
     if (!mapReference.current) return;
 
     const mapNode = ReactDOM.findDOMNode(mapReference.current);
@@ -118,6 +123,37 @@ export default function InterpolateMap(props: Props) {
     transformComponentRef.current?.setTransform(x, y, scale);
   };
 
+  const zoomToUser = () => {
+    const targetPinSize = 50; // px
+    const defaultPinSize = 24; // px // TODO: Either share this in a higher level component or implement fixed-pin-size
+    const currentPinSize = defaultPinSize * (pinScale || 1); // px
+    const targetScale = targetPinSize / currentPinSize;
+
+    if (userPin) {
+      zoomToPoint(userPin?.mapPoint, targetScale); // Zoom to the user with the current map scale
+    }
+  };
+
+  const zoomToPoint = (point: Point, scale: number) => {
+    if (!transformComponentRef.current) return;
+
+    const { x, y } = point;
+    const left = x;
+    const top = -y;
+
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+
+    const offsetX = windowWidth / 2 - left * scale;
+    const offsetY = windowHeight / 2 - top * scale;
+
+    setMapPosition(offsetX, offsetY, scale);
+  };
+
+  function setMapPosition(offsetX: number, offsetY: number, scale: number = 1) {
+    transformComponentRef.current?.setTransform(offsetX, offsetY, scale);
+  }
+
   useEffect(() => {
     if (mapReference.current) {
       zoomToFit();
@@ -127,7 +163,7 @@ export default function InterpolateMap(props: Props) {
   return (
     <TransformWrapper
       limitToBounds={false}
-      initialScale={scale || 0.4}
+      initialScale={mapScale}
       minScale={0.1}
       maxScale={20}
       ref={transformComponentRef}
@@ -135,10 +171,12 @@ export default function InterpolateMap(props: Props) {
       {() => (
         <>
           {React.Children.map(children, (child) => {
+            if (!child) return;
             return React.cloneElement(child as React.ReactElement, {
               zoomToFit,
               zoomToImage,
               resetImage,
+              zoomToUser,
               mapReference,
             });
           })}
@@ -148,9 +186,9 @@ export default function InterpolateMap(props: Props) {
               <PinComponent pin={start} type={"PIN"} scale={pinScale} />
             )}
             {end && <PinComponent pin={end} type={"PIN"} scale={pinScale} />}
-            {canFindUserLocation && (
+            {userPin && (
               <PinComponent
-                pin={getUserPin(start, end, userLocation)}
+                pin={userPin}
                 type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
                 heading={userHeading}
                 scale={pinScale}
@@ -210,9 +248,9 @@ interface PinMarkerProps {
 }
 
 const typeToStyle = {
-  USER_NO_DIRECTION: "/user-location.svg",
-  USER_WITH_DIRECTION: "/user-location-with-direction.svg",
-  PIN: "/map-x.svg",
+  USER_NO_DIRECTION: "/icons/user-location.svg",
+  USER_WITH_DIRECTION: "/icons/user-location-with-direction.svg",
+  PIN: "/icons/map-x.svg",
 };
 
 const PinComponent: React.FC<PinMarkerProps> = (props) => {

@@ -4,19 +4,24 @@ import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import InterpolateMap from "@/components/InterpolateMap";
 import { MapPosition } from "@/types/MapPosition";
+import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
+
+import styles from "./CurrentMap.module.css";
 
 export default function CurrentMap() {
   const { map, mapPosition, setMapPosition } = useMapContext();
   const { currentAcceptedUserLocation, currentHeading } =
     useUserLocationContext();
 
-  const scale = mapPosition?.scale || 0.4;
+  const initialScale = mapPosition?.scale || 0.4;
 
   const handleMapStateUpdate = ({ x, y, scale }: MapPosition) => {
     setMapPosition({ x, y, scale });
   };
 
   if (!map) return null;
+  const canFindUserLocationOnMap =
+    !!map.start && !!map.end && !!currentAcceptedUserLocation;
 
   return (
     <InterpolateMap
@@ -27,9 +32,13 @@ export default function CurrentMap() {
       }
       userHeading={currentHeading != null ? currentHeading : undefined}
       mapURL={map.url}
-      scale={scale}
+      initialScale={initialScale}
       pinScale={map.pinScale}
       onMapStateUpdate={handleMapStateUpdate}
-    />
+    >
+      {canFindUserLocationOnMap && (
+        <ZoomToUserButton className={styles["position-zoom-to-user"]} />
+      )}
+    </InterpolateMap>
   );
 }

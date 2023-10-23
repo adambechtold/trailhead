@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 import styles from "./info.module.css";
-import Button from "@/components/Button/Button";
+import Button from "@/components/Buttons/Button";
 import ComparisonWithSlider from "@/components/ComparisonWithSlider/ComparisonWithSlider";
 
 import { Montserrat } from "next/font/google";

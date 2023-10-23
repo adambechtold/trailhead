@@ -3,9 +3,9 @@ import { Location } from "@/types/Vector";
 import { useMapContext } from "@/contexts/MapContext";
 import { useCreatePinContext } from "@/contexts/CreatePinContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
-import { CancelIcon, ConfirmIcon } from "./Icons/Icons";
+import { CancelIcon, ConfirmIcon } from "@/components/Icons/Icons";
 
-import Button from "./Button/Button";
+import Button from "@/components/Buttons/Button";
 
 import styles from "@/components/Toolbar.module.css";
 

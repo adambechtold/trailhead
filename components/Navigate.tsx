@@ -16,7 +16,7 @@ import SettingsPanel from "./SettingsPanel/SettingsPanel";
 import styles from "./Navigate.module.css";
 import HelpButton from "./HelpButton";
 
-const CurrentMap = dynamic(() => import("@/components/CurrentMap"), {
+const CurrentMap = dynamic(() => import("@/components/CurrentMap/CurrentMap"), {
   ssr: false,
 });
 

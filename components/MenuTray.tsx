@@ -5,7 +5,7 @@ import { useMapContext } from "@/contexts/MapContext";
 
 import ListOfMaps from "./ListOfMaps";
 import Toolbar from "./Toolbar";
-import Button from "@/components/Button/Button";
+import Button from "@/components/Buttons/Button";
 
 import styles from "@/components/MenuTray.module.css";
 

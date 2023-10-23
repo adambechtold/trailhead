@@ -169,6 +169,7 @@ export default function InterpolateMap(props: Props) {
       {() => (
         <>
           {React.Children.map(children, (child) => {
+            if (!child) return;
             return React.cloneElement(child as React.ReactElement, {
               zoomToFit,
               zoomToImage,

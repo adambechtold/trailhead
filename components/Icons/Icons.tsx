@@ -25,37 +25,37 @@ function Icon({ size = DEFAULT_SIZE, inText = false, src }: BaseIconProps) {
 }
 
 export function CancelIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/cancel-x.svg"} inText={true} />;
+  return <Icon size={size} src={"icons/cancel-x.svg"} inText={true} />;
 }
 
 export function ConfirmIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/confirm-check.svg"} inText={true} />;
+  return <Icon size={size} src={"icons/confirm-check.svg"} inText={true} />;
 }
 
 export function QuestionIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/question-mark.svg"} />;
+  return <Icon size={size} src={"icons/question-mark.svg"} />;
 }
 
 export function TrashIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/trash-outline.svg"} />;
+  return <Icon size={size} src={"icons/trash-outline.svg"} />;
 }
 
 export function ShareIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/share-icon.svg"} />;
+  return <Icon size={size} src={"icons/share-icon.svg"} />;
 }
 
 export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/compass-no-ring.svg"} />;
+  return <Icon size={size} src={"icons/compass-no-ring.svg"} />;
 }
 
 export function GearIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/gear.svg"} />;
+  return <Icon size={size} src={"icons/gear.svg"} />;
 }
 
 export function PlusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/plus-icon.svg"} />;
+  return <Icon size={size} src={"icons/plus-icon.svg"} />;
 }
 
 export function MinusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/minus-icon.svg"} />;
+  return <Icon size={size} src={"icons/minus-icon.svg"} />;
 }

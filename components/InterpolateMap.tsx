@@ -246,9 +246,9 @@ interface PinMarkerProps {
 }
 
 const typeToStyle = {
-  USER_NO_DIRECTION: "/user-location.svg",
-  USER_WITH_DIRECTION: "/user-location-with-direction.svg",
-  PIN: "/map-x.svg",
+  USER_NO_DIRECTION: "/icons/user-location.svg",
+  USER_WITH_DIRECTION: "/icons/user-location-with-direction.svg",
+  PIN: "/icons/map-x.svg",
 };
 
 const PinComponent: React.FC<PinMarkerProps> = (props) => {

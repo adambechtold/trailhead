@@ -80,7 +80,7 @@ export default function Toolbar() {
           size="medium"
           isElevated
         >
-          SET PIN
+          Set Pin
         </Button>
       )}
       {canDisplayConfirmLocation && (
@@ -92,7 +92,7 @@ export default function Toolbar() {
             isElevated
           >
             <CancelIcon />
-            CANCEL
+            Cancel
           </Button>
           <Button
             onClick={handleConfirmLocation}
@@ -101,7 +101,7 @@ export default function Toolbar() {
             isElevated
           >
             <ConfirmIcon />
-            CONFIRM
+            Confirm
           </Button>
         </>
       )}

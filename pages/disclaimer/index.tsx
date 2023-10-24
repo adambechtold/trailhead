@@ -53,7 +53,7 @@ export default function DisclaimerPage() {
             type="gradient-primary"
             size="medium"
           >
-            I UNDERSTAND
+            I Understand
           </Button>
         )}
         {hasAgreedToUserAgreement && (
@@ -63,14 +63,14 @@ export default function DisclaimerPage() {
               type="gradient-primary"
               size="medium"
             >
-              START NAVIGATING
+              Start Navigating
             </Button>
             <Button
               onClick={() => router.push("/how-to-use")}
               type={"gradient-secondary"}
               size="medium"
             >
-              HOW TO USE TRAILHEAD
+              How To Use Trailhead
             </Button>
           </>
         )}

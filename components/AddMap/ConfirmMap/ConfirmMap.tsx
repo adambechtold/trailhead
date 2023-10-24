@@ -39,7 +39,7 @@ export default function ConfirmMap({
           isElevated
         >
           <CancelIcon />
-          SELECT NEW IMAGE
+          Select New Image
         </Button>
         <Button
           onClick={handleConfirmMap}
@@ -48,7 +48,7 @@ export default function ConfirmMap({
           isElevated
         >
           <ConfirmIcon />
-          CONFIRM
+          Confirm
         </Button>
       </div>
       <InterpolateMap

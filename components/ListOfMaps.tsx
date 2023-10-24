@@ -106,7 +106,7 @@ function AddMapOption({ onClick }: { onClick: () => void }) {
       <div className={styles["add-map-container"]} onClick={onClick}>
         <div className={styles["add-map-content"]}>
           <div className={styles["add-map-icon"]}>+</div>
-          <div className={styles["add-map-text"]}>ADD MAP</div>
+          <div className={styles["add-map-text"]}>Add Map</div>
         </div>
       </div>
     </div>

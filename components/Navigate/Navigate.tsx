@@ -9,12 +9,12 @@ import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
-import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
-import AddMap from "./AddMap/AddMap";
-import SettingsPanel from "./SettingsPanel/SettingsPanel";
+import AccuracyIndicator from "../AccuracyIndicator/AccuracyIndicator";
+import AddMap from "../AddMap/AddMap";
+import SettingsPanel from "../SettingsPanel/SettingsPanel";
 
 import styles from "./Navigate.module.css";
-import HelpButton from "./HelpButton";
+import HelpButton from "../HelpButton";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap/CurrentMap"), {
   ssr: false,

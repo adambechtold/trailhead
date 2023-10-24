@@ -1,4 +1,4 @@
-import Navigate from "@/components/Navigate";
+import Navigate from "@/components/Navigate/Navigate";
 
 import CreatePinContextProvider from "@/contexts/CreatePinContext";
 

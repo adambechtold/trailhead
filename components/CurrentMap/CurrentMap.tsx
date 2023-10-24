@@ -37,7 +37,10 @@ export default function CurrentMap() {
       onMapStateUpdate={handleMapStateUpdate}
     >
       {canFindUserLocationOnMap && (
-        <ZoomToUserButton className={styles["position-zoom-to-user"]} />
+        <ZoomToUserButton
+          className={styles["position-zoom-to-user"]}
+          isEnabled
+        />
       )}
     </InterpolateMap>
   );

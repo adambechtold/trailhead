@@ -23,6 +23,7 @@ type Props = {
   initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
   pinScale?: number;
+  hideConfigurationPins?: boolean;
   children?: React.ReactNode;
 };
 
@@ -36,6 +37,7 @@ export default function InterpolateMap(props: Props) {
     initialScale,
     onMapStateUpdate,
     pinScale,
+    hideConfigurationPins = false,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
@@ -182,10 +184,12 @@ export default function InterpolateMap(props: Props) {
           })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
-            {start && (
+            {start && !hideConfigurationPins && (
               <PinComponent pin={start} type={"PIN"} scale={pinScale} />
             )}
-            {end && <PinComponent pin={end} type={"PIN"} scale={pinScale} />}
+            {end && !hideConfigurationPins && (
+              <PinComponent pin={end} type={"PIN"} scale={pinScale} />
+            )}
             {userPin && (
               <PinComponent
                 pin={userPin}

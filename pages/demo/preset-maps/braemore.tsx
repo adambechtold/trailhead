@@ -77,6 +77,7 @@ function DemoMap({ map, userLocation }: DemoMapProps) {
       userLocation={userLocation ? userLocation : undefined}
       mapURL={map.url}
       pinScale={map.pinScale}
+      hideConfigurationPins={true}
     >
       {canFindUserLocationOnMap && (
         <ZoomToUserButton className={mapStyles["position-zoom-to-user"]} />

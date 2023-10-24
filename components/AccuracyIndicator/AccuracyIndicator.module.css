@@ -3,7 +3,7 @@
 }
 
 .content {
-  width: 4rem;
+  width: 10rem;
   height: 3rem;
   border-radius: 1rem;
   backdrop-filter: blur(10px);
@@ -14,14 +14,11 @@
   place-items: center;
 
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 2;
 }
 
 .accuracy-updating-glow {
-  width: 6rem;
+  width: 12rem;
   height: 5rem;
 
   background-position: -0.3rem -0.3rem;

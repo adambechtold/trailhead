@@ -111,7 +111,7 @@ function DemoMap({
       {canFindUserLocationOnMap &&
         canWatchUserHeading &&
         !isWatchingHeading && (
-          <div style={{ top: "1.5rem", right: "1.5rem", position: "fixed" }}>
+          <div style={{ top: "1.5rem", right: "1rem", position: "fixed" }}>
             <Button
               onClick={() => startWatchingHeading()}
               type="opaque"

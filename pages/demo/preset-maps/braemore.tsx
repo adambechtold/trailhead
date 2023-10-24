@@ -10,7 +10,8 @@ import styles from "@/components/Navigate/Navigate.module.css";
 import mapStyles from "@/components/CurrentMap/CurrentMap.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 import Button from "@/components/Buttons/Button";
-import { ArrowIcon } from "@/components/Icons/Icons";
+import { ArrowIcon, CompassIcon } from "@/components/Icons/Icons";
+import { EnableCompassButton } from "@/components/Buttons/EnableCompassButton/EnableCompassButton";
 
 export default function BraemorePage() {
   const {
@@ -81,6 +82,12 @@ function DemoMap({
 }: DemoMapProps) {
   const initialScale = 0.4;
   const canFindUserLocationOnMap = !!map.start && !!map.end && !!userLocation;
+  const {
+    currentHeading,
+    startWatchingHeading,
+    canWatchUserHeading,
+    isWatchingHeading,
+  } = useUserLocationContext();
 
   return (
     <>
@@ -92,6 +99,7 @@ function DemoMap({
         mapURL={map.url}
         pinScale={map.pinScale}
         hideConfigurationPins={true}
+        userHeading={currentHeading ? currentHeading : undefined}
       >
         {canFindUserLocationOnMap && (
           <ZoomToUserButton
@@ -100,6 +108,21 @@ function DemoMap({
           />
         )}
       </InterpolateMap>
+      {canFindUserLocationOnMap &&
+        canWatchUserHeading &&
+        !isWatchingHeading && (
+          <div style={{ top: "1.5rem", right: "1.5rem", position: "fixed" }}>
+            <Button
+              onClick={() => startWatchingHeading()}
+              type="opaque"
+              isElevated
+              size="medium"
+            >
+              <CompassIcon />
+              Enable Compass
+            </Button>
+          </div>
+        )}
 
       {!isWatchingLocation && (
         <div className={mapStyles["position-zoom-to-user"]}>

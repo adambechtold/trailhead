@@ -22,7 +22,7 @@ export default function HowToUsePage() {
           type="gradient-primary"
           size="medium"
         >
-          START NAVIGATING
+          Start Navigating
         </Button>
       </div>
     </div>

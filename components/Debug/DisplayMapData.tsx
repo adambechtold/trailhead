@@ -79,10 +79,10 @@ export default function DisplayMapData() {
       />
       <div className={styles["button-container"]}>
         <Button onClick={returnToNavigate} type="clear" size="medium">
-          RETURN TO NAVIGATE
+          Return To Navigate
         </Button>
         <Button onClick={clearLocalStorage} type="clear" size="medium">
-          CLEAR LOCAL STORAGE
+          Clear Local Storage
         </Button>
         <Button
           onClick={startWatchingUserLocation}
@@ -90,7 +90,7 @@ export default function DisplayMapData() {
           type="clear"
           size="medium"
         >
-          START WATCHING LOCATION
+          Start Watching Location
         </Button>
         {isWatchingLocation && canWatchUserHeading && (
           <Button
@@ -99,7 +99,7 @@ export default function DisplayMapData() {
             type="clear"
             size="medium"
           >
-            START WATCHING HEADING
+            Start Watching Heading
           </Button>
         )}
         {version && `Version: ${version}`}

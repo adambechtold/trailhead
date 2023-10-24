@@ -210,7 +210,7 @@ export default function MenuTray() {
               type="clear"
               size="medium"
             >
-              INSPECT DATA
+              Inspect Data
             </Button>
           </div>
         </div>

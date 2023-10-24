@@ -70,7 +70,7 @@ export default function ControlPinScale({
           )}
           {canResetPins && (
             <Button onClick={resetPins} type="opaque" size="small" isElevated>
-              RESET PINS
+              Reset Pins
             </Button>
           )}
         </div>

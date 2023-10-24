@@ -10,6 +10,6 @@ type Props = {
 export const EnableCompassButton = ({ onClick }: Props) => (
   <Button onClick={onClick} type="opaque" size="medium">
     <CompassIcon />
-    ENABLE COMPASS
+    Enable Compass
   </Button>
 );

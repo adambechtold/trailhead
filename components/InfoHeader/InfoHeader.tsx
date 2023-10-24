@@ -1,14 +1,15 @@
 import React from "react";
+import { useRouter } from "next/router";
 
 import styles from "./InfoHeader.module.css";
 import Logo from "../Logo/Logo";
 
 type Props = {
   audience: "hikers" | "trail-managers";
-  setAudience: (audience: "hikers" | "trail-managers") => void;
 };
 
-export default function InfoHeader({ audience, setAudience }: Props) {
+export default function InfoHeader({ audience }: Props) {
+  const router = useRouter();
   const classes = {
     hikers: [
       styles["navigation-item"],
@@ -18,6 +19,10 @@ export default function InfoHeader({ audience, setAudience }: Props) {
       styles["navigation-item"],
       audience === "trail-managers" ? styles["selected"] : "",
     ],
+  };
+
+  const setAudience = (audience: "hikers" | "trail-managers") => {
+    router.push("/info/" + audience);
   };
 
   return (

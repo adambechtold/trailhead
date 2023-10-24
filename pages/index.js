@@ -5,7 +5,7 @@ export default function App() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/info");
+    router.push("/info/hikers");
   }, []);
 
   return <div></div>;

@@ -1,24 +1,32 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import { GetStaticProps, GetStaticPaths } from "next";
 
-import styles from "./info.module.css";
+import InfoHeader from "@/components/InfoHeader/InfoHeader";
 import Button from "@/components/Buttons/Button";
 import ComparisonWithSlider from "@/components/ComparisonWithSlider/ComparisonWithSlider";
 
+import styles from "./info.module.css";
+
 import { Montserrat } from "next/font/google";
-import InfoHeader from "@/components/InfoHeader/InfoHeader";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
-type Audience = "hikers" | "trail-managers";
+type Props = {
+  audience: "hikers" | "trail-managers";
+};
 
-export default function Info() {
-  const [audience, setAudience] = useState<Audience>("hikers");
+export default function InfoPage({ audience }: Props) {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={[styles.container, montserrat.className].join(" ")}>
       <div className={styles.content}>
         <div className={styles["position-header"]}>
-          <InfoHeader audience={audience} setAudience={setAudience} />
+          <InfoHeader audience={audience} />
         </div>
         {audience === "hikers" ? <InfoForHikers /> : <InfoForTrailManagers />}
         <div className={styles.signature}>
@@ -28,6 +36,25 @@ export default function Info() {
     </div>
   );
 }
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const audience = context.params?.audience;
+  return {
+    props: {
+      audience: audience,
+    },
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { audience: "hikers" } },
+      { params: { audience: "trail-managers" } },
+    ],
+    fallback: false,
+  };
+};
 
 type DemoModalProps = {
   onClose: () => void;

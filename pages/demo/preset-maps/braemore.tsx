@@ -125,7 +125,17 @@ function DemoMap({
         )}
 
       {!isWatchingLocation && (
-        <div className={mapStyles["position-zoom-to-user"]}>
+        <div
+          style={{
+            bottom: "3rem",
+            left: "50%",
+            transform: "translate(-50%, 0)",
+            position: "fixed",
+            width: "100%",
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
           <Button
             onClick={() => startWatchingUserLocation()}
             type="opaque"

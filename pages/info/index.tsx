@@ -160,6 +160,10 @@ function InfoForTrailManagers() {
           You already have great maps with local details. Seamlessly layer hiker
           location on top.
         </p>
+        <p style={{ marginTop: "1rem" }}>
+          Try out these <a href={"/demo/preset-maps"}>demo maps</a>{" "}
+          pre-configured for Guilford, CT.
+        </p>
       </div>
       <div className={styles["content-section"]}>
         <h2>Scan and Go.</h2>

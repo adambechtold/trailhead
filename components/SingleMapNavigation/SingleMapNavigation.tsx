@@ -1,33 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Map } from "@/types/Map";
-import { Location } from "@/types/Vector";
 import AccuracyIndicator from "@/components/AccuracyIndicator/AccuracyIndicator";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
-import styles from "@/components/Navigate/Navigate.module.css";
-import mapStyles from "@/components/CurrentMap/CurrentMap.module.css";
+import styles from "./SingleMapNavigation.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 import Button from "@/components/Buttons/Button";
-import { ArrowIcon, CompassIcon } from "@/components/Icons/Icons";
+import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
 
 type DemoMapProps = {
   map: Map;
+  mapName: string;
 };
 
-export default function DemoMap({ map }: DemoMapProps) {
+export default function DemoMap({ map, mapName }: DemoMapProps) {
   const {
     isWatchingLocation,
     startWatchingUserLocation,
-    currentAcceptedUserLocation,
+    currentAcceptedUserLocation: userLocation,
     error: userLocationError,
     mostRecentLocation,
+    currentHeading,
+    startWatchingHeading,
+    isWatchingHeading,
+    canWatchUserHeading,
   } = useUserLocationContext();
 
   const canDisplayAccuracyIndicator =
-    currentAcceptedUserLocation || isWatchingLocation || userLocationError;
-  let accuracyToDisplay = currentAcceptedUserLocation?.accuracy;
+    userLocation || isWatchingLocation || userLocationError;
+  let accuracyToDisplay = userLocation?.accuracy;
   if (isWatchingLocation) {
     if (mostRecentLocation) {
       accuracyToDisplay = mostRecentLocation.accuracy;
@@ -36,49 +39,17 @@ export default function DemoMap({ map }: DemoMapProps) {
     }
   }
 
-  return (
-    <>
-      <div className={styles["accuracy-indicator-container"]}>
-        {canDisplayAccuracyIndicator && (
-          <AccuracyIndicator
-            accuracy={accuracyToDisplay}
-            isUpdating={isWatchingLocation}
-            error={!!userLocationError}
-          />
-        )}
-      </div>
-      {map &&
-        ShowMap({
-          map,
-          userLocation: currentAcceptedUserLocation,
-          isWatchingLocation,
-          startWatchingUserLocation,
-        })}
-    </>
-  );
-}
-
-type ShowMapProps = {
-  map: Map;
-  userLocation: Location | null;
-  isWatchingLocation: boolean;
-  startWatchingUserLocation: () => void;
-};
-
-function ShowMap({
-  map,
-  userLocation,
-  isWatchingLocation,
-  startWatchingUserLocation,
-}: ShowMapProps) {
   const initialScale = 0.4;
   const canFindUserLocationOnMap = !!map.start && !!map.end && !!userLocation;
-  const {
-    currentHeading,
-    startWatchingHeading,
-    canWatchUserHeading,
-    isWatchingHeading,
-  } = useUserLocationContext();
+
+  function downloadMap(src: string, fileName: string) {
+    const link = document.createElement("a");
+    link.href = src;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   return (
     <>
@@ -94,15 +65,24 @@ function ShowMap({
       >
         {canFindUserLocationOnMap && (
           <ZoomToUserButton
-            className={mapStyles["position-zoom-to-user"]}
+            className={styles["position-zoom-to-user-button"]}
             isEnabled={isWatchingLocation}
           />
         )}
       </InterpolateMap>
+      <div className={styles["position-accuracy-indicator"]}>
+        {canDisplayAccuracyIndicator && (
+          <AccuracyIndicator
+            accuracy={accuracyToDisplay}
+            isUpdating={isWatchingLocation}
+            error={!!userLocationError}
+          />
+        )}
+      </div>
       {canFindUserLocationOnMap &&
         canWatchUserHeading &&
         !isWatchingHeading && (
-          <div style={{ top: "1.5rem", right: "1rem", position: "fixed" }}>
+          <div className={styles["position-enable-compass-button"]}>
             <Button
               onClick={() => startWatchingHeading()}
               type="opaque"
@@ -116,17 +96,7 @@ function ShowMap({
         )}
 
       {!isWatchingLocation && (
-        <div
-          style={{
-            bottom: "3rem",
-            left: "50%",
-            transform: "translate(-50%, 0)",
-            position: "fixed",
-            width: "100%",
-            display: "grid",
-            placeItems: "center",
-          }}
-        >
+        <div className={styles["position-find-location-button"]}>
           <Button
             onClick={() => startWatchingUserLocation()}
             type="opaque"
@@ -137,6 +107,16 @@ function ShowMap({
           </Button>
         </div>
       )}
+      <div className={styles["position-download-button"]}>
+        <Button
+          onClick={() => downloadMap(map.url, mapName)}
+          type="opaque"
+          size="medium"
+          isElevated
+        >
+          <DownloadIcon />
+        </Button>
+      </div>
     </>
   );
 }

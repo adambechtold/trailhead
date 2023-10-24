@@ -21,7 +21,7 @@ export default function BraemorePage() {
   return (
     <>
       {!map && <div>Loading...</div>}
-      {map && <SingleMapNavigation map={map} />}
+      {map && <SingleMapNavigation map={map} mapName={"timberlands"} />}
     </>
   );
 }

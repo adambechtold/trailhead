@@ -44,6 +44,10 @@ export function ShareIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/icons/share-icon.svg"} />;
 }
 
+export function DownloadIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/icons/download-icon.svg"} />;
+}
+
 export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/icons/compass-no-ring.svg"} />;
 }

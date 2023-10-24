@@ -9,6 +9,8 @@ import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import styles from "@/components/Navigate/Navigate.module.css";
 import mapStyles from "@/components/CurrentMap/CurrentMap.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
+import Button from "@/components/Buttons/Button";
+import { ArrowIcon } from "@/components/Icons/Icons";
 
 export default function BraemorePage() {
   const {
@@ -100,11 +102,16 @@ function DemoMap({
       </InterpolateMap>
 
       {!isWatchingLocation && (
-        <ZoomToUserButton
-          className={mapStyles["position-zoom-to-user"]}
-          isEnabled={isWatchingLocation}
-          zoomToUser={() => startWatchingUserLocation()}
-        />
+        <div className={mapStyles["position-zoom-to-user"]}>
+          <Button
+            onClick={() => startWatchingUserLocation()}
+            type="opaque"
+            size="medium"
+            isElevated
+          >
+            <ArrowIcon isFilled={isWatchingLocation} /> Find Your Location
+          </Button>
+        </div>
       )}
     </>
   );

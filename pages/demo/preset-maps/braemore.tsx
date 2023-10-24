@@ -28,8 +28,6 @@ export default function BraemorePage() {
       setMap(jsonData);
     }
     fetchMap();
-
-    if (!isWatchingLocation) startWatchingUserLocation();
   }, []);
 
   const canDisplayAccuracyIndicator =
@@ -55,7 +53,13 @@ export default function BraemorePage() {
         )}
       </div>
       {!map && <div>Loading...</div>}
-      {map && DemoMap({ map, userLocation: currentAcceptedUserLocation })}
+      {map &&
+        DemoMap({
+          map,
+          userLocation: currentAcceptedUserLocation,
+          isWatchingLocation,
+          startWatchingUserLocation,
+        })}
     </>
   );
 }
@@ -63,25 +67,45 @@ export default function BraemorePage() {
 type DemoMapProps = {
   map: Map;
   userLocation: Location | null;
+  isWatchingLocation: boolean;
+  startWatchingUserLocation: () => void;
 };
 
-function DemoMap({ map, userLocation }: DemoMapProps) {
+function DemoMap({
+  map,
+  userLocation,
+  isWatchingLocation,
+  startWatchingUserLocation,
+}: DemoMapProps) {
   const initialScale = 0.4;
   const canFindUserLocationOnMap = !!map.start && !!map.end && !!userLocation;
 
   return (
-    <InterpolateMap
-      start={map.start}
-      end={map.end}
-      initialScale={initialScale}
-      userLocation={userLocation ? userLocation : undefined}
-      mapURL={map.url}
-      pinScale={map.pinScale}
-      hideConfigurationPins={true}
-    >
-      {canFindUserLocationOnMap && (
-        <ZoomToUserButton className={mapStyles["position-zoom-to-user"]} />
+    <>
+      <InterpolateMap
+        start={map.start}
+        end={map.end}
+        initialScale={initialScale}
+        userLocation={userLocation ? userLocation : undefined}
+        mapURL={map.url}
+        pinScale={map.pinScale}
+        hideConfigurationPins={true}
+      >
+        {canFindUserLocationOnMap && (
+          <ZoomToUserButton
+            className={mapStyles["position-zoom-to-user"]}
+            isEnabled={isWatchingLocation}
+          />
+        )}
+      </InterpolateMap>
+
+      {!isWatchingLocation && (
+        <ZoomToUserButton
+          className={mapStyles["position-zoom-to-user"]}
+          isEnabled={isWatchingLocation}
+          zoomToUser={() => startWatchingUserLocation()}
+        />
       )}
-    </InterpolateMap>
+    </>
   );
 }

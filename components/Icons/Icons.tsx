@@ -60,10 +60,21 @@ export function MinusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/icons/minus-icon.svg"} />;
 }
 
-export function ArrowIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+type ArrowProps = TypedIconProps & {
+  isFilled: boolean;
+};
+
+export function ArrowIcon({
+  size = DEFAULT_SIZE,
+  isFilled = false,
+}: ArrowProps) {
+  const source = isFilled
+    ? "/icons/arrow-filled.svg"
+    : "/icons/arrow-hollow.svg";
+
   return (
     <div style={{ transform: "rotate(45deg)" }}>
-      <Icon size={size} src={"/icons/arrow.svg"} />
+      <Icon size={size} src={source} />
     </div>
   );
 }

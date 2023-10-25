@@ -146,7 +146,7 @@ function InfoForHikers() {
         <p>New features delivered every week.</p>
         <h3>Up Next:</h3>
         <p>🧭 Keep Adding More Pins to Increase Accuracy</p>
-        <p>📍 Zoom Map to Your Current Location </p>
+        <p>📍 Easy Undo Actions</p>
       </div>
       <Button
         type="gradient-primary"

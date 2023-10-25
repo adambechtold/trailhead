@@ -103,7 +103,7 @@ export default function DisplayMapData() {
           </Button>
         )}
         {version && `Version: ${version}`}
-        <a href="./info">About Trailhead</a>
+        <a href="./">About Trailhead</a>
       </div>
     </div>
   );

@@ -111,3 +111,5 @@ public/workbox-*.js.*
 public/fallback-*.js
 public/sw.js
 public/sw.js*
+# Sentry Config File
+.sentryclirc

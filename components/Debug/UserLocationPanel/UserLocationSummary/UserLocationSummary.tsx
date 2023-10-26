@@ -19,7 +19,10 @@ export default function UserLocationSummary({
   const location: Location = userPin ? userPin.location : userLocation;
 
   return (
-    <div className={[styles["container"], "clear"].join(" ")} onClick={onClick}>
+    <div
+      className={[styles["container"], "opaque", "elevated"].join(" ")}
+      onClick={onClick}
+    >
       <h4>User Pin</h4>
 
       <h5>Coordinates</h5>

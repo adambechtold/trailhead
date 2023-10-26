@@ -9,7 +9,7 @@ import {
 import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
 
 import { Pin, Location, Point } from "@/types/Vector";
-import { convertCoordinates } from "@/utils/vector";
+import { getUserPin } from "@/utils/vector";
 import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/InterpolateMap.module.css";
@@ -23,6 +23,7 @@ type Props = {
   initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
   pinScale?: number;
+  hideConfigurationPins?: boolean;
   children?: React.ReactNode;
 };
 
@@ -36,6 +37,7 @@ export default function InterpolateMap(props: Props) {
     initialScale,
     onMapStateUpdate,
     pinScale,
+    hideConfigurationPins = false,
     children,
   } = props;
   const mapReference = useRef<HTMLImageElement>(null);
@@ -182,10 +184,12 @@ export default function InterpolateMap(props: Props) {
           })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
-            {start && (
+            {start && !hideConfigurationPins && (
               <PinComponent pin={start} type={"PIN"} scale={pinScale} />
             )}
-            {end && <PinComponent pin={end} type={"PIN"} scale={pinScale} />}
+            {end && !hideConfigurationPins && (
+              <PinComponent pin={end} type={"PIN"} scale={pinScale} />
+            )}
             {userPin && (
               <PinComponent
                 pin={userPin}
@@ -200,44 +204,6 @@ export default function InterpolateMap(props: Props) {
       )}
     </TransformWrapper>
   );
-}
-
-function getUserPin(start: Pin, end: Pin, userLocation: Location) {
-  const startCoordinatesPoint: Point = {
-    x: start.location.coordinates.longitude,
-    y: start.location.coordinates.latitude,
-  };
-  const endCoordinatesPoint: Point = {
-    x: end.location.coordinates.longitude,
-    y: end.location.coordinates.latitude,
-  };
-  const userLocationCoordinatesPoint: Point = {
-    x: userLocation.coordinates.longitude,
-    y: userLocation.coordinates.latitude,
-  };
-
-  const { x, y } = convertCoordinates(
-    startCoordinatesPoint,
-    start.mapPoint,
-    endCoordinatesPoint,
-    end.mapPoint,
-    userLocationCoordinatesPoint
-  );
-
-  const userPin: Pin = {
-    mapPoint: {
-      x,
-      y,
-    },
-    location: {
-      coordinates: {
-        longitude: userLocation.coordinates.longitude,
-        latitude: userLocation.coordinates.latitude,
-      },
-    },
-  };
-
-  return userPin;
 }
 
 interface PinMarkerProps {

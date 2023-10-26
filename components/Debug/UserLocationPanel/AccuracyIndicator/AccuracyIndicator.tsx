@@ -81,9 +81,8 @@ export default function AccuracyIndicator({
           " "
         )}
       >
-        {accuracy ? accuracy.toFixed(1) + "m" : "X"}
+        Accuracy: {accuracy ? accuracy.toFixed(1) + "m" : "X"}
       </div>
-      <div className={glowClassName} ref={glowRef} />
     </div>
   );
 }

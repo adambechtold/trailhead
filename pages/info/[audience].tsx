@@ -195,6 +195,10 @@ function InfoForTrailManagers() {
           Visitors scan a QR code and hike. No app download or configuration
           required.
         </p>
+        <p style={{ marginTop: "1rem" }}>
+          Try out these <a href={"/demo/preset-maps"}>demo maps</a>{" "}
+          pre-configured for Guilford, CT.
+        </p>
       </div>
       <div className={styles["content-section"]}>
         <h2>Easy Setup.</h2>

@@ -1,5 +1,5 @@
 import React from "react";
-import DisplayMapData from "@/components/Debug/DisplayMapData";
+import DisplayMapData from "@/components/Debug/DisplayMapData/DisplayMapData";
 
 import styles from "./index.module.css";
 

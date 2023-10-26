@@ -25,45 +25,60 @@ function Icon({ size = DEFAULT_SIZE, inText = false, src }: BaseIconProps) {
 }
 
 export function CancelIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/cancel-x.svg"} inText={true} />;
+  return <Icon size={size} src={"/icons/cancel-x.svg"} inText={true} />;
 }
 
 export function ConfirmIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/confirm-check.svg"} inText={true} />;
+  return <Icon size={size} src={"/icons/confirm-check.svg"} inText={true} />;
 }
 
 export function QuestionIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/question-mark.svg"} />;
+  return <Icon size={size} src={"/icons/question-mark.svg"} />;
 }
 
 export function TrashIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/trash-outline.svg"} />;
+  return <Icon size={size} src={"/icons/trash-outline.svg"} />;
 }
 
 export function ShareIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/share-icon.svg"} />;
+  return <Icon size={size} src={"/icons/share-icon.svg"} />;
+}
+
+export function DownloadIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/icons/download-icon.svg"} />;
 }
 
 export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/compass-no-ring.svg"} />;
+  return <Icon size={size} src={"/icons/compass-no-ring.svg"} />;
 }
 
 export function GearIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/gear.svg"} />;
+  return <Icon size={size} src={"/icons/gear.svg"} />;
 }
 
 export function PlusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/plus-icon.svg"} />;
+  return <Icon size={size} src={"/icons/plus-icon.svg"} />;
 }
 
 export function MinusIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"icons/minus-icon.svg"} />;
+  return <Icon size={size} src={"/icons/minus-icon.svg"} />;
 }
 
-export function ArrowIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+type ArrowProps = TypedIconProps & {
+  isFilled: boolean;
+};
+
+export function ArrowIcon({
+  size = DEFAULT_SIZE,
+  isFilled = false,
+}: ArrowProps) {
+  const source = isFilled
+    ? "/icons/arrow-filled.svg"
+    : "/icons/arrow-hollow.svg";
+
   return (
     <div style={{ transform: "rotate(45deg)" }}>
-      <Icon size={size} src={"icons/arrow.svg"} />
+      <Icon size={size} src={source} />
     </div>
   );
 }

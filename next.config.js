@@ -3,13 +3,19 @@ const withPWA = require("next-pwa")({
   disable: process.env.NODE_ENV === "development",
 });
 
-/** @type {import('next').NextConfig} */
-const nextConfig = withPWA({
-  reactStrictMode: true,
-  publicRuntimeConfig: {
-    GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-  },
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
+
+/** @type {import('next').NextConfig} */
+const nextConfig = withBundleAnalyzer(
+  withPWA({
+    reactStrictMode: true,
+    publicRuntimeConfig: {
+      GA_TRACKING_ID: process.env.GA_TRACKING_ID,
+    },
+  })
+);
 
 module.exports = nextConfig;
 

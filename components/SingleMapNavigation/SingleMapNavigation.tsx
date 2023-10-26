@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Map } from "@/types/Map";
-import AccuracyIndicator from "@/components/AccuracyIndicator/AccuracyIndicator";
+import AccuracyIndicator from "@/components/Debug/UserLocationPanel/AccuracyIndicator/AccuracyIndicator";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
@@ -9,6 +9,8 @@ import styles from "./SingleMapNavigation.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 import Button from "@/components/Buttons/Button";
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
+import { getUserPin } from "@/utils/vector";
+import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 
 type DemoMapProps = {
   map: Map;
@@ -20,24 +22,11 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
     isWatchingLocation,
     startWatchingUserLocation,
     currentAcceptedUserLocation: userLocation,
-    error: userLocationError,
-    mostRecentLocation,
     currentHeading,
     startWatchingHeading,
     isWatchingHeading,
     canWatchUserHeading,
   } = useUserLocationContext();
-
-  const canDisplayAccuracyIndicator =
-    userLocation || isWatchingLocation || userLocationError;
-  let accuracyToDisplay = userLocation?.accuracy;
-  if (isWatchingLocation) {
-    if (mostRecentLocation) {
-      accuracyToDisplay = mostRecentLocation.accuracy;
-    } else {
-      accuracyToDisplay = undefined;
-    }
-  }
 
   const initialScale = 0.4;
   const canFindUserLocationOnMap = !!map.start && !!map.end && !!userLocation;
@@ -70,14 +59,9 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
           />
         )}
       </InterpolateMap>
-      <div className={styles["position-accuracy-indicator"]}>
-        {canDisplayAccuracyIndicator && (
-          <AccuracyIndicator
-            accuracy={accuracyToDisplay}
-            isUpdating={isWatchingLocation}
-            error={!!userLocationError}
-          />
-        )}
+
+      <div className={styles["position-user-location-panel"]}>
+        <UserLocationPanel map={map} />
       </div>
       {canFindUserLocationOnMap &&
         canWatchUserHeading &&

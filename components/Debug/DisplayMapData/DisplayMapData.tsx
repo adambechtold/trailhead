@@ -11,7 +11,7 @@ import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import Button from "@/components/Buttons/Button";
 
 import styles from "./DisplayMapData.module.css";
-import { TrashIcon } from "../Icons/Icons";
+import { TrashIcon } from "../../Icons/Icons";
 import { HeadingError } from "@/contexts/userHeadingReducer";
 
 export default function DisplayMapData() {

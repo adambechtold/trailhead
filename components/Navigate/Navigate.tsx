@@ -9,12 +9,12 @@ import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
-import AccuracyIndicator from "../AccuracyIndicator/AccuracyIndicator";
 import AddMap from "../AddMap/AddMap";
 import SettingsPanel from "../SettingsPanel/SettingsPanel";
 
 import styles from "./Navigate.module.css";
 import HelpButton from "../HelpButton";
+import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap/CurrentMap"), {
   ssr: false,
@@ -29,12 +29,9 @@ export default function Navigate() {
   } = useCreatePinContext();
   const {
     isWatchingLocation,
-    currentAcceptedUserLocation,
     canWatchUserHeading,
     isWatchingHeading,
     startWatchingHeading,
-    error: userLocationError,
-    mostRecentLocation,
     startWatchingUserLocation,
   } = useUserLocationContext();
   const { hasAgreedToUserAgreement } = useUserAgreementContext();
@@ -49,16 +46,6 @@ export default function Navigate() {
   }, []);
 
   const canDisplayResetButton = !!(map && (map.start || map.end));
-  const canDisplayAccuracyIndicator =
-    currentAcceptedUserLocation || isWatchingLocation || userLocationError;
-  let accuracyToDisplay = currentAcceptedUserLocation?.accuracy;
-  if (isWatchingLocation) {
-    if (mostRecentLocation) {
-      accuracyToDisplay = mostRecentLocation.accuracy;
-    } else {
-      accuracyToDisplay = undefined;
-    }
-  }
 
   const onReset = () => {
     const result = confirm("Are you sure you want to reset the pins?");
@@ -71,13 +58,7 @@ export default function Navigate() {
   return (
     <>
       <div className={styles["accuracy-indicator-container"]}>
-        {canDisplayAccuracyIndicator && (
-          <AccuracyIndicator
-            accuracy={accuracyToDisplay}
-            isUpdating={isWatchingLocation}
-            error={!!userLocationError}
-          />
-        )}
+        <UserLocationPanel map={map} />
       </div>
       <div className={styles["position-settings-panel"]}>
         <HelpButton />

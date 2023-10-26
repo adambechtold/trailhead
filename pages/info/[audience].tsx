@@ -97,7 +97,7 @@ function InfoForHikers() {
       <Button
         type="gradient-primary"
         size="medium"
-        onClick={() => router.push("navigate")}
+        onClick={() => router.push("/navigate")}
       >
         Start Navigating
       </Button>
@@ -151,7 +151,7 @@ function InfoForHikers() {
       <Button
         type="gradient-primary"
         size="medium"
-        onClick={() => router.push("navigate")}
+        onClick={() => router.push("/navigate")}
       >
         Start Navigating
       </Button>

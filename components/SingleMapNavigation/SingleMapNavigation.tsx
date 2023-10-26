@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Map } from "@/types/Map";
 import AccuracyIndicator from "@/components/AccuracyIndicator/AccuracyIndicator";
 import InterpolateMap from "@/components/InterpolateMap";
@@ -9,6 +9,7 @@ import styles from "./SingleMapNavigation.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 import Button from "@/components/Buttons/Button";
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
+import { getUserPin } from "@/utils/vector";
 
 type DemoMapProps = {
   map: Map;
@@ -27,6 +28,7 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
     isWatchingHeading,
     canWatchUserHeading,
   } = useUserLocationContext();
+  const [displayDebugPanel, setDisplayDebugPanel] = useState<Boolean>(false);
 
   const canDisplayAccuracyIndicator =
     userLocation || isWatchingLocation || userLocationError;
@@ -51,8 +53,32 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
     document.body.removeChild(link);
   }
 
+  let userPin = null;
+
+  if (map.start && map.end && userLocation) {
+    userPin = getUserPin(map.start, map.end, userLocation);
+  }
+
   return (
     <>
+      {userPin && displayDebugPanel && (
+        <div
+          className={[styles["debug-panel"], "clear"].join(" ")}
+          onClick={() => setDisplayDebugPanel(false)}
+        >
+          <div className={styles["content"]}>
+            <h4>User Pin</h4>
+            <h5>Coordinates</h5>
+
+            <p>Longitude: {userPin.location.coordinates.longitude}</p>
+            <p>Latitude: {userPin.location.coordinates.latitude}</p>
+            <p>Accuracy: {userPin.location.accuracy}</p>
+            <h5>Map Point</h5>
+            <p>top: {-1 * userPin.mapPoint.y}</p>
+            <p>left: {userPin.mapPoint.x}</p>
+          </div>
+        </div>
+      )}
       <InterpolateMap
         start={map.start}
         end={map.end}
@@ -70,15 +96,19 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
           />
         )}
       </InterpolateMap>
-      <div className={styles["position-accuracy-indicator"]}>
-        {canDisplayAccuracyIndicator && (
+
+      {canDisplayAccuracyIndicator && (
+        <div
+          className={styles["position-accuracy-indicator"]}
+          onClick={() => setDisplayDebugPanel(true)}
+        >
           <AccuracyIndicator
             accuracy={accuracyToDisplay}
             isUpdating={isWatchingLocation}
             error={!!userLocationError}
           />
-        )}
-      </div>
+        </div>
+      )}
       {canFindUserLocationOnMap &&
         canWatchUserHeading &&
         !isWatchingHeading && (

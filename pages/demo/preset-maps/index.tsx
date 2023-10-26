@@ -4,9 +4,19 @@ import Button from "@/components/Buttons/Button";
 
 import styles from "./index.module.css";
 
+type Demo = {
+  path: string;
+  name: string;
+};
+
+const demos: Demo[] = [
+  { name: "braemore", path: "braemore" },
+  { name: "timberlands", path: "timberlands" },
+  { name: "bartlett", path: "bartlett-closeup" },
+];
+
 export default function PresetMapsPage() {
   const [currentMapIndex, setCurrentMapIndex] = useState(0);
-  const demos = ["braemore", "timberlands"];
 
   const moveToNextMap = () => {
     setCurrentMapIndex((prev) => {
@@ -18,7 +28,10 @@ export default function PresetMapsPage() {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <QRCodeLink mapName={demos[currentMapIndex]} />
+        <DemoLink
+          name={demos[currentMapIndex].name}
+          path={demos[currentMapIndex].path}
+        />
         <Button onClick={moveToNextMap} size="medium" type="gradient-primary">
           Next Map
         </Button>
@@ -27,15 +40,15 @@ export default function PresetMapsPage() {
   );
 }
 
-function QRCodeLink({ mapName }: { mapName: string }) {
+function DemoLink({ name, path }: Demo) {
   const origin = window.origin;
   const presetRoot = `${origin}/demo/preset-maps`;
-  const createLinkToMap = (mapName: string) => `${presetRoot}/${mapName}`;
+  const createLinkToMap = (path: string) => `${presetRoot}/${path}`;
   return (
     <div className={styles["qr-container"]}>
-      <QRCode value={createLinkToMap(mapName)} />
-      <a href={createLinkToMap(mapName)}>
-        <h2 style={{ textTransform: "capitalize" }}>{mapName}</h2>
+      <QRCode value={createLinkToMap(path)} />
+      <a href={createLinkToMap(path)}>
+        <h2 style={{ textTransform: "capitalize" }}>{name}</h2>
       </a>
     </div>
   );

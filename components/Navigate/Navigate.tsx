@@ -9,7 +9,7 @@ import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
 import MenuTray from "@/components/MenuTray";
 import Crosshairs from "@/components/Crosshairs";
-import AccuracyIndicator from "../AccuracyIndicator/AccuracyIndicator";
+import AccuracyIndicator from "../Debug/AccuracyIndicator/AccuracyIndicator";
 import AddMap from "../AddMap/AddMap";
 import SettingsPanel from "../SettingsPanel/SettingsPanel";
 

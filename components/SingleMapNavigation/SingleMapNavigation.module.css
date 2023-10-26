@@ -1,4 +1,4 @@
-.position-accuracy-indicator {
+.position-user-location-panel {
   position: fixed;
   top: 1rem;
   left: 1rem;
@@ -29,13 +29,4 @@
   position: fixed;
   bottom: 3rem;
   left: 1.5rem;
-}
-
-.debug-panel {
-  position: fixed;
-  top: 1%;
-  left: 1rem;
-  z-index: 1;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
 }

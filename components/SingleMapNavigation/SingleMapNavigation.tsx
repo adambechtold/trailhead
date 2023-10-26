@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Map } from "@/types/Map";
-import AccuracyIndicator from "@/components/Debug/AccuracyIndicator/AccuracyIndicator";
+import AccuracyIndicator from "@/components/Debug/UserLocationPanel/AccuracyIndicator/AccuracyIndicator";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
@@ -10,7 +10,7 @@ import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserBu
 import Button from "@/components/Buttons/Button";
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
 import { getUserPin } from "@/utils/vector";
-import UserLocationPanel from "../Debug/UserLocationPanel";
+import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 
 type DemoMapProps = {
   map: Map;

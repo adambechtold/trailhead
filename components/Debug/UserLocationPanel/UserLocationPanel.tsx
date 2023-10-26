@@ -6,6 +6,8 @@ import UserLocationSummary from "./UserLocationSummary/UserLocationSummary";
 import { Map } from "@/types/Map";
 import { getUserPin } from "@/utils/vector";
 
+import styles from "./UserLocationPanel.module.css";
+
 type Props = {
   map: Map;
 };
@@ -35,12 +37,12 @@ export default function UserLocationPanel({ map }: Props) {
   };
 
   let userPin = undefined;
-  if (map.start && map.end && userLocation) {
+  if (map && map.start && map.end && userLocation) {
     userPin = getUserPin(map.start, map.end, userLocation);
   }
 
   return (
-    <>
+    <div className={styles.container}>
       {!showUserSummary && canDisplayAccuracyIndicator && (
         <div onClick={toggleShowUserSummary}>
           <AccuracyIndicator
@@ -58,6 +60,6 @@ export default function UserLocationPanel({ map }: Props) {
           onClick={toggleShowUserSummary}
         />
       )}
-    </>
+    </div>
   );
 }

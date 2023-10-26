@@ -133,11 +133,11 @@ export default function ComparisonWithSlider({
         style={{ clipPath: `inset(0 0 0 ${percentBefore}%)` }}
       >
         <img src={afterImageURL} alt="After" />
-        {percentBefore < 63 && (
+        {percentBefore < 53 && (
           <span
             className={[styles["title-text"], styles["bottom-right"]].join(" ")}
           >
-            Kiosk Map
+            Trailhead Map
           </span>
         )}
       </div>

@@ -2,15 +2,16 @@
   position: fixed;
   top: 1rem;
   left: 1rem;
-  z-index: 1rem;
+  z-index: 1;
 }
 
-.position-find-location-button {
+.position-find-user-location-button {
   bottom: 3rem;
   position: fixed;
   width: 100%;
   display: grid;
   place-items: center;
+  z-index: 1;
 }
 
 .position-zoom-to-user-button {

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Map } from "@/types/Map";
-import AccuracyIndicator from "@/components/Debug/UserLocationPanel/AccuracyIndicator/AccuracyIndicator";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
@@ -8,9 +7,9 @@ import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import styles from "./SingleMapNavigation.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 import Button from "@/components/Buttons/Button";
-import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
-import { getUserPin } from "@/utils/vector";
+import { CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
+import FindUserLocationButton from "../Buttons/FindUserLocationButton/FindUserLocationButton";
 
 type DemoMapProps = {
   map: Map;
@@ -63,6 +62,7 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
       <div className={styles["position-user-location-panel"]}>
         <UserLocationPanel map={map} />
       </div>
+
       {canFindUserLocationOnMap &&
         canWatchUserHeading &&
         !isWatchingHeading && (
@@ -80,17 +80,12 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
         )}
 
       {!isWatchingLocation && (
-        <div className={styles["position-find-location-button"]}>
-          <Button
-            onClick={() => startWatchingUserLocation()}
-            type="opaque"
-            size="medium"
-            isElevated
-          >
-            <ArrowIcon isFilled={isWatchingLocation} /> Find Your Location
-          </Button>
-        </div>
+        <FindUserLocationButton
+          startWatchingUserLocation={startWatchingUserLocation}
+          className={styles["position-find-user-location-button"]}
+        />
       )}
+
       <div className={styles["position-download-button"]}>
         <Button
           onClick={() => downloadMap(map.url, mapName)}

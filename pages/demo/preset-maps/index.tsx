@@ -12,7 +12,6 @@ type Demo = {
 const demos: Demo[] = [
   { name: "braemore", path: "braemore" },
   { name: "timberlands", path: "timberlands" },
-  { name: "bartlett", path: "bartlett-closeup" },
 ];
 
 export default function PresetMapsPage() {

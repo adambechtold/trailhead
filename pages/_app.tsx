@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 import getConfig from "next/config";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -63,6 +64,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </MapContextProvider>
         </UserAgreementContextProvider>
       </UserLocationProvider>
+      <Analytics />
     </>
   );
 }

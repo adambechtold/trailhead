@@ -48,7 +48,6 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
         initialScale={initialScale}
         userLocation={userLocation ? userLocation : undefined}
         mapURL={map.url}
-        pinScale={map.pinScale}
         hideConfigurationPins={true}
         userHeading={currentHeading ? currentHeading : undefined}
       >

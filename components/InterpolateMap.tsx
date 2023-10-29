@@ -22,7 +22,7 @@ type Props = {
   mapURL: string;
   initialScale?: number;
   onMapStateUpdate?: (mapPosition: MapPosition) => void;
-  pinScale?: number;
+  pinSize?: number;
   hideConfigurationPins?: boolean;
   children?: React.ReactNode;
 };
@@ -36,7 +36,7 @@ export default function InterpolateMap(props: Props) {
     mapURL,
     initialScale,
     onMapStateUpdate,
-    pinScale,
+    pinSize = 50,
     hideConfigurationPins = false,
     children,
   } = props;
@@ -126,13 +126,10 @@ export default function InterpolateMap(props: Props) {
   };
 
   const zoomToUser = () => {
-    const targetPinSize = 50; // px
-    const defaultPinSize = 24; // px // TODO: Either share this in a higher level component or implement fixed-pin-size
-    const currentPinSize = defaultPinSize * (pinScale || 1); // px
-    const targetScale = targetPinSize / currentPinSize;
+    // TODO: Calculate the scale based on the "height" you want to view the user from: i.e. use the real area in view
 
     if (userPin) {
-      zoomToPoint(userPin?.mapPoint, targetScale); // Zoom to the user with the current map scale
+      zoomToPoint(userPin?.mapPoint, mapScale); // Zoom to the user with the current map scale
     }
   };
 
@@ -162,6 +159,12 @@ export default function InterpolateMap(props: Props) {
     }
   }, [mapURL]);
 
+  function calculatePinScale(targetSize: number): number {
+    const defaultPinSize = 24; // px
+    let pinScale = targetSize / (defaultPinSize * mapScale);
+    return pinScale;
+  }
+
   return (
     <TransformWrapper
       limitToBounds={false}
@@ -185,17 +188,25 @@ export default function InterpolateMap(props: Props) {
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
             {start && !hideConfigurationPins && (
-              <PinComponent pin={start} type={"PIN"} scale={pinScale} />
+              <PinComponent
+                pin={start}
+                type={"PIN"}
+                scale={calculatePinScale(pinSize)}
+              />
             )}
             {end && !hideConfigurationPins && (
-              <PinComponent pin={end} type={"PIN"} scale={pinScale} />
+              <PinComponent
+                pin={end}
+                type={"PIN"}
+                scale={calculatePinScale(pinSize)}
+              />
             )}
             {userPin && (
               <PinComponent
                 pin={userPin}
                 type={userHeading ? "USER_WITH_DIRECTION" : "USER_NO_DIRECTION"}
                 heading={userHeading}
-                scale={pinScale}
+                scale={calculatePinScale(pinSize)}
               />
             )}
             <img src={mapURL} alt="Trail Map" ref={mapReference} />

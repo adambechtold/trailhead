@@ -25,8 +25,9 @@ export default function ControlPinScale({
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const pinScaleAdjustment = 0.8;
-  const minPinScale = 1;
+  const pinScaleAdjustment = 0.2;
+  const minPinScale = 0.5;
+
   const incrementPinScale = () => {
     const newPinScale = pinScale + pinScaleAdjustment;
     setPinScale(newPinScale);

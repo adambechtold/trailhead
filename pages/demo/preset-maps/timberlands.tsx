@@ -13,7 +13,7 @@ export default function BraemorePage() {
     start: start,
     end: end,
     url: bestConfiguration.url,
-    pinScale: 2,
+    pinScale: 1,
     key: "map-timberlands",
     formatVersion: "0.1",
   };

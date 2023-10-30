@@ -8,8 +8,9 @@ import {
 
 import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
 
-import { Pin, Location, Point } from "@/types/Vector";
-import { getUserPin } from "@/utils/vector";
+import { Pin, Location, Point, Coordinates } from "@/types/Vector";
+import { getUserPin, getCoordinatesFromMapPoint } from "@/utils/vector";
+import { calculateDistance } from "@/utils/earth";
 import { MapPosition } from "@/types/MapPosition";
 
 import styles from "@/components/InterpolateMap.module.css";
@@ -86,50 +87,23 @@ export default function InterpolateMap(props: Props) {
     }
   };
 
-  const calculateZoomToFitTransform = () => {
-    const imageWidth = mapReference.current?.width;
-    const imageHeight = mapReference.current?.height;
-    const windowWidth = window?.innerWidth;
-    const windowHeight = window?.innerHeight;
-
-    if (!(imageWidth && imageHeight && windowWidth && windowHeight)) {
-      return {
-        x: 0,
-        y: 0,
-        scale: 0.4,
-      };
-    }
-
-    const windowAspectRatio = windowWidth / windowHeight;
-    const imageAspectRatio = imageWidth / imageHeight;
-
-    if (windowAspectRatio < imageAspectRatio) {
-      const scale = windowWidth / imageWidth;
-      return {
-        x: 0,
-        y: (windowHeight - imageHeight * scale) / 2,
-        scale,
-      };
-    } else {
-      const scale = windowHeight / imageHeight;
-      return {
-        x: (windowWidth - imageWidth * scale) / 2,
-        y: 0,
-        scale,
-      };
-    }
-  };
-
   const zoomToFit = () => {
-    const { x, y, scale } = calculateZoomToFitTransform();
+    if (!mapReference.current) return;
+    const { x, y, scale } = calculateZoomToFitTransform(mapReference);
     transformComponentRef.current?.setTransform(x, y, scale);
   };
 
   const zoomToUser = () => {
     // TODO: Calculate the scale based on the "height" you want to view the user from: i.e. use the real area in view
+    let scale = mapScale;
+
+    // 3x the zoom of the map unless the map is already zoomed in more than that
+    const { scale: fitScale } = calculateZoomToFitTransform(mapReference);
+    const zoomedScale = fitScale * 3;
+    if (zoomedScale > mapScale) scale = zoomedScale;
 
     if (userPin) {
-      zoomToPoint(userPin?.mapPoint, mapScale); // Zoom to the user with the current map scale
+      zoomToPoint(userPin?.mapPoint, scale); // Zoom to the user with the current map scale
     }
   };
 
@@ -249,4 +223,98 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
   return (
     <img src={imgURL} alt="Pin" className={styles["map-pin"]} style={style} />
   );
+};
+
+/**
+ * Calculates the transform needed to fit the map image within the window.
+ *
+ * @param {React.RefObject<HTMLImageElement>} mapReference - The reference to the map image element.
+ * @returns {{ x: number, y: number, scale: number }} - The transform object containing the x and y offsets and the scale factor.
+ */
+const calculateZoomToFitTransform = (
+  mapReference: React.RefObject<HTMLImageElement>
+) => {
+  const imageWidth = mapReference.current?.width;
+  const imageHeight = mapReference.current?.height;
+  const windowWidth = window?.innerWidth;
+  const windowHeight = window?.innerHeight;
+
+  if (!(imageWidth && imageHeight && windowWidth && windowHeight)) {
+    return {
+      x: 0,
+      y: 0,
+      scale: 0.4,
+    };
+  }
+
+  const windowAspectRatio = windowWidth / windowHeight;
+  const imageAspectRatio = imageWidth / imageHeight;
+
+  if (windowAspectRatio < imageAspectRatio) {
+    const scale = windowWidth / imageWidth;
+    return {
+      x: 0,
+      y: (windowHeight - imageHeight * scale) / 2,
+      scale,
+    };
+  } else {
+    const scale = windowHeight / imageHeight;
+    return {
+      x: (windowWidth - imageWidth * scale) / 2,
+      y: 0,
+      scale,
+    };
+  }
+};
+
+/**
+ * Calculates the scale factor needed such that the width of the map is equal to the target width.
+ *
+ * @param {number} targetWidth - The target width in meters.
+ * @param {Pin} start - The start pin.
+ * @param {Pin} end - The end pin.
+ * @param {React.RefObject<HTMLImageElement>} mapReference - The reference to the map image element.
+ * @returns {number | undefined} - The scale factor or undefined if the function cannot calculate the scale.
+ */
+const calculateScaleForTargetWidth = (
+  targetWidth: number,
+  start: Pin,
+  end: Pin,
+  mapReference: React.RefObject<HTMLImageElement>
+): number | undefined => {
+  if (start && end && mapReference.current) {
+    const imageWidth = mapReference.current?.width;
+
+    const westmostPoint: Point = {
+      x: imageWidth,
+      y: 0,
+    };
+    const eastmostPoint: Point = {
+      x: 0,
+      y: 0,
+    };
+    const westmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
+      start,
+      end,
+      westmostPoint
+    );
+    const eastmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
+      start,
+      end,
+      eastmostPoint
+    );
+
+    const mapWidth = calculateDistance(
+      eastmostCoordinates,
+      westmostCoordinates
+    );
+
+    if (mapWidth >= targetWidth) {
+      const { scale: matchingScale } =
+        calculateZoomToFitTransform(mapReference);
+      return (mapWidth / targetWidth) * matchingScale;
+    }
+    // TODO: zoom to fit scale
+    else console.warn("we can't scale down. The provided map is too small.");
+  }
 };

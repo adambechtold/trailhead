@@ -2,8 +2,6 @@ import { Point } from "../../types/Vector";
 import { convertCoordinates } from "../vector";
 
 describe("convertCoordinates", () => {
-  console.log("convertCoordinates");
-
   test("converts identity coordinates", () => {
     const A_C1: Point = { x: 0, y: 0 };
     const A_C2: Point = { x: 0, y: 0 };

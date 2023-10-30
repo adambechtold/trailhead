@@ -45,11 +45,20 @@ export default function InterpolateMap(props: Props) {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   // TODO: Learn how to read scale off of the transform component. We shouldn't be tracking it manually.
   const [mapScale, setMapScale] = useState(initialScale || 0.4);
-
   const canFindUserLocation = !!start && !!end && !!userLocation;
+  const [hasUserLocation, setHasUserLocation] = useState(canFindUserLocation);
   const userPin: Pin | undefined = canFindUserLocation
     ? getUserPin(start, end, userLocation)
     : undefined;
+
+  // the first time we acquire the user location, zoom to it
+  useEffect(() => {
+    if (!hasUserLocation && userPin) {
+      setHasUserLocation(true);
+      if (isPointWithinMap(userPin.mapPoint, mapReference)) zoomToUser();
+      // if the user is not within the map, don't zoom to them on load
+    }
+  }, [userLocation]);
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
@@ -318,3 +327,17 @@ const calculateScaleForTargetWidth = (
     else console.warn("we can't scale down. The provided map is too small.");
   }
 };
+
+function isPointWithinMap(
+  point: Point,
+  mapReference: React.RefObject<HTMLImageElement>
+) {
+  const top = -point.y;
+  const left = point.x;
+  const imageWidth = mapReference.current?.width;
+  const imageHeight = mapReference.current?.height;
+
+  if (!(imageWidth && imageHeight)) return false;
+
+  return top >= 0 && top <= imageHeight && left >= 0 && left <= imageWidth;
+}

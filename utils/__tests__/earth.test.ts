@@ -11,8 +11,6 @@ const expectResultWithin = (
 };
 
 describe("calculateDistance", () => {
-  console.log("testing calculateDistance");
-
   test("the same points are 0 meters apart", () => {
     let A: Coordinates = { latitude: 0, longitude: 0 };
     let B: Coordinates = { latitude: 0, longitude: 0 };

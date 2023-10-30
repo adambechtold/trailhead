@@ -26,7 +26,6 @@ export default function CurrentMap() {
   // adjust pin scale to target a particular screen size
   const defaultPinSize = 50; // px
   const pinSize = map.pinScale ? defaultPinSize * map.pinScale : defaultPinSize;
-  console.log("pinSize", pinSize, "map.pinScale", map.pinScale);
 
   return (
     <InterpolateMap

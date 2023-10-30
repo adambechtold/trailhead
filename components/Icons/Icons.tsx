@@ -45,7 +45,11 @@ export function ShareIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 }
 
 export function DownloadIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
-  return <Icon size={size} src={"/icons/download-icon.svg"} />;
+  return (
+    <div style={{ paddingRight: "1px", paddingLeft: "1px" }}>
+      <Icon size={size} src={"/icons/download-icon.svg"} />
+    </div>
+  );
 }
 
 export function CompassIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
@@ -77,7 +81,13 @@ export function ArrowIcon({
     : "/icons/arrow-hollow.svg";
 
   return (
-    <div style={{ transform: "rotate(45deg)" }}>
+    <div
+      style={{
+        transform: "rotate(45deg)",
+        paddingRight: "2px",
+        paddingLeft: "2px",
+      }}
+    >
       <Icon size={size} src={source} />
     </div>
   );

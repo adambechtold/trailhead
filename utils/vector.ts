@@ -1,4 +1,4 @@
-import { Pin, Point, Vector, Location } from "../types/Vector";
+import { Pin, Point, Vector, Location, Coordinates } from "../types/Vector";
 
 export function getUserPin(start: Pin, end: Pin, userLocation: Location) {
   const startCoordinatesPoint: Point = {
@@ -36,6 +36,34 @@ export function getUserPin(start: Pin, end: Pin, userLocation: Location) {
   };
 
   return userPin;
+}
+
+export function getCoordinatesFromMapPoint(
+  start: Pin,
+  end: Pin,
+  point: Point
+): Coordinates {
+  const startCoordinatesPoint: Point = {
+    x: start.location.coordinates.longitude,
+    y: start.location.coordinates.latitude,
+  };
+  const endCoordinatesPoint: Point = {
+    x: end.location.coordinates.longitude,
+    y: end.location.coordinates.latitude,
+  };
+
+  const { x, y } = convertCoordinates(
+    start.mapPoint,
+    startCoordinatesPoint,
+    end.mapPoint,
+    endCoordinatesPoint,
+    point
+  );
+
+  return {
+    longitude: x,
+    latitude: y,
+  };
 }
 
 export function convertCoordinates(

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Map } from "@/types/Map";
-import AccuracyIndicator from "@/components/Debug/UserLocationPanel/AccuracyIndicator/AccuracyIndicator";
 import InterpolateMap from "@/components/InterpolateMap";
 
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
@@ -9,7 +8,6 @@ import styles from "./SingleMapNavigation.module.css";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
 import Button from "@/components/Buttons/Button";
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
-import { getUserPin } from "@/utils/vector";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 
 type DemoMapProps = {
@@ -29,7 +27,8 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
   } = useUserLocationContext();
 
   const initialScale = 0.4;
-  const canFindUserLocationOnMap = !!map.start && !!map.end && !!userLocation;
+  const canFindUserLocationOnMap =
+    map.pins && map.pins.length >= 2 && !!userLocation;
 
   function downloadMap(src: string, fileName: string) {
     const link = document.createElement("a");
@@ -43,8 +42,7 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
   return (
     <>
       <InterpolateMap
-        start={map.start}
-        end={map.end}
+        pins={map.pins}
         initialScale={initialScale}
         userLocation={userLocation ? userLocation : undefined}
         mapURL={map.url}

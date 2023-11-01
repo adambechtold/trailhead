@@ -37,8 +37,8 @@ export default function UserLocationPanel({ map }: Props) {
   };
 
   let userPin = undefined;
-  if (map && map.start && map.end && userLocation) {
-    userPin = getUserPin(map.start, map.end, userLocation);
+  if (map && map.pins && map.pins.length >= 2 && userLocation) {
+    userPin = getUserPin(map.pins, userLocation);
   }
 
   return (

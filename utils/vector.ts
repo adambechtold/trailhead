@@ -1,6 +1,12 @@
 import { Pin, Point, Vector, Location, Coordinates } from "../types/Vector";
 
-export function getUserPin(start: Pin, end: Pin, userLocation: Location) {
+export function getUserPin(pins: Pin[], userLocation: Location) {
+  if (pins.length < 2) {
+    throw new Error("Not enough pins to calculate user pin");
+  }
+  const start = pins[0];
+  const end = pins[1];
+
   const startCoordinatesPoint: Point = {
     x: start.location.coordinates.longitude,
     y: start.location.coordinates.latitude,

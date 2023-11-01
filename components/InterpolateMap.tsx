@@ -16,8 +16,7 @@ import { MapPosition } from "@/types/MapPosition";
 import styles from "@/components/InterpolateMap.module.css";
 
 type Props = {
-  start?: Pin;
-  end?: Pin;
+  pins?: Pin[];
   userLocation?: Location;
   userHeading?: number;
   mapURL: string;
@@ -30,8 +29,7 @@ type Props = {
 
 export default function InterpolateMap(props: Props) {
   const {
-    start,
-    end,
+    pins,
     userLocation,
     userHeading,
     mapURL,
@@ -45,11 +43,14 @@ export default function InterpolateMap(props: Props) {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   // TODO: Learn how to read scale off of the transform component. We shouldn't be tracking it manually.
   const [mapScale, setMapScale] = useState(initialScale || 0.4);
-  const canFindUserLocation = !!start && !!end && !!userLocation;
+  const canFindUserLocation = !!pins && pins.length >= 2 && !!userLocation;
+  console.log("canFindUserLocation", canFindUserLocation);
   const [hasUserLocation, setHasUserLocation] = useState(canFindUserLocation);
   const userPin: Pin | undefined = canFindUserLocation
-    ? getUserPin(start, end, userLocation)
+    ? getUserPin([pins[0], pins[1]], userLocation)
     : undefined;
+
+  console.log("user pin - interpolate map", userPin);
 
   // the first time we acquire the user location, zoom to it
   useEffect(() => {
@@ -170,20 +171,17 @@ export default function InterpolateMap(props: Props) {
           })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
-            {start && !hideConfigurationPins && (
-              <PinComponent
-                pin={start}
-                type={"PIN"}
-                scale={calculatePinScale(pinSize)}
-              />
-            )}
-            {end && !hideConfigurationPins && (
-              <PinComponent
-                pin={end}
-                type={"PIN"}
-                scale={calculatePinScale(pinSize)}
-              />
-            )}
+            {pins &&
+              !hideConfigurationPins &&
+              pins.map((pin, index) => (
+                <div key={`pin-${index}`}>
+                  <PinComponent
+                    pin={pin}
+                    type={"PIN"}
+                    scale={calculatePinScale(pinSize)}
+                  />
+                </div>
+              ))}
             {userPin && (
               <PinComponent
                 pin={userPin}

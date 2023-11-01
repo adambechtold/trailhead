@@ -44,13 +44,10 @@ export default function InterpolateMap(props: Props) {
   // TODO: Learn how to read scale off of the transform component. We shouldn't be tracking it manually.
   const [mapScale, setMapScale] = useState(initialScale || 0.4);
   const canFindUserLocation = !!pins && pins.length >= 2 && !!userLocation;
-  console.log("canFindUserLocation", canFindUserLocation);
   const [hasUserLocation, setHasUserLocation] = useState(canFindUserLocation);
   const userPin: Pin | undefined = canFindUserLocation
-    ? getUserPin([pins[0], pins[1]], userLocation)
+    ? getUserPin(pins, userLocation)
     : undefined;
-
-  console.log("user pin - interpolate map", userPin);
 
   // the first time we acquire the user location, zoom to it
   useEffect(() => {
@@ -285,11 +282,10 @@ const calculateZoomToFitTransform = (
  */
 const calculateScaleForTargetWidth = (
   targetWidth: number,
-  start: Pin,
-  end: Pin,
+  pins: Pin[],
   mapReference: React.RefObject<HTMLImageElement>
 ): number | undefined => {
-  if (start && end && mapReference.current) {
+  if (pins.length >= 2 && mapReference.current) {
     const imageWidth = mapReference.current?.width;
 
     const westmostPoint: Point = {
@@ -301,13 +297,11 @@ const calculateScaleForTargetWidth = (
       y: 0,
     };
     const westmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
-      start,
-      end,
+      pins,
       westmostPoint
     );
     const eastmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
-      start,
-      end,
+      pins,
       eastmostPoint
     );
 

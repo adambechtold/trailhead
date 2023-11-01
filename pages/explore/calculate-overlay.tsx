@@ -21,16 +21,22 @@ function createOverlay(pins: [Pin, Pin], overlayURL: string): Overlay {
   };
 
   let { x, y } = convertCoordinates(
-    pins[0].mapPoint,
-    {
-      x: pins[0].location.coordinates.longitude,
-      y: pins[0].location.coordinates.latitude,
-    },
-    pins[1].mapPoint,
-    {
-      x: pins[1].location.coordinates.longitude,
-      y: pins[1].location.coordinates.latitude,
-    },
+    [
+      {
+        aPoint: pins[0].mapPoint,
+        bPoint: {
+          x: pins[0].location.coordinates.longitude,
+          y: pins[0].location.coordinates.latitude,
+        },
+      },
+      {
+        aPoint: pins[1].mapPoint,
+        bPoint: {
+          x: pins[1].location.coordinates.longitude,
+          y: pins[1].location.coordinates.latitude,
+        },
+      },
+    ],
     upperLeftMapPoint
   );
   const upperLeft: Pin = {
@@ -44,16 +50,22 @@ function createOverlay(pins: [Pin, Pin], overlayURL: string): Overlay {
   };
 
   ({ x, y } = convertCoordinates(
-    pins[0].mapPoint,
-    {
-      x: pins[0].location.coordinates.longitude,
-      y: pins[0].location.coordinates.latitude,
-    },
-    pins[1].mapPoint,
-    {
-      x: pins[1].location.coordinates.longitude,
-      y: pins[1].location.coordinates.latitude,
-    },
+    [
+      {
+        aPoint: pins[0].mapPoint,
+        bPoint: {
+          x: pins[0].location.coordinates.longitude,
+          y: pins[0].location.coordinates.latitude,
+        },
+      },
+      {
+        aPoint: pins[1].mapPoint,
+        bPoint: {
+          x: pins[1].location.coordinates.longitude,
+          y: pins[1].location.coordinates.latitude,
+        },
+      },
+    ],
     lowerRightMapPoint
   ));
   const lowerRight: Pin = {

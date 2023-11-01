@@ -11,20 +11,20 @@ export default function HowToUse() {
       <ol className={styles["main-step"]}>
         <li className={styles["main-step"]}>
           <span className={styles["title"]}>
-            📸 Take a Picture of a Trail Map
+            📸 Take a picture of a trail map
           </span>
           <p>Make sure that...</p>
           <PictureGuidelines />
         </li>
         <li>
-          <span className={styles["title"]}>📍 Pin Your Current Location</span>
+          <span className={styles["title"]}>📍 Pin your current location</span>
           <p>
             Click <b>Set Pin</b> and position the crosshairs over your current
             location.
           </p>
         </li>
         <li>
-          <span className={styles["title"]}>📍 Pin Another Location</span>
+          <span className={styles["title"]}>📍 Pin another location</span>
           <p>
             <b>Walk a short distance</b> to a spot that's clearly marked on the
             map, <i>for example, walk to the first fork in the trail</i>.
@@ -35,15 +35,23 @@ export default function HowToUse() {
           </p>
         </li>
         <li>
-          <span className={styles["title"]}>🗺️ Enjoy Your Hike!</span>
+          <span className={styles["title"]}>🗺️ Enjoy your hike!</span>
           <p>
             You've successfully configured your map! View it any time to see
             your current position.
           </p>
         </li>
       </ol>
+      <h3 className={styles["h3-title"]}>Increase accuracy as you hike</h3>
+      <p>
+        If you notice your location is incorrect, just keep adding more pins.
+      </p>
+      <p>
+        Trailhead uses all the pins to find your location and places more weight
+        on the pin closets to you.
+      </p>
       <h3 className={styles["h3-title"]}>Reset Configuration</h3>
-      <p>Need to adjust your pins? You have two options:</p>
+      <p>Placed a pin incorrectly? You have two options:</p>
       <ul className={styles["reset-options"]}>
         <li>
           Click <b>Reset Pins</b> to remove both pins.

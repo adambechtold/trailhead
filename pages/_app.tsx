@@ -29,6 +29,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Trailhead: Navigate Anywhere</title>
         <link
+          href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
+          rel="stylesheet"
+        />
+        <link
           rel="apple-touch-icon"
           sizes="180x180"
           href="/favicons/apple-touch-icon.png"

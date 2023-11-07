@@ -27,7 +27,7 @@ export default function DisplayMapData() {
     error,
     startWatchingUserLocation,
   } = useUserLocationContext();
-  const { map, deleteStartPin, deleteEndPin } = useMapContext();
+  const { map, deletePinFromMap } = useMapContext();
   const router = useRouter();
   const [version, setVersion] = useState<string | null>(null);
 
@@ -60,13 +60,7 @@ export default function DisplayMapData() {
 
   return (
     <div className={styles.container}>
-      {map && (
-        <MapData
-          map={map}
-          deleteStartPin={deleteStartPin}
-          deleteEndPin={deleteEndPin}
-        />
-      )}
+      {map && <MapData map={map} deletePinFromMap={deletePinFromMap} />}
       <UserLocationData
         currentAcceptedUserLocation={currentAcceptedUserLocation}
         currentHeading={currentHeading}
@@ -111,58 +105,41 @@ export default function DisplayMapData() {
 
 type MapDataProps = {
   map: Map;
-  deleteStartPin: (map: Map) => void;
-  deleteEndPin: (map: Map) => void;
+  deletePinFromMap: (map: Map, index: number) => void;
 };
 
-function MapData({ map, deleteStartPin, deleteEndPin }: MapDataProps) {
-  const onDeletePin = (pin: "start" | "end") => {
-    const result = confirm(`Are you sure you want to delete the ${pin} pin?`);
+function MapData({ map, deletePinFromMap }: MapDataProps) {
+  const onDeletePin = (index: number) => {
+    const result = confirm(
+      `Are you sure you want to delete pin #${index + 1}?`
+    );
     if (result) {
       // User clicked OK
       // Perform delete operation
-      if (pin === "start") {
-        deleteStartPin(map);
-      } else {
-        deleteEndPin(map);
-      }
+      deletePinFromMap(map, index);
     }
   };
 
   return (
     <div className={styles.section}>
       <h3>Map</h3>
-      {map.start ? (
-        <div className={styles.pin}>
-          <p>{displayObject(flattenObject(map.start), "Start Pin")}</p>
-          <div className={styles["delete-button"]}>
-            <Button
-              onClick={() => onDeletePin("start")}
-              size="small"
-              type="clear"
-            >
-              <TrashIcon />
-            </Button>
+      {map.pins && map.pins.length > 0 ? (
+        map.pins.map((pin, index) => (
+          <div className={styles.pin} key={`display-pin-${index + 1}`}>
+            <p>{displayObject(flattenObject(pin), `Pin ${index + 1}`)}</p>
+            <div className={styles["delete-button"]}>
+              <Button
+                onClick={() => onDeletePin(index)}
+                size="small"
+                type="clear"
+              >
+                <TrashIcon />
+              </Button>
+            </div>
           </div>
-        </div>
+        ))
       ) : (
-        <p>Start Position Not Set</p>
-      )}
-      {map.end ? (
-        <div className={styles.pin}>
-          <p>{displayObject(flattenObject(map.end), "End Pin")}</p>
-          <div className={styles["delete-button"]}>
-            <Button
-              onClick={() => onDeletePin("end")}
-              size="small"
-              type="clear"
-            >
-              <TrashIcon />
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <p>End Position Not Set</p>
+        <div>No Pins</div>
       )}
     </div>
   );

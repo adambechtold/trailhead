@@ -53,8 +53,7 @@ export default function ConfirmMap({
       </div>
       <InterpolateMap
         mapURL={previewMap.url}
-        start={previewMap.start}
-        end={previewMap.end}
+        pins={previewMap.pins}
         userLocation={userLocation}
       />
     </>

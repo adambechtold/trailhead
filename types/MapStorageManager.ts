@@ -1,4 +1,4 @@
-import { Map } from "./Map";
+import { Map, updateToLatestVersion as updateMapToLatestVersion } from "./Map";
 
 type StorageStrategy = "LOCAL_STORAGE" | "INDEXED_DB";
 
@@ -120,10 +120,13 @@ async function getMapsFromLocalStorage(): Promise<Map[]> {
   const savedMapKeys = await getMapKeysFromLocalStorage();
   const savedMaps = savedMapKeys.map((key) => {
     const mapString = localStorage.getItem(formatKeyForLocalStorage(key));
-    const parsedMap = JSON.parse(mapString || "");
     return mapString ? JSON.parse(mapString) : undefined;
   });
-  return savedMaps.filter((map) => map !== undefined) as Map[];
+  const mapsToReturn = savedMaps
+    .filter((map) => map !== undefined)
+    .map(updateMapToLatestVersion);
+
+  return mapsToReturn;
 }
 
 async function getMapsFromIndexedDB(): Promise<Map[]> {
@@ -133,7 +136,8 @@ async function getMapsFromIndexedDB(): Promise<Map[]> {
     const objectStore = transaction.objectStore("maps");
     const request = objectStore.getAll();
     request.onerror = reject;
-    request.onsuccess = () => resolve(request.result as Map[]);
+    request.onsuccess = () =>
+      resolve((request.result as Map[]).map(updateMapToLatestVersion));
   });
 }
 

@@ -1,16 +1,14 @@
 import InterpolateMap from "@/components/InterpolateMap";
-import { Pin } from "@/types/Vector";
 import { configurations } from "../../types/overlay.configurations";
 
 export default function ExploreInterpolatePosition() {
   const configuration = configurations[0];
-  const start: Pin = configuration.start;
-  const end: Pin = configuration.end;
+  const pins = configuration.pins;
 
   const currentUserLocation = {
     coordinates: {
-      longitude: start.location.coordinates.longitude,
-      latitude: start.location.coordinates.latitude,
+      longitude: pins[0].location.coordinates.longitude,
+      latitude: pins[0].location.coordinates.latitude,
     },
   };
 
@@ -19,8 +17,7 @@ export default function ExploreInterpolatePosition() {
   return (
     <div>
       <InterpolateMap
-        start={start}
-        end={end}
+        pins={pins}
         userLocation={currentUserLocation}
         mapURL={MAP_URL}
       />

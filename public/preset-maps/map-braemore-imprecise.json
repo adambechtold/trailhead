@@ -3,19 +3,21 @@
   "key": "29779590",
   "formatVersion": "0.2",
   "pinScale": 1,
-  "start": {
-    "mapPoint": { "x": 12.055741190765493, "y": -1340.3546505970914 },
-    "location": {
-      "coordinates": { "latitude": 41.419643, "longitude": -72.689458 },
-      "accuracy": 5
+  "pins": [
+    {
+      "mapPoint": { "x": 12.055741190765493, "y": -1340.3546505970914 },
+      "location": {
+        "coordinates": { "latitude": 41.419643, "longitude": -72.689458 },
+        "accuracy": 5
+      }
+    },
+    {
+      "mapPoint": { "x": 852.4557188061474, "y": -689.2216425901565 },
+      "location": {
+        "coordinates": { "latitude": 41.424107, "longitude": -72.680717 },
+        "accuracy": 5
+      }
     }
-  },
-  "end": {
-    "mapPoint": { "x": 852.4557188061474, "y": -689.2216425901565 },
-    "location": {
-      "coordinates": { "latitude": 41.424107, "longitude": -72.680717 },
-      "accuracy": 5
-    }
-  },
+  ],
   "isSaved": true
 }

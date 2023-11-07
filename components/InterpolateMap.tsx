@@ -16,8 +16,7 @@ import { MapPosition } from "@/types/MapPosition";
 import styles from "@/components/InterpolateMap.module.css";
 
 type Props = {
-  start?: Pin;
-  end?: Pin;
+  pins?: Pin[];
   userLocation?: Location;
   userHeading?: number;
   mapURL: string;
@@ -30,8 +29,7 @@ type Props = {
 
 export default function InterpolateMap(props: Props) {
   const {
-    start,
-    end,
+    pins,
     userLocation,
     userHeading,
     mapURL,
@@ -45,10 +43,10 @@ export default function InterpolateMap(props: Props) {
   const transformComponentRef = useRef<ReactZoomPanPinchRef | null>(null);
   // TODO: Learn how to read scale off of the transform component. We shouldn't be tracking it manually.
   const [mapScale, setMapScale] = useState(initialScale || 0.4);
-  const canFindUserLocation = !!start && !!end && !!userLocation;
+  const canFindUserLocation = !!pins && pins.length >= 2 && !!userLocation;
   const [hasUserLocation, setHasUserLocation] = useState(canFindUserLocation);
   const userPin: Pin | undefined = canFindUserLocation
-    ? getUserPin(start, end, userLocation)
+    ? getUserPin(pins, userLocation)
     : undefined;
 
   // the first time we acquire the user location, zoom to it
@@ -170,20 +168,17 @@ export default function InterpolateMap(props: Props) {
           })}
           <TransformComponent>
             <MapStateTracker setCurrentMapState={handleMapStateUpdate} />
-            {start && !hideConfigurationPins && (
-              <PinComponent
-                pin={start}
-                type={"PIN"}
-                scale={calculatePinScale(pinSize)}
-              />
-            )}
-            {end && !hideConfigurationPins && (
-              <PinComponent
-                pin={end}
-                type={"PIN"}
-                scale={calculatePinScale(pinSize)}
-              />
-            )}
+            {pins &&
+              !hideConfigurationPins &&
+              pins.map((pin, index) => (
+                <div key={`pin-${index}`}>
+                  <PinComponent
+                    pin={pin}
+                    type={"PIN"}
+                    scale={calculatePinScale(pinSize)}
+                  />
+                </div>
+              ))}
             {userPin && (
               <PinComponent
                 pin={userPin}
@@ -287,11 +282,10 @@ const calculateZoomToFitTransform = (
  */
 const calculateScaleForTargetWidth = (
   targetWidth: number,
-  start: Pin,
-  end: Pin,
+  pins: Pin[],
   mapReference: React.RefObject<HTMLImageElement>
 ): number | undefined => {
-  if (start && end && mapReference.current) {
+  if (pins.length >= 2 && mapReference.current) {
     const imageWidth = mapReference.current?.width;
 
     const westmostPoint: Point = {
@@ -303,13 +297,11 @@ const calculateScaleForTargetWidth = (
       y: 0,
     };
     const westmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
-      start,
-      end,
+      pins,
       westmostPoint
     );
     const eastmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
-      start,
-      end,
+      pins,
       eastmostPoint
     );
 

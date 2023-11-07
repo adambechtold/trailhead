@@ -1,23 +1,31 @@
-import React, { useState } from "react";
-import { Map } from "@/types/Map";
-import AccuracyIndicator from "@/components/Debug/UserLocationPanel/AccuracyIndicator/AccuracyIndicator";
-import InterpolateMap from "@/components/InterpolateMap";
+import React from "react";
+import toast from "react-hot-toast";
 
+import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import Button from "@/components/Buttons/Button";
+import InterpolateMap from "@/components/InterpolateMap";
+import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
+import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
+
+import { Map } from "@/types/Map";
 
 import styles from "./SingleMapNavigation.module.css";
-import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
-import Button from "@/components/Buttons/Button";
-import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
-import { getUserPin } from "@/utils/vector";
-import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 
 type DemoMapProps = {
   map: Map;
   mapName: string;
 };
 
-export default function DemoMap({ map, mapName }: DemoMapProps) {
+const notifyWatchingLocation = () => {
+  console.log("Toast!");
+  toast.success("Tracking your location. Enjoy the hike!", {
+    duration: 4000,
+    position: "bottom-center",
+  });
+};
+
+export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
   const {
     isWatchingLocation,
     startWatchingUserLocation,
@@ -29,7 +37,8 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
   } = useUserLocationContext();
 
   const initialScale = 0.4;
-  const canFindUserLocationOnMap = !!map.start && !!map.end && !!userLocation;
+  const canFindUserLocationOnMap =
+    Boolean(map.start) && Boolean(map.end) && Boolean(userLocation);
 
   function downloadMap(src: string, fileName: string) {
     const link = document.createElement("a");
@@ -38,6 +47,11 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  function onStartWatchingUserLocation() {
+    startWatchingUserLocation();
+    notifyWatchingLocation();
   }
 
   return (
@@ -81,7 +95,7 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
       {!isWatchingLocation && (
         <div className={styles["position-find-location-button"]}>
           <Button
-            onClick={() => startWatchingUserLocation()}
+            onClick={() => onStartWatchingUserLocation()}
             type="opaque"
             size="medium"
             isElevated

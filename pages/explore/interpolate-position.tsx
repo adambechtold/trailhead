@@ -5,15 +5,13 @@
 // we can add x markers for pins and a path of the user
 
 import InterpolateMap from "@/components/InterpolateMap";
-import { Pin } from "@/types/Vector";
 import { configurations } from "../../types/overlay.configurations";
 import { useEffect, useState } from "react";
 import MapControls from "@/components/MapControls";
 
 export default function ExploreInterpolatePosition() {
   const configuration = configurations[0];
-  const start: Pin = configuration.start;
-  const end: Pin = configuration.end;
+  const pins = configuration.pins;
 
   const [percentMovementLongitude, setPercentMovementLongitude] = useState(50);
   const [percentMovementLatitude, setPercentMovementLatitude] = useState(50);
@@ -56,17 +54,19 @@ export default function ExploreInterpolatePosition() {
   }, [isIncrementing]);
 
   const differenceLongitude =
-    end.location.coordinates.longitude - start.location.coordinates.longitude;
+    pins[1].location.coordinates.longitude -
+    pins[0].location.coordinates.longitude;
   const differenceLatitude =
-    end.location.coordinates.latitude - start.location.coordinates.latitude;
+    pins[1].location.coordinates.latitude -
+    pins[0].location.coordinates.latitude;
   const movementLongitude =
     differenceLongitude * (percentMovementLongitude / 100);
   const movementLatitude = differenceLatitude * (percentMovementLatitude / 100);
 
   const currentUserLocation = {
     coordinates: {
-      longitude: start.location.coordinates.longitude + movementLongitude,
-      latitude: start.location.coordinates.latitude + movementLatitude,
+      longitude: pins[0].location.coordinates.longitude + movementLongitude,
+      latitude: pins[0].location.coordinates.latitude + movementLatitude,
     },
   };
 
@@ -74,8 +74,7 @@ export default function ExploreInterpolatePosition() {
 
   return (
     <InterpolateMap
-      start={start}
-      end={end}
+      pins={pins}
       userLocation={currentUserLocation}
       userHeading={heading}
       mapURL={MAP_URL}

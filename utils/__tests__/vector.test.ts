@@ -3,74 +3,86 @@ import { convertCoordinates } from "../vector";
 
 describe("convertCoordinates", () => {
   test("converts identity coordinates", () => {
-    const A_C1: Point = { x: 0, y: 0 };
-    const A_C2: Point = { x: 0, y: 0 };
-    const B_C1: Point = { x: 1, y: 1 };
-    const B_C2: Point = { x: 1, y: 1 };
+    const referencePins = [
+      {
+        aPoint: { x: 0, y: 0 },
+        bPoint: { x: 0, y: 0 },
+      },
+      {
+        aPoint: { x: 1, y: 1 },
+        bPoint: { x: 1, y: 1 },
+      },
+      {
+        aPoint: { x: 2, y: 2 },
+        bPoint: { x: 2, y: 2 },
+      },
+    ];
 
-    let new_C1: Point = { x: 2, y: 2 };
-    let result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    let new_aPoint: Point = { x: 2, y: 2 };
+    let result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(2, 2);
     expect(result.y).toBeCloseTo(2, 2);
 
-    new_C1 = { x: 1, y: 1 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: 1, y: 1 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(1, 2);
     expect(result.y).toBeCloseTo(1, 2);
 
-    new_C1 = { x: 0, y: 0 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: 0, y: 0 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(0, 2);
     expect(result.y).toBeCloseTo(0, 2);
 
-    new_C1 = { x: -1, y: -1 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: -1, y: -1 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(-1, 2);
     expect(result.y).toBeCloseTo(-1, 2);
 
-    new_C1 = { x: -2, y: -3 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: -2, y: -3 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(-2, 2);
     expect(result.y).toBeCloseTo(-3, 2);
 
-    new_C1 = { x: -3.23, y: 0 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: -3.23, y: 0 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(-3.23, 3);
     expect(result.y).toBeCloseTo(0, 2);
 
-    new_C1 = { x: 0, y: -10.239 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: 0, y: -10.239 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(0, 2);
     expect(result.y).toBeCloseTo(-10.239, 4);
   });
 
   // different scale
   test("converts coordinates with different scale", () => {
-    const A_C1: Point = { x: 0, y: 0 };
-    const A_C2: Point = { x: 0, y: 0 };
-    const B_C1: Point = { x: 1, y: 1 };
-    const B_C2: Point = { x: 2, y: 2 };
+    let referencePins = [
+      { aPoint: { x: 0, y: 0 }, bPoint: { x: 0, y: 0 } },
+      { aPoint: { x: 1, y: 1 }, bPoint: { x: 2, y: 2 } },
+      { aPoint: { x: 2, y: 2 }, bPoint: { x: 4, y: 4 } },
+    ];
 
-    let new_C1: Point = { x: 2, y: 2 };
-    let result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    let new_aPoint: Point = { x: 2, y: 2 };
+    let result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(4, 2);
     expect(result.y).toBeCloseTo(4, 2);
 
-    new_C1 = { x: 1, y: 4 };
-    result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    new_aPoint = { x: 1, y: 4 };
+    result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(2, 2);
     expect(result.y).toBeCloseTo(8, 2);
   });
 
   // different scale for each dimension
   test("converts coordinates with different scale for each dimension", () => {
-    const A_C1: Point = { x: 0, y: 0 };
-    const A_C2: Point = { x: 0, y: 0 };
-    const B_C1: Point = { x: 1, y: 1 };
-    const B_C2: Point = { x: 2, y: 3 };
+    let referencePins = [
+      { aPoint: { x: 0, y: 0 }, bPoint: { x: 0, y: 0 } },
+      { aPoint: { x: 1, y: 1 }, bPoint: { x: 2, y: 3 } },
+      { aPoint: { x: 2, y: 2 }, bPoint: { x: 4, y: 6 } },
+    ];
 
-    let new_C1: Point = { x: 2, y: 2 };
-    let result = convertCoordinates(A_C1, A_C2, B_C1, B_C2, new_C1);
+    let new_aPoint: Point = { x: 2, y: 2 };
+    let result = convertCoordinates(referencePins, new_aPoint);
     expect(result.x).toBeCloseTo(4, 2);
     expect(result.y).toBeCloseTo(6, 2);
   });

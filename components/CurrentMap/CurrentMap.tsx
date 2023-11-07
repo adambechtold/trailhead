@@ -21,7 +21,7 @@ export default function CurrentMap() {
 
   if (!map) return null;
   const canFindUserLocationOnMap =
-    !!map.start && !!map.end && !!currentAcceptedUserLocation;
+    !!map && map.pins && map.pins.length >= 2 && !!currentAcceptedUserLocation;
 
   // adjust pin scale to target a particular screen size
   const defaultPinSize = 50; // px
@@ -29,8 +29,7 @@ export default function CurrentMap() {
 
   return (
     <InterpolateMap
-      start={map.start}
-      end={map.end}
+      pins={map.pins}
       userLocation={
         currentAcceptedUserLocation ? currentAcceptedUserLocation : undefined
       }

@@ -45,7 +45,7 @@ export default function Navigate() {
     if (!isWatchingLocation) startWatchingUserLocation();
   }, []);
 
-  const canDisplayResetButton = !!(map && (map.start || map.end));
+  const canDisplayResetButton = !!(map && map.pins && map.pins.length > 0);
 
   const onReset = () => {
     const result = confirm("Are you sure you want to reset the pins?");

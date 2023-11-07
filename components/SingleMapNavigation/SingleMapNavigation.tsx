@@ -23,7 +23,7 @@ function notifyWatchingLocation() {
     (t) => <ConfirmTrackingLocation onDismiss={() => toast.dismiss(t.id)} />,
     {
       duration: 10_000,
-    },
+    }
   );
 }
 
@@ -46,7 +46,7 @@ export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
 
   const initialScale = 0.4;
   const canFindUserLocationOnMap =
-    Boolean(map.start) && Boolean(map.end) && Boolean(userLocation);
+    map.pins && map.pins.length >= 2 && !!userLocation;
 
   function downloadMap(src: string, fileName: string) {
     const link = document.createElement("a");
@@ -69,8 +69,7 @@ export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
   return (
     <>
       <InterpolateMap
-        start={map.start}
-        end={map.end}
+        pins={map.pins}
         initialScale={initialScale}
         userLocation={userLocation ? userLocation : undefined}
         mapURL={map.url}

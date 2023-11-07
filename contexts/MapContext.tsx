@@ -16,10 +16,8 @@ type MapContext = {
   deleteMap: (mapKey: string) => void;
   chooseMap: (mapKey: string) => void;
   downloadMap: (mapKey: string) => void;
-  setStartPin: (map: Map, pin: Pin) => void;
-  setEndPin: (map: Map, pin: Pin) => void;
-  deleteStartPin: (map: Map) => void;
-  deleteEndPin: (map: Map) => void;
+  addPinToMap: (map: Map, pin: Pin) => void;
+  deletePinFromMap: (map: Map, index: number) => void;
   resetPins: (map: Map) => void;
   mapPosition?: MapPosition;
   setMapPosition: (mapPosition: MapPosition) => void;
@@ -128,8 +126,9 @@ export default function MapContextProvider({
 
   const removeMapError = () => mapContextDispatch({ type: "REMOVE_MAP_ERROR" });
 
-  const addPinToMap = (map: Map, pin: Pin, type: "start" | "end") => {
-    map[type] = pin;
+  const addPinToMap = (map: Map, pin: Pin) => {
+    if (!map.pins) map.pins = [];
+    map.pins.push(pin);
     mapContextDispatch({
       type: "OVERWRITE_MAP",
       payload: map,
@@ -139,8 +138,9 @@ export default function MapContextProvider({
       .then((wasSaved) => storeSavedResult(map, wasSaved));
   };
 
-  const deletePinFromMap = (map: Map, type: "start" | "end") => {
-    delete map[type];
+  const deletePinFromMap = (map: Map, index: number) => {
+    map.pins?.splice(index, 1);
+
     mapContextDispatch({
       type: "OVERWRITE_MAP",
       payload: map,
@@ -151,8 +151,9 @@ export default function MapContextProvider({
   };
 
   const resetPins = (map: Map) => {
-    deletePinFromMap(map, "start");
-    deletePinFromMap(map, "end");
+    if (!map.pins) return;
+    map.pins = [];
+
     mapContextDispatch({
       type: "OVERWRITE_MAP",
       payload: map,
@@ -182,10 +183,8 @@ export default function MapContextProvider({
         deleteMap,
         chooseMap,
         downloadMap,
-        setStartPin: (map: Map, pin: Pin) => addPinToMap(map, pin, "start"),
-        setEndPin: (map: Map, pin: Pin) => addPinToMap(map, pin, "end"),
-        deleteStartPin: (map: Map) => deletePinFromMap(map, "start"),
-        deleteEndPin: (map: Map) => deletePinFromMap(map, "end"),
+        addPinToMap,
+        deletePinFromMap,
         resetPins,
         mapPosition: currentMapPosition,
         setMapPosition,

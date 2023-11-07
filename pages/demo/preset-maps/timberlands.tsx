@@ -1,17 +1,14 @@
 import React from "react";
 import { Map } from "@/types/Map";
-import { Pin } from "@/types/Vector";
 
 import SingleMapNavigation from "@/components/SingleMapNavigation/SingleMapNavigation";
 import { configurations } from "@/types/overlay.configurations";
 
 export default function BraemorePage() {
   const bestConfiguration = configurations[2];
-  const start: Pin = bestConfiguration.start;
-  const end: Pin = bestConfiguration.end;
+  const pins = bestConfiguration.pins;
   const map: Map = {
-    start: start,
-    end: end,
+    pins,
     url: bestConfiguration.url,
     pinScale: 1,
     key: "map-timberlands",

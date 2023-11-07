@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./Icons.module.css";
 
-type Size = "small" | "medium";
+type Size = "small" | "medium" | "large";
 const DEFAULT_SIZE: Size = "medium";
 
 type BaseIconProps = {
@@ -30,6 +30,14 @@ export function CancelIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
 
 export function ConfirmIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
   return <Icon size={size} src={"/icons/confirm-check.svg"} inText={true} />;
+}
+
+export function CircleConfirmIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/icons/green-check.svg"} />;
+}
+
+export function FailIcon({ size = DEFAULT_SIZE }: TypedIconProps) {
+  return <Icon size={size} src={"/icons/fail-icon.svg"} />;
 }
 
 export function QuestionIcon({ size = DEFAULT_SIZE }: TypedIconProps) {

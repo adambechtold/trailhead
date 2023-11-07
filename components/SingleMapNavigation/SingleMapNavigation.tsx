@@ -2,12 +2,13 @@ import React from "react";
 import toast from "react-hot-toast";
 
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import Button from "@/components/Buttons/Button";
+import ConfirmTrackingLocation from "@/components/Toasts/ConfirmTrackingLocation/ConfirmTrackingLocation";
+import FailTrackingLocation from "@/components/Toasts/FailTrackingLocation/FailTrackingLocation";
 import InterpolateMap from "@/components/InterpolateMap";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
-
 import { Map } from "@/types/Map";
 
 import styles from "./SingleMapNavigation.module.css";
@@ -17,13 +18,20 @@ type DemoMapProps = {
   mapName: string;
 };
 
-const notifyWatchingLocation = () => {
-  console.log("Toast!");
-  toast.success("Tracking your location. Enjoy the hike!", {
-    duration: 4000,
-    position: "bottom-center",
+function notifyWatchingLocation() {
+  toast(
+    (t) => <ConfirmTrackingLocation onDismiss={() => toast.dismiss(t.id)} />,
+    {
+      duration: 10_000,
+    },
+  );
+}
+
+function notifyWatchingFailed() {
+  toast((t) => <FailTrackingLocation onDismiss={() => toast.dismiss(t.id)} />, {
+    duration: Infinity,
   });
-};
+}
 
 export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
   const {
@@ -49,9 +57,13 @@ export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
     document.body.removeChild(link);
   }
 
-  function onStartWatchingUserLocation() {
-    startWatchingUserLocation();
-    notifyWatchingLocation();
+  async function onStartWatchingUserLocation() {
+    try {
+      await startWatchingUserLocation();
+      notifyWatchingLocation();
+    } catch (error) {
+      notifyWatchingFailed();
+    }
   }
 
   return (

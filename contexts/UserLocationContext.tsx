@@ -31,11 +31,11 @@ type UserLocationContext = {
   mostRecentLocation: Location | null;
   isWatchingLocation: boolean;
   error: string | null;
-  startWatchingUserLocation: () => void;
+  startWatchingUserLocation: () => Promise<boolean>;
 };
 
 export const UserLocationContext = createContext<UserLocationContext | null>(
-  null
+  null,
 );
 
 const MINIMUM_ACCURACY = 10; // meters
@@ -45,11 +45,11 @@ export default function UserLocationContextProvider({
 }: UserLocationContextProviderProps) {
   const [userLocationState, userLocationContextDispatch] = useReducer(
     userLocationReducer,
-    INITIAL_LOCATION_STATE
+    INITIAL_LOCATION_STATE,
   );
   const [userHeadingState, userHeadingContextDispatch] = useReducer(
     userHeadingReducer,
-    INITIAL_HEADING
+    INITIAL_HEADING,
   );
 
   const [watchId, setWatchId] = useState<number | null>(null);
@@ -57,6 +57,7 @@ export default function UserLocationContextProvider({
   useEffect(() => {
     stopWatchingHeading();
 
+    // Determine if we the user's device supports user heading and put that in the state
     if (getCanWatchUserHeading()) {
       userHeadingContextDispatch({ type: "CAN_WATCH_USER_HEADING" });
     } else {
@@ -74,20 +75,27 @@ export default function UserLocationContextProvider({
     };
   }, []);
 
-  const startWatchingUserLocation = (): void => {
-    userLocationContextDispatch({ type: "START_WATCH_USER_LOCATION" });
-    const watchID = navigator.geolocation.watchPosition(
-      (position) => {
-        handleLocationUpdate(position);
-      },
-      (error) => handleLocationError(error),
-      {
-        enableHighAccuracy: true,
-        timeout: 10000, // 10s //TODO: I'm not sure what this should be set to
-        maximumAge: 0,
-      }
-    );
-    setWatchId(watchID);
+  const startWatchingUserLocation = async (): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      userLocationContextDispatch({ type: "START_WATCH_USER_LOCATION" });
+      const watchID = navigator.geolocation.watchPosition(
+        (position) => {
+          handleLocationUpdate(position);
+          resolve(true);
+        },
+        (error) => {
+          console.log("error...");
+          reject(false);
+          handleLocationError(error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000, // 10s //TODO: I'm not sure what this should be set to
+          maximumAge: 0,
+        },
+      );
+      setWatchId(watchID);
+    });
   };
 
   const stopWatchingUserLocation = (): void => {
@@ -234,7 +242,7 @@ export function useUserLocationContext() {
   const context = useContext(UserLocationContext);
   if (!context) {
     throw new Error(
-      "useUserLocationContext must be used within a UserLocationContextProvider"
+      "useUserLocationContext must be used within a UserLocationContextProvider",
     );
   }
   return context;

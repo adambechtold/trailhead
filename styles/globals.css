@@ -111,3 +111,7 @@ a {
   color: var(--primary-color);
   text-decoration: none;
 }
+
+.toast-container {
+  margin-bottom: 2rem;
+}

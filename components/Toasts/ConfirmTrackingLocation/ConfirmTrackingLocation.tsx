@@ -12,7 +12,8 @@ export default function ConfirmTrackingLocation({ onDismiss }: Props) {
     <div className={styles["container"]}>
       <CircleConfirmIcon />
       <div className={styles["description-container"]}>
-        <p>Tracking your location.</p>
+        <h4>Tracking your location</h4>
+        <br />
         <p>Enjoy your hike!</p>
       </div>
       <Button onClick={onDismiss} size="small" type="clear">

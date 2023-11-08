@@ -61,7 +61,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <MapContextProvider>
             <main className={inter.className}>
               <Component {...pageProps} />
-              <Toaster position="bottom-center" />
+              <Toaster
+                position="bottom-center"
+                containerClassName="toast-container"
+              />
             </main>
           </MapContextProvider>
         </UserAgreementContextProvider>

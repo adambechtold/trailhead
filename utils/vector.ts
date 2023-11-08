@@ -52,7 +52,7 @@ function convertPinToReferencePoint(pin: Pin): ReferencePin {
 
 // CONVERT COORDINATES
 /* Constraints
- * - The scalars across the coordinate systems must be consistent
+ * - The scalers across the coordinate systems must be consistent
  *   - i.e. the map must be to-scale
  * - The orientations of the coordinate systems must be the
  *   - i.e. the map image must have north directly up
@@ -65,7 +65,7 @@ export function convertCoordinates(
     throw new Error("Not enough pins to convert coordinates");
   }
 
-  // - - - Find the farthest two points - - -
+  // ========== Find the farthest two points ==========
   /* Rationale - Reduce the effect of small errors
    *  - Example - A few meters of GPS inaccuracy matter less over a large distance
    *  - Example - A few pixels of inaccuracy of a user's input matters less over a large distance
@@ -101,7 +101,7 @@ export function convertCoordinates(
   );
   const yScaler = getScalersFromAtoB(vectorYA, vectorYB).y;
 
-  // - - - Find the closest point to the new point - - -
+  // ========== Find the closest point to the new point ==========
   // Rationale - Use the closest "source of truth"
   const indexOfClosetPoint = getIndexOfClosestPoint(
     new_aPoint,
@@ -109,14 +109,22 @@ export function convertCoordinates(
   );
   const origin = referencePins[indexOfClosetPoint];
 
+  // ========== Calculate the Vector from the origin to the new point in the A coordinate system ==========
   const vectorOriginToNew_CA = getVectorBetweenPoints(
     origin.aPoint,
     new_aPoint,
   );
 
+  // ========== Use the A-to-B Scalers to calculate the Vector in the B cooridinate system ==========
+  const vectorOriginToNew_CB = new Vector(
+    vectorOriginToNew_CA.x * xScaler,
+    vectorOriginToNew_CA.y * yScaler,
+  );
+
+  // ======== Offset the B coordinate system vector by the origin point ==========
   const new_bPoint: Point = {
-    x: origin.bPoint.x + vectorOriginToNew_CA.x * xScaler,
-    y: origin.bPoint.y + vectorOriginToNew_CA.y * yScaler,
+    x: vectorOriginToNew_CB.x + origin.bPoint.x,
+    y: vectorOriginToNew_CB.y + origin.bPoint.y,
   };
 
   return new_bPoint;

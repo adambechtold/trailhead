@@ -1,5 +1,7 @@
-import { Pin, Point, Vector, Location, Coordinates } from "../types/Vector";
+import { Coordinates, Location, Pin, Point, Vector } from "../types/Vector";
 
+// Create a Pin (Location and MapPoint) from a set of tie points
+// and the user's current location
 export function getUserPin(pins: Pin[], userLocation: Location) {
   if (pins.length < 2) {
     throw new Error("Not enough pins to calculate user pin");
@@ -13,7 +15,7 @@ export function getUserPin(pins: Pin[], userLocation: Location) {
 
   const { x, y } = convertCoordinates(
     referencePins,
-    userLocationCoordinatesPoint
+    userLocationCoordinatesPoint,
   );
 
   const userPin: Pin = {
@@ -32,10 +34,12 @@ export function getUserPin(pins: Pin[], userLocation: Location) {
   return userPin;
 }
 
+// Reference Pins are 1 point across two coordinate systems (a and b)
 type ReferencePin = {
   aPoint: Point;
   bPoint: Point;
 };
+
 function convertPinToReferencePoint(pin: Pin): ReferencePin {
   return {
     aPoint: {
@@ -46,70 +50,68 @@ function convertPinToReferencePoint(pin: Pin): ReferencePin {
   };
 }
 
-export function getCoordinatesFromMapPoint(
-  pins: Pin[],
-  point: Point
-): Coordinates {
-  const referencePins = pins.map(convertPinToReferencePoint);
-
-  const { x, y } = convertCoordinates(referencePins, point);
-
-  return {
-    longitude: x,
-    latitude: y,
-  };
-}
-
+// CONVERT COORDINATES
+/* Constraints
+ * - The scalars across the coordinate systems must be consistent
+ *   - i.e. the map must be to-scale
+ * - The orientations of the coordinate systems must be the
+ *   - i.e. the map image must have north directly up
+ */
 export function convertCoordinates(
-  // this seems to work, assuming that both coordinates systems are
-  // oriented in the same direction
   referencePins: ReferencePin[],
-  new_aPoint: Point
+  new_aPoint: Point,
 ): Point {
   if (referencePins.length < 2) {
     throw new Error("Not enough pins to convert coordinates");
   }
+
+  // - - - Find the farthest two points - - -
+  /* Rationale - Reduce the effect of small errors
+   *  - Example - A few meters of GPS inaccuracy matter less over a large distance
+   *  - Example - A few pixels of inaccuracy of a user's input matters less over a large distance
+   */
   const [iX, jX] = getIndicesOfFarthestTwoPoints(
     referencePins.map((pin) => pin.bPoint),
-    "x"
+    "x",
   );
   const [iY, jY] = getIndicesOfFarthestTwoPoints(
     referencePins.map((pin) => pin.bPoint),
-    "y"
+    "y",
   );
 
   // - - - Get the X scaler from the two points that are farthest apart in the X dimension - - -
   const vectorXA = getVectorBetweenPoints(
     referencePins[iX].aPoint,
-    referencePins[jX].aPoint
+    referencePins[jX].aPoint,
   );
   const vectorXB = getVectorBetweenPoints(
     referencePins[iY].bPoint,
-    referencePins[jY].bPoint
+    referencePins[jY].bPoint,
   );
-  const xScaler = getScalers(vectorXA, vectorXB).x;
+  const xScaler = getScalersFromAtoB(vectorXA, vectorXB).x;
 
   // - - - Get the Y scaler from the two points that are farthest apart in the Y dimension - - -
   const vectorYA = getVectorBetweenPoints(
     referencePins[iY].aPoint,
-    referencePins[jY].aPoint
+    referencePins[jY].aPoint,
   );
   const vectorYB = getVectorBetweenPoints(
     referencePins[iY].bPoint,
-    referencePins[jY].bPoint
+    referencePins[jY].bPoint,
   );
-  const yScaler = getScalers(vectorYA, vectorYB).y;
+  const yScaler = getScalersFromAtoB(vectorYA, vectorYB).y;
 
-  // Find the closest point to the new point
+  // - - - Find the closest point to the new point - - -
+  // Rationale - Use the closest "source of truth"
   const indexOfClosetPoint = getIndexOfClosestPoint(
     new_aPoint,
-    referencePins.map((pin) => pin.aPoint)
+    referencePins.map((pin) => pin.aPoint),
   );
   const origin = referencePins[indexOfClosetPoint];
 
   const vectorOriginToNew_CA = getVectorBetweenPoints(
     origin.aPoint,
-    new_aPoint
+    new_aPoint,
   );
 
   const new_bPoint: Point = {
@@ -122,7 +124,7 @@ export function convertCoordinates(
 
 function getIndicesOfFarthestTwoPoints(
   points: Point[],
-  dimension: "x" | "y"
+  dimension: "x" | "y",
 ): [number, number] {
   if (points.length < 2) {
     throw new Error("Not enough points to calculate farthest two points");
@@ -148,9 +150,9 @@ function getVectorBetweenPoints(pointA: Point, pointB: Point): Vector {
   return new Vector(pointB.x - pointA.x, pointB.y - pointA.y);
 }
 
-function getScalers(
+function getScalersFromAtoB(
   vectorA: Vector,
-  vectorB: Vector
+  vectorB: Vector,
 ): { x: number; y: number } {
   return {
     x: vectorB.x / vectorA.x,
@@ -180,4 +182,19 @@ function getIndexOfClosestPoint(originPoint: Point, points: Point[]): number {
 function getDistanceBetweenPoints(point1: Point, point2: Point) {
   const vector = getVectorBetweenPoints(point1, point2);
   return vector.length;
+}
+
+// MapPoint (x,y) → Coorindates (long, lat)
+export function getCoordinatesFromMapPoint(
+  pins: Pin[],
+  point: Point,
+): Coordinates {
+  const referencePins = pins.map(convertPinToReferencePoint);
+
+  const { x, y } = convertCoordinates(referencePins, point);
+
+  return {
+    longitude: x,
+    latitude: y,
+  };
 }

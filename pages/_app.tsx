@@ -1,8 +1,9 @@
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import getConfig from "next/config";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import getConfig from "next/config";
+import { Toaster } from "react-hot-toast";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
 import UserAgreementContextProvider from "@/contexts/UserAgreementContext";
 
@@ -13,7 +14,7 @@ const GoogleAnalytics = dynamic(
   () => import("@/components/GoogleAnalytics/GoogleAnalytics"),
   {
     ssr: false,
-  }
+  },
 );
 
 import { Inter } from "next/font/google";
@@ -60,6 +61,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <MapContextProvider>
             <main className={inter.className}>
               <Component {...pageProps} />
+              <Toaster
+                position="bottom-center"
+                containerClassName="toast-container"
+              />
             </main>
           </MapContextProvider>
         </UserAgreementContextProvider>

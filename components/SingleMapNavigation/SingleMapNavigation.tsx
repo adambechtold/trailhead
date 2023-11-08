@@ -1,21 +1,39 @@
 import React from "react";
-import { Map } from "@/types/Map";
-import InterpolateMap from "@/components/InterpolateMap";
+import toast from "react-hot-toast";
 
+import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
+import Button from "@/components/Buttons/Button";
+import ConfirmTrackingLocation from "@/components/Toasts/ConfirmTrackingLocation/ConfirmTrackingLocation";
+import FailTrackingLocation from "@/components/Toasts/FailTrackingLocation/FailTrackingLocation";
+import InterpolateMap from "@/components/InterpolateMap";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
+import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
+import { Map } from "@/types/Map";
 
 import styles from "./SingleMapNavigation.module.css";
-import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
-import Button from "@/components/Buttons/Button";
-import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
-import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 
 type DemoMapProps = {
   map: Map;
   mapName: string;
 };
 
-export default function DemoMap({ map, mapName }: DemoMapProps) {
+function notifyWatchingLocation() {
+  toast(
+    (t) => <ConfirmTrackingLocation onDismiss={() => toast.dismiss(t.id)} />,
+    {
+      duration: 10_000,
+    },
+  );
+}
+
+function notifyWatchingFailed() {
+  toast((t) => <FailTrackingLocation onDismiss={() => toast.dismiss(t.id)} />, {
+    duration: Infinity,
+  });
+}
+
+export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
   const {
     isWatchingLocation,
     startWatchingUserLocation,
@@ -28,7 +46,7 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
 
   const initialScale = 0.4;
   const canFindUserLocationOnMap =
-    map.pins && map.pins.length >= 2 && !!userLocation;
+    !!map.pins && map.pins.length >= 2 && !!userLocation;
 
   function downloadMap(src: string, fileName: string) {
     const link = document.createElement("a");
@@ -37,6 +55,15 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  async function onStartWatchingUserLocation() {
+    try {
+      await startWatchingUserLocation();
+      notifyWatchingLocation();
+    } catch (error) {
+      notifyWatchingFailed();
+    }
   }
 
   return (
@@ -79,7 +106,7 @@ export default function DemoMap({ map, mapName }: DemoMapProps) {
       {!isWatchingLocation && (
         <div className={styles["position-find-location-button"]}>
           <Button
-            onClick={() => startWatchingUserLocation()}
+            onClick={() => onStartWatchingUserLocation()}
             type="opaque"
             size="medium"
             isElevated

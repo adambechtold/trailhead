@@ -145,8 +145,8 @@ function InfoForHikers() {
         <h2>More to Come.</h2>
         <p>New features delivered every week.</p>
         <h3>Up Next:</h3>
-        <p>🧭 Keep Adding More Pins to Increase Accuracy</p>
-        <p>📍 Easy Undo Actions</p>
+        <p>⚙️ Guided Map Configuration</p>
+        <p>💾 Export to GeoTIFF</p>
       </div>
       <Button
         type="gradient-primary"

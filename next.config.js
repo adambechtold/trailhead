@@ -14,13 +14,12 @@ const nextConfig = withBundleAnalyzer(
     publicRuntimeConfig: {
       GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     },
-  })
+  }),
 );
 
 module.exports = nextConfig;
 
 // Injected content via Sentry wizard below
-
 const { withSentryConfig } = require("@sentry/nextjs");
 
 module.exports = withSentryConfig(
@@ -52,5 +51,5 @@ module.exports = withSentryConfig(
 
     // Automatically tree-shake Sentry logger statements to reduce bundle size
     disableLogger: true,
-  }
+  },
 );

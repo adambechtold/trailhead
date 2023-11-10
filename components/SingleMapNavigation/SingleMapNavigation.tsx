@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
 import Button from "@/components/Buttons/Button";
 import ConfirmTrackingLocation from "@/components/Toasts/ConfirmTrackingLocation/ConfirmTrackingLocation";
-import FailTrackingLocation from "@/components/Toasts/FailTrackingLocation/FailTrackingLocation";
+import { notifyWatchingLocationFailed } from "@/components/Toasts/FailTrackingLocation/FailTrackingLocation";
 import InterpolateMap from "@/components/InterpolateMap";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
@@ -25,12 +25,6 @@ function notifyWatchingLocation() {
       duration: 10_000,
     },
   );
-}
-
-function notifyWatchingFailed() {
-  toast((t) => <FailTrackingLocation onDismiss={() => toast.dismiss(t.id)} />, {
-    duration: Infinity,
-  });
 }
 
 export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
@@ -58,11 +52,13 @@ export default function SingleMapNavigation({ map, mapName }: DemoMapProps) {
   }
 
   async function onStartWatchingUserLocation() {
+    // consideration - this is used in Navigation.tsx too.
+    // Consider consolidating if it get's used again
     try {
       await startWatchingUserLocation();
       notifyWatchingLocation();
     } catch (error) {
-      notifyWatchingFailed();
+      notifyWatchingLocationFailed();
     }
   }
 

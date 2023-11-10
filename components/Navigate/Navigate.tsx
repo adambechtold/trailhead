@@ -15,6 +15,7 @@ import SettingsPanel from "../SettingsPanel/SettingsPanel";
 import styles from "./Navigate.module.css";
 import HelpButton from "../HelpButton";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
+import { notifyWatchingLocationFailed } from "../Toasts/FailTrackingLocation/FailTrackingLocation";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap/CurrentMap"), {
   ssr: false,
@@ -36,14 +37,31 @@ export default function Navigate() {
   } = useUserLocationContext();
   const { hasAgreedToUserAgreement } = useUserAgreementContext();
   const router = useRouter();
+  const hasMap = !!map;
 
   useEffect(() => {
+    let isMounted = true;
+
+    const tryWatchingLocation = async () => {
+      try {
+        await startWatchingUserLocation();
+      } catch (error) {
+        if (isMounted) {
+          notifyWatchingLocationFailed();
+        }
+      }
+    };
+
     if (!hasAgreedToUserAgreement) {
       router.push({ pathname: "/disclaimer" });
-      return;
+    } else if (!isWatchingLocation && !!map) {
+      tryWatchingLocation();
     }
-    if (!isWatchingLocation && !!map) startWatchingUserLocation();
-  }, [map]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasMap]);
 
   const canDisplayResetButton = !!(map && map.pins && map.pins.length > 0);
 

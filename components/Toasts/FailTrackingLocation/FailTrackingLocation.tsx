@@ -1,11 +1,18 @@
 import React from "react";
 import Button from "@/components/Buttons/Button";
 import { FailIcon } from "@/components/Icons/Icons";
+import toast from "react-hot-toast";
 import styles from "../Toasts.module.css";
 
 type Props = {
   onDismiss: () => void;
 };
+
+export function notifyWatchingLocationFailed() {
+  toast((t) => <FailTrackingLocation onDismiss={() => toast.dismiss(t.id)} />, {
+    duration: Infinity,
+  });
+}
 
 export default function FailTrackingLocation({ onDismiss }: Props) {
   return (

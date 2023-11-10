@@ -84,7 +84,6 @@ export default function UserLocationContextProvider({
           resolve(true);
         },
         (error) => {
-          console.log("error...");
           reject(false);
           handleLocationError(error);
         },

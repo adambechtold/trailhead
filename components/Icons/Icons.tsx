@@ -17,9 +17,6 @@ type TypedIconProps = {
 
 function Icon({ size = DEFAULT_SIZE, inText = false, src }: BaseIconProps) {
   const iconClasses = [styles[`size-${size}`]];
-  if (inText) {
-    iconClasses.push(styles["pad-bottom-a-tiny-bit"]);
-  }
 
   return <img className={iconClasses.join(" ")} src={src} />;
 }

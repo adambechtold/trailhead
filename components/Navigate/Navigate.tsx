@@ -42,8 +42,8 @@ export default function Navigate() {
       router.push({ pathname: "/disclaimer" });
       return;
     }
-    if (!isWatchingLocation) startWatchingUserLocation();
-  }, []);
+    if (!isWatchingLocation && !!map) startWatchingUserLocation();
+  }, [map]);
 
   const canDisplayResetButton = !!(map && map.pins && map.pins.length > 0);
 

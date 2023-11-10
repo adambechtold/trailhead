@@ -42,7 +42,7 @@ export default function UserLocationPanel({ map }: Props) {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={[styles.container, "disable-pinch-to-zoom"].join(" ")}>
       {!showUserSummary && canDisplayAccuracyIndicator && (
         <div onClick={toggleShowUserSummary}>
           <AccuracyIndicator

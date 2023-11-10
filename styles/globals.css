@@ -115,3 +115,7 @@ a {
 .toast-container {
   margin-bottom: 2rem;
 }
+
+.disable-pinch-to-zoom {
+  touch-action: none;
+}

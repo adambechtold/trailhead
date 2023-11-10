@@ -26,7 +26,7 @@ export default function Button({
 }: Props) {
   const sizeClass = styles[`size-${size}`];
   const contentClass = [styles.content, disabled ? styles.disabled : ""].join(
-    " "
+    " ",
   );
   const typeClass =
     type === "gradient-secondary" ? `gradient-text ${type}` : type;
@@ -44,6 +44,7 @@ export default function Button({
         typeClass,
         elevatedClass,
         styles["no-border"],
+        "disable-pinch-to-zoom",
       ].join(" ")}
       onClick={disabled ? () => {} : onClick}
     >

@@ -141,13 +141,6 @@ function InfoForHikers() {
           />
         </div>
       </div>
-      <div className={styles["content-section"]}>
-        <h2>More to Come.</h2>
-        <p>New features delivered every week.</p>
-        <h3>Up Next:</h3>
-        <p>⚙️ Guided Map Configuration</p>
-        <p>💾 Export to GeoTIFF</p>
-      </div>
       <Button
         type="gradient-primary"
         size="medium"

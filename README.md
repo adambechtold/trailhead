@@ -33,7 +33,7 @@ Trailhead works offline, but there are a few rough edges.
 Place a Trailhead QR code on trail maps so hikers can rapidly access pre-configured maps. 
 
 ## 3) Integrate into Offline Trail Maps
-Create printable trail maps that already contain configuration information on them. Just add the piccture and Trailhead reads the configuration off the map.
+Create printable trail maps that already contain configuration information on them. Just add the picture and Trailhead reads the configuration off the map.
 
 # Develop
 

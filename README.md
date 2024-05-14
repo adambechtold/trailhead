@@ -1,6 +1,6 @@
 # ⛰️ Trailhead 🗺️
 
-Alltrails, Gaia GPS, and even Google Maps provide a huge library of GPS-enabled maps you can use _if you prepare ahead of time._ If you forget to download the trail before you leave the house or you choose a new trail, you're out of luck. I take a picture of the trail map at the trailhead and try to keep track of my progress as I walk, but I often lose my place.
+Alltrails, Gaia GPS, and Google Maps provide a huge library of GPS-enabled maps you can use _if you prepare ahead of time._ If you forget to download the trail before you leave the house or you choose a new trail, you're out of luck. I take a picture of the trail map at the trailhead and try to keep track of my progress as I walk, but I often lose my place.
 
 Trailhead turns any image into a GPS-enabled map: it provides a pin that shows your current location as you walk.
 
@@ -26,10 +26,10 @@ Consider adding it to your homescreen for an app-like experience ([iOS](https://
 ## 1) 🔄 Polish Offline Use
 Trailhead works offline, but there are a few rough edges. 
 
-1) Allow Users to Add More than 2 Pins
-2) Create Prompts to Guide First-time Users
+1) ✅ Allow Users to Add More than 2 Pins
+2) ✅ Create Prompts to Guide First-time Users
 
-## 2) Integrate into Online Trail Maps
+## 2) ✅ Integrate into Online Trail Maps
 Place a Trailhead QR code on trail maps so hikers can rapidly access pre-configured maps. 
 
 ## 3) Integrate into Offline Trail Maps

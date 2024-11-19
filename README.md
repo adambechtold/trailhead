@@ -17,7 +17,7 @@ https://github.com/adambechtold/trailhead/assets/22563063/74184fa5-545e-41a4-a7f
 
 # Offline Use
 
-Trailhead is a Progressive Web App. It caches itself on your phone so you can use it offline, including any maps you've saved from previous hikes.
+Trailhead is a Progressive Web App. It's cached on your phone so you can use it offline, including any maps you've saved from previous hikes.
 
 Consider adding it to your homescreen for an app-like experience ([iOS](https://trailhead.adambechtold.xyz/videos/demo-trailhead.large.mp4) / [Android](https://www.androidauthority.com/add-website-android-iphone-home-screen-3181682/)).
 

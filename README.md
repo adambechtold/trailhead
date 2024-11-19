@@ -28,6 +28,7 @@ Trailhead works offline, but there are a few rough edges.
 
 1) ✅ Allow Users to Add More than 2 Pins
 2) ✅ Create Prompts to Guide First-time Users
+3) 🔄 Avoid Cache Invalidation and Attempted Site Reload on Weak Signal
 
 ## 2) ✅ Integrate into Online Trail Maps
 Place a Trailhead QR code on trail maps so hikers can rapidly access pre-configured maps. 

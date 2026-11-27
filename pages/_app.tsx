@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import getConfig from "next/config";
 import { Toaster } from "react-hot-toast";
 import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
 import UserAgreementContextProvider from "@/contexts/UserAgreementContext";
@@ -20,7 +19,6 @@ const GoogleAnalytics = dynamic(
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
-const { publicRuntimeConfig } = getConfig();
 
 import type { AppProps } from "next/app";
 
@@ -55,7 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
         <link rel="manifest" href="/manifest.webmanifest" />
       </Head>
-      <GoogleAnalytics GA_TRACKING_ID={publicRuntimeConfig.GA_TRACKING_ID} />
+      <GoogleAnalytics GA_TRACKING_ID={process.env.GA_TRACKING_ID ?? ""} />
       <UserLocationProvider>
         <UserAgreementContextProvider>
           <MapContextProvider>

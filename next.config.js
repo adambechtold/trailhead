@@ -1,6 +1,11 @@
-const withPWA = require("next-pwa")({
-  dest: "public",
+const { randomUUID } = require("node:crypto");
+
+const withSerwist = require("@serwist/next").default({
+  swSrc: "worker/sw.ts",
+  swDest: "public/sw.js",
   disable: process.env.NODE_ENV === "development",
+  // The offline fallback page must be precached; the revision changes every build.
+  additionalPrecacheEntries: [{ url: "/_offline", revision: randomUUID() }],
 });
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
@@ -9,9 +14,10 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = withBundleAnalyzer(
-  withPWA({
+  withSerwist({
     reactStrictMode: true,
-    publicRuntimeConfig: {
+    // Inlined into the client bundle at build time
+    env: {
       GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     },
   }),
@@ -19,37 +25,23 @@ const nextConfig = withBundleAnalyzer(
 
 module.exports = nextConfig;
 
-// Injected content via Sentry wizard below
-const { withSentryConfig } = require("@sentry/nextjs");
+// Sentry: https://docs.sentry.io/platforms/javascript/guides/nextjs/
+const { withSentryConfig } = require("@sentry/nextjs/config");
 
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
+module.exports = withSentryConfig(module.exports, {
+  org: "adam-bechtold",
+  project: "trailhead",
 
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: "adam-bechtold",
-    project: "trailhead",
+  // Suppresses source map uploading logs during build
+  silent: true,
+
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
+
+  // Remove Sentry's debug logging from the production bundle
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
   },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
-
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: "/monitoring",
-
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-  },
-);
+});

@@ -1,0 +1,35 @@
+/// <reference lib="webworker" />
+// Service worker, built to public/sw.js by @serwist/next (see next.config.js).
+// https://serwist.pages.dev/docs/next
+import { defaultCache } from "@serwist/next/worker";
+import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import { Serwist } from "serwist";
+
+declare global {
+  interface WorkerGlobalScope extends SerwistGlobalConfig {
+    __SW_MANIFEST: (PrecacheEntry | string)[] | undefined;
+  }
+}
+
+declare const self: ServiceWorkerGlobalScope;
+
+const serwist = new Serwist({
+  precacheEntries: self.__SW_MANIFEST,
+  skipWaiting: true,
+  clientsClaim: true,
+  navigationPreload: true,
+  runtimeCaching: defaultCache,
+  // Show the offline page when a page can't be loaded from the network or cache.
+  fallbacks: {
+    entries: [
+      {
+        url: "/_offline",
+        matcher({ request }) {
+          return request.destination === "document";
+        },
+      },
+    ],
+  },
+});
+
+serwist.addEventListeners();

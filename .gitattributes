@@ -1,3 +1,0 @@
-*.large.png filter=lfs diff=lfs merge=lfs -text
-*.large.jpeg filter=lfs diff=lfs merge=lfs -text
-*.large.mp4 filter=lfs diff=lfs merge=lfs -text

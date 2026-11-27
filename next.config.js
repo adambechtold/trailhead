@@ -11,6 +11,10 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = withBundleAnalyzer(
   withPWA({
     reactStrictMode: true,
+    // Needed on Next.js 14 for instrumentation.ts (Sentry). Stable in Next.js 15.
+    experimental: {
+      instrumentationHook: true,
+    },
     publicRuntimeConfig: {
       GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     },
@@ -19,37 +23,23 @@ const nextConfig = withBundleAnalyzer(
 
 module.exports = nextConfig;
 
-// Injected content via Sentry wizard below
-const { withSentryConfig } = require("@sentry/nextjs");
+// Sentry: https://docs.sentry.io/platforms/javascript/guides/nextjs/
+const { withSentryConfig } = require("@sentry/nextjs/config");
 
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
+module.exports = withSentryConfig(module.exports, {
+  org: "adam-bechtold",
+  project: "trailhead",
 
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: "adam-bechtold",
-    project: "trailhead",
+  // Suppresses source map uploading logs during build
+  silent: true,
+
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
+
+  // Remove Sentry's debug logging from the production bundle
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
   },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
-
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: "/monitoring",
-
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
-
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
-  },
-);
+});

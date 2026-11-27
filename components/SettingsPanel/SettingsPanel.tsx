@@ -2,9 +2,9 @@ import React, { useState } from "react";
 
 import Button from "@/components/Buttons/Button";
 
-import styles from "./SettingsPanel.module.css";
-import { GearIcon, PlusIcon, MinusIcon } from "../Icons/Icons";
+import { GearIcon, MinusIcon, PlusIcon } from "../Icons/Icons";
 import { EnableCompassButton } from "../Buttons/EnableCompassButton/EnableCompassButton";
+import styles from "./SettingsPanel.module.css";
 
 type Props = {
   pinScale: number;

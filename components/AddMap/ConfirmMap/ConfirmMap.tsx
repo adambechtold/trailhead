@@ -4,9 +4,9 @@ import { CancelIcon, ConfirmIcon } from "@/components/Icons/Icons";
 import Button from "@/components/Buttons/Button";
 import InterpolateMap from "@/components/InterpolateMap";
 
-import styles from "./ConfirmMap.module.css";
-import { Map } from "@/types/Map";
 import { Location } from "@/types/Vector";
+import { Map } from "@/types/Map";
+import styles from "./ConfirmMap.module.css";
 
 type Props = {
   previewMap: Map;

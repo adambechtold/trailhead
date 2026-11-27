@@ -1,7 +1,7 @@
 // TODO: Refactor this component.
 // Its implementation is very messy.
 
-import React, { useRef } from "react";
+import React from "react";
 
 import styles from "./AccuracyIndicator.module.css";
 
@@ -24,56 +24,13 @@ const getAccuracyClass = (error: boolean, accuracy?: number) => {
   return styles[className];
 };
 
-const setGlowBackground = (
-  glowRef: React.RefObject<HTMLDivElement | null>,
-  error: boolean,
-  accuracy?: number
-) => {
-  if (!glowRef.current) return;
-  const glow = glowRef.current;
-
-  const getBackgroundAttribute = (color: string) =>
-    `radial-gradient(closest-side, ${color}, transparent)`;
-
-  if (error) {
-    glow.style.background = getBackgroundAttribute("var(--error-color)");
-    return;
-  }
-
-  if (!accuracy) {
-    glow.style.background = getBackgroundAttribute(
-      "var(--clear-button-background-color)"
-    );
-    return;
-  }
-  glow.style.background = getBackgroundAttribute(
-    `var(--${getThresholdName(accuracy)})`
-  );
-};
-
 type Props = {
   accuracy?: number; // in meters
   isUpdating?: boolean;
   error: boolean;
 };
 
-export default function AccuracyIndicator({
-  accuracy,
-  isUpdating,
-  error,
-}: Props) {
-  const glowRef = useRef<HTMLDivElement>(null);
-  setGlowBackground(glowRef, !!error, accuracy);
-
-  const glowClassName = [
-    styles["accuracy-updating-glow"],
-    isUpdating ? styles["spin"] : "",
-  ].join(" ");
-
-  if (glowRef.current && !isUpdating) {
-    glowRef.current.style.background = "";
-  }
-
+export default function AccuracyIndicator({ accuracy, error }: Props) {
   return (
     <div className={styles.container}>
       <div

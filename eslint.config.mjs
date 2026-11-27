@@ -2,7 +2,7 @@ import js from "@eslint/js";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import prettier from "eslint-config-prettier";
 
-export default [
+const config = [
   {
     ignores: [
       ".next/**",
@@ -27,6 +27,9 @@ export default [
         },
       ],
       quotes: ["error", "double"],
+      // Map images are user photos (data/blob URLs) shown inside a pan/zoom
+      // canvas, which next/image doesn't support; the icons are small SVGs.
+      "@next/next/no-img-element": "off",
     },
   },
   {
@@ -35,6 +38,14 @@ export default [
     rules: {
       "no-undef": "off",
       "no-redeclare": "off",
+      // The core rule flags parameter names in type signatures.
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrors: "none" },
+      ],
     },
   },
 ];
+
+export default config;

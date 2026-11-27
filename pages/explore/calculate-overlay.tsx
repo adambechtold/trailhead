@@ -1,10 +1,10 @@
+import { Coordinates, Pin, Point } from "@/types/Vector";
+import { Overlay } from "@/types/Overlay";
+import { convertCoordinates } from "@/utils/vector";
 import dynamic from "next/dynamic";
 import styles from "./calculate-overlay.module.css";
-import { Overlay } from "@/types/Overlay";
-import { Pin, Point, Coordinates } from "@/types/Vector";
-import { convertCoordinates } from "@/utils/vector";
 
-import { configurations, Configuration } from "@/types/overlay.configurations";
+import { Configuration, configurations } from "@/types/overlay.configurations";
 
 const Plot = dynamic(() => import("@/components/Plot"), {
   ssr: false,

@@ -1,10 +1,10 @@
+import {
+  CreatePinState,
+  INITIAL_STATE,
+  createPinContextReducer,
+} from "./createPinContextReducer";
 import React, { createContext, useContext, useReducer } from "react";
 import { Point } from "@/types/Vector";
-import {
-  createPinContextReducer,
-  INITIAL_STATE,
-  CreatePinState,
-} from "./createPinContextReducer";
 
 type CreatePinContextProviderProps = {
   children: React.ReactNode;

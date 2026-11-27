@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  ReactZoomPanPinchRef,
   TransformComponent,
   TransformWrapper,
-  ReactZoomPanPinchRef,
 } from "react-zoom-pan-pinch";
 
 import MapStateTracker from "@/components/MapStateTracker"; // consider moving this into InterpolateMap or CurrentMap and passsing it into InterpolateMap
 
-import { Pin, Location, Point, Coordinates } from "@/types/Vector";
-import { getUserPin, getCoordinatesFromMapPoint } from "@/utils/vector";
-import { calculateDistance } from "@/utils/earth";
+import { Location, Pin, Point } from "@/types/Vector";
 import { MapPosition } from "@/types/MapPosition";
+import { getUserPin } from "@/utils/vector";
 
 import styles from "@/components/InterpolateMap.module.css";
 
@@ -47,15 +46,6 @@ export default function InterpolateMap(props: Props) {
   const userPin: Pin | undefined = canFindUserLocation
     ? getUserPin(pins, userLocation)
     : undefined;
-
-  // the first time we acquire the user location, zoom to it
-  useEffect(() => {
-    if (!hasUserLocation && userPin) {
-      setHasUserLocation(true);
-      if (isPointWithinMap(userPin.mapPoint, mapReference)) zoomToUser();
-      // if the user is not within the map, don't zoom to them on load
-    }
-  }, [userLocation]);
 
   const handleMapStateUpdate = ({ scale }: { scale: number }) => {
     // every time to map updates, let's track that.
@@ -129,6 +119,17 @@ export default function InterpolateMap(props: Props) {
   function setMapPosition(offsetX: number, offsetY: number, scale: number = 1) {
     transformComponentRef.current?.setTransform(offsetX, offsetY, scale);
   }
+
+  // the first time we acquire the user location, zoom to it
+  useEffect(() => {
+    if (!hasUserLocation && userPin) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time flag, set when the first location arrives
+      setHasUserLocation(true);
+      if (isPointWithinMap(userPin.mapPoint, mapReference)) zoomToUser();
+      // if the user is not within the map, don't zoom to them on load
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only react to new locations
+  }, [userLocation]);
 
   useEffect(() => {
     if (mapReference.current) {
@@ -264,55 +265,6 @@ const calculateZoomToFitTransform = (
       y: 0,
       scale,
     };
-  }
-};
-
-/**
- * Calculates the scale factor needed such that the width of the map is equal to the target width.
- *
- * @param {number} targetWidth - The target width in meters.
- * @param {Pin} start - The start pin.
- * @param {Pin} end - The end pin.
- * @param {React.RefObject<HTMLImageElement | null>} mapReference - The reference to the map image element.
- * @returns {number | undefined} - The scale factor or undefined if the function cannot calculate the scale.
- */
-const calculateScaleForTargetWidth = (
-  targetWidth: number,
-  pins: Pin[],
-  mapReference: React.RefObject<HTMLImageElement | null>
-): number | undefined => {
-  if (pins.length >= 2 && mapReference.current) {
-    const imageWidth = mapReference.current?.width;
-
-    const westmostPoint: Point = {
-      x: imageWidth,
-      y: 0,
-    };
-    const eastmostPoint: Point = {
-      x: 0,
-      y: 0,
-    };
-    const westmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
-      pins,
-      westmostPoint
-    );
-    const eastmostCoordinates: Coordinates = getCoordinatesFromMapPoint(
-      pins,
-      eastmostPoint
-    );
-
-    const mapWidth = calculateDistance(
-      eastmostCoordinates,
-      westmostCoordinates
-    );
-
-    if (mapWidth >= targetWidth) {
-      const { scale: matchingScale } =
-        calculateZoomToFitTransform(mapReference);
-      return (mapWidth / targetWidth) * matchingScale;
-    }
-    // TODO: zoom to fit scale
-    else console.warn("we can't scale down. The provided map is too small.");
   }
 };
 

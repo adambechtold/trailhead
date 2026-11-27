@@ -1,9 +1,9 @@
 import { Location } from "@/types/Vector";
 
-import { useMapContext } from "@/contexts/MapContext";
-import { useCreatePinContext } from "@/contexts/CreatePinContext";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import { CancelIcon, ConfirmIcon } from "@/components/Icons/Icons";
+import { useCreatePinContext } from "@/contexts/CreatePinContext";
+import { useMapContext } from "@/contexts/MapContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import Button from "@/components/Buttons/Button";
 

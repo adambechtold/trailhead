@@ -16,10 +16,10 @@ export default function UserAgreementContextProvider({
 }: UserAgreementContextProviderProps) {
   const [hasAgreed, setHasAgreed] = useState(true);
 
+  // localStorage only exists in the browser, so the stored value is read after mount.
   useEffect(() => {
-    localStorage.getItem("hasAgreedToUserAgreement") === "true"
-      ? setHasAgreed(true)
-      : setHasAgreed(false);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sync from localStorage on mount
+    setHasAgreed(localStorage.getItem("hasAgreedToUserAgreement") === "true");
   }, []);
 
   const setHasAgreedToUserAgreement = (hasAgreed: boolean) => {

@@ -1,10 +1,10 @@
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
-import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
 import UserAgreementContextProvider from "@/contexts/UserAgreementContext";
+import UserLocationProvider from "@/contexts/UserLocationContext"; //TODO: Rename this to UserLocationContextProvider
+import dynamic from "next/dynamic";
 
 const MapContextProvider = dynamic(() => import("@/contexts/MapContext"), {
   ssr: false,

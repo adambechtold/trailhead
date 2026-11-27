@@ -1,10 +1,10 @@
+import { GetStaticPaths, GetStaticProps } from "next";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { GetStaticProps, GetStaticPaths } from "next";
 
-import InfoHeader from "@/components/InfoHeader/InfoHeader";
 import Button from "@/components/Buttons/Button";
 import ComparisonWithSlider from "@/components/ComparisonWithSlider/ComparisonWithSlider";
+import InfoHeader from "@/components/InfoHeader/InfoHeader";
 
 import styles from "./info.module.css";
 
@@ -195,7 +195,7 @@ function InfoForTrailManagers() {
       </div>
       <div className={styles["content-section"]}>
         <h2>Easy Setup.</h2>
-        <p>Send us your maps, and we'll set them up.</p>
+        <p>Send us your maps, and we&apos;ll set them up.</p>
         <p>You just place the QR code on site.</p>
       </div>
       <Button

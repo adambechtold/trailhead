@@ -1,6 +1,6 @@
-import React from "react";
 import Button from "@/components/Buttons/Button";
 import { CircleConfirmIcon } from "@/components/Icons/Icons";
+import React from "react";
 import styles from "../Toasts.module.css";
 
 type Props = {

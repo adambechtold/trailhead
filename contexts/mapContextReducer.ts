@@ -1,5 +1,5 @@
-import { MapPosition } from "@/types/MapPosition";
 import { Map } from "@/types/Map";
+import { MapPosition } from "@/types/MapPosition";
 
 export type MapContextState = {
   mapIndex: number;
@@ -34,7 +34,7 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
   let newMapList: Map[] = [...state.mapList];
 
   switch (action.type) {
-    case "ADD_NEW_MAP":
+    case "ADD_NEW_MAP": {
       const mapToAdd = action.payload;
       const existingMap = state.mapList.find((map) => map.key === mapToAdd.key);
       if (existingMap) return state;
@@ -44,13 +44,15 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
         mapList: newMapList,
         mapSaveError: false,
       };
-    case "SET_MAPS":
+    }
+    case "SET_MAPS": {
       const mapsToLoad = action.payload;
       return {
         ...state,
         mapList: mapsToLoad,
       };
-    case "DELETE_MAP":
+    }
+    case "DELETE_MAP": {
       const key: string = action.payload;
       const indexToDelete: number = newMapList.findIndex(
         (map) => map.key === key
@@ -63,7 +65,8 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
         mapList: newMapList,
         mapIndex: newIndex,
       };
-    case "OVERWRITE_MAP":
+    }
+    case "OVERWRITE_MAP": {
       newMap = action.payload;
       const indexOfNewMap = newMapList.findIndex(
         (map) => map.key === newMap.key
@@ -74,6 +77,7 @@ export const mapContextReducer = (state: MapContextState, action: Action) => {
         ...state,
         mapList: newMapList,
       };
+    }
     case "CHOOSE_MAP":
       return {
         ...state,

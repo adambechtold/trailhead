@@ -1,19 +1,19 @@
+import {
+  HeadingError,
+  INITIAL_STATE as INITIAL_HEADING,
+  userHeadingReducer,
+} from "./userHeadingReducer";
+import {
+  INITIAL_STATE as INITIAL_LOCATION_STATE,
+  userLocationReducer,
+} from "./userLocationReducer";
 import React, {
   createContext,
   useContext,
-  useReducer,
   useEffect,
+  useReducer,
   useState,
 } from "react";
-import {
-  userLocationReducer,
-  INITIAL_STATE as INITIAL_LOCATION_STATE,
-} from "./userLocationReducer";
-import {
-  userHeadingReducer,
-  HeadingError,
-  INITIAL_STATE as INITIAL_HEADING,
-} from "./userHeadingReducer";
 
 import { Location } from "@/types/Vector";
 
@@ -53,27 +53,6 @@ export default function UserLocationContextProvider({
   );
 
   const [watchId, setWatchId] = useState<number | null>(null);
-
-  useEffect(() => {
-    stopWatchingHeading();
-
-    // Determine if we the user's device supports user heading and put that in the state
-    if (getCanWatchUserHeading()) {
-      userHeadingContextDispatch({ type: "CAN_WATCH_USER_HEADING" });
-    } else {
-      userHeadingContextDispatch({
-        type: "CANNOT_WATCH_USER_HEADING",
-        payload: {
-          reason: userHeadingState.error || "NOT_SUPPORTED",
-        },
-      });
-    }
-
-    return () => {
-      stopWatchingHeading();
-      stopWatchingUserLocation();
-    };
-  }, []);
 
   const startWatchingUserLocation = async (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -216,6 +195,28 @@ export default function UserLocationContextProvider({
       : null;
   const mostRecentLocation: Location | null =
     userLocations.length > 0 ? userLocations[0].location : null;
+
+  useEffect(() => {
+    stopWatchingHeading();
+
+    // Determine if we the user's device supports user heading and put that in the state
+    if (getCanWatchUserHeading()) {
+      userHeadingContextDispatch({ type: "CAN_WATCH_USER_HEADING" });
+    } else {
+      userHeadingContextDispatch({
+        type: "CANNOT_WATCH_USER_HEADING",
+        payload: {
+          reason: userHeadingState.error || "NOT_SUPPORTED",
+        },
+      });
+    }
+
+    return () => {
+      stopWatchingHeading();
+      stopWatchingUserLocation();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- set up once on mount, clean up on unmount
+  }, []);
 
   return (
     <UserLocationContext.Provider

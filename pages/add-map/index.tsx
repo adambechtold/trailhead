@@ -1,8 +1,8 @@
-import React from "react";
 import AddMap from "@/components/AddMap/AddMap";
+import React from "react";
 
-import styles from "./index.module.css";
 import HelpButton from "@/components/HelpButton";
+import styles from "./index.module.css";
 
 export default function AddMapPage() {
   return (

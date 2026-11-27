@@ -40,9 +40,10 @@ export const userHeadingReducer = (state: UserHeading, action: Action) => {
       return { ...state, heading: action.payload };
     case "CAN_WATCH_USER_HEADING":
       return { ...state, canWatchUserHeading: true };
-    case "CANNOT_WATCH_USER_HEADING":
+    case "CANNOT_WATCH_USER_HEADING": {
       const { reason } = action.payload;
       return { ...state, canWatchUserHeading: false, error: reason };
+    }
     default:
       return state;
   }

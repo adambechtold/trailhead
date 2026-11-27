@@ -26,7 +26,7 @@ export default function HowToUse() {
         <li>
           <span className={styles["title"]}>📍 Pin another location</span>
           <p>
-            <b>Walk a short distance</b> to a spot that's clearly marked on the
+            <b>Walk a short distance</b> to a spot that&apos;s clearly marked on the
             map, <i>for example, walk to the first fork in the trail</i>.
           </p>
           <p>
@@ -37,7 +37,7 @@ export default function HowToUse() {
         <li>
           <span className={styles["title"]}>🗺️ Enjoy your hike!</span>
           <p>
-            You've successfully configured your map! View it any time to see
+            You&apos;ve successfully configured your map! View it any time to see
             your current position.
           </p>
         </li>

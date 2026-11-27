@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { useMapContext } from "@/contexts/MapContext";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import {
   getMaximumStorageAmount,
   getUsedStorageAmount,
 } from "@/utils/localStorage";
+import { useMapContext } from "@/contexts/MapContext";
+import { useRouter } from "next/router";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
-import { createMapFromUrl, isMap, Map } from "@/types/Map";
+import { Map, createMapFromUrl, isMap } from "@/types/Map";
 
 import ChooseMapFile from "@/components/AddMap/ChooseMapFile/ChooseMapFile";
 import ConfirmMap from "@/components/AddMap/ConfirmMap/ConfirmMap";
@@ -109,8 +109,11 @@ export default function AddMap() {
   );
 }
 
+// The storage quota check is switched off for now.
+const CHECK_STORAGE_QUOTA = false;
+
 function canSavePhoto(photoURL: string) {
-  return true;
+  if (!CHECK_STORAGE_QUOTA) return true;
   const quotaUsed = getUsedStorageAmount();
   const quotaTotal = getMaximumStorageAmount();
   const remainingQuota = quotaTotal - quotaUsed;

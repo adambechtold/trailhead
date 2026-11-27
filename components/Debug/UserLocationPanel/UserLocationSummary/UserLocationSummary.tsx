@@ -1,4 +1,4 @@
-import { Pin, Location } from "@/types/Vector";
+import { Location, Pin } from "@/types/Vector";
 import React from "react";
 
 import styles from "./UserLocationSummary.module.css";

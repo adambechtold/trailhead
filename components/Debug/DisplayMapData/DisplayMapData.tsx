@@ -2,17 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { Map } from "@/types/Map";
 import { Location } from "@/types/Vector";
+import { Map } from "@/types/Map";
 
 import { useMapContext } from "@/contexts/MapContext";
 import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import Button from "@/components/Buttons/Button";
 
-import styles from "./DisplayMapData.module.css";
-import { TrashIcon } from "../../Icons/Icons";
 import { HeadingError } from "@/contexts/userHeadingReducer";
+import { TrashIcon } from "../../Icons/Icons";
+import styles from "./DisplayMapData.module.css";
 
 export default function DisplayMapData() {
   const {

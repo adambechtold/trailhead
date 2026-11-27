@@ -5,14 +5,14 @@ import { Coordinates } from "@/types/Vector";
 import { Overlay } from "@/types/Overlay";
 
 import {
+  ImageOverlay,
   MapContainer,
-  TileLayer,
   Marker,
   Popup,
-  ImageOverlay,
+  TileLayer,
 } from "react-leaflet";
 
-import { LatLngExpression, LatLngBounds } from "leaflet";
+import { LatLngBounds, LatLngExpression } from "leaflet";
 
 import { createMapIcon } from "@/components/MapIcon";
 

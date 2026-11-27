@@ -1,9 +1,9 @@
 /// <reference lib="webworker" />
 // Service worker, built to public/sw.js by @serwist/next (see next.config.js).
 // https://serwist.pages.dev/docs/next
-import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 import { Serwist } from "serwist";
+import { defaultCache } from "@serwist/next/worker";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {

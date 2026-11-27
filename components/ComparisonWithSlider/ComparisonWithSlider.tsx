@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Handle from "./Handle/Handle";
 
@@ -28,10 +28,6 @@ export default function ComparisonWithSlider({
   const onDragStop = () => {
     setIsDragStarted(false);
   };
-
-  useEffect(() => {
-    setToPosition(percentBefore);
-  }, []);
 
   const containerOnTouchMove = (e: React.TouchEvent<HTMLElement>) => {
     e.preventDefault();
@@ -82,6 +78,11 @@ export default function ComparisonWithSlider({
 
     setSizeBefore(resizableImageWidth);
   };
+
+  useEffect(() => {
+    setToPosition(percentBefore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- set the initial position once on mount
+  }, []);
 
   const getElementSizes = () => {
     const handleWidth = dragElementRef.current?.offsetWidth || 0;

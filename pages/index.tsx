@@ -6,6 +6,7 @@ export default function App() {
 
   useEffect(() => {
     router.replace("/info/hikers");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- redirect once on mount
   }, []);
 
   return <div></div>;

@@ -1,6 +1,6 @@
-import React from "react";
-import Button from "../Button";
 import { ArrowIcon } from "@/components/Icons/Icons";
+import Button from "../Button";
+import React from "react";
 
 type Props = {
   zoomToUser?: () => void;

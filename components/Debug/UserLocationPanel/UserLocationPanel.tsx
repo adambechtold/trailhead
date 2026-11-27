@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import AccuracyIndicator from "./AccuracyIndicator/AccuracyIndicator";
 import UserLocationSummary from "./UserLocationSummary/UserLocationSummary";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import { Map } from "@/types/Map";
 import { getUserPin } from "@/utils/vector";

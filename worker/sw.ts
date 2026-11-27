@@ -1,4 +1,3 @@
-/// <reference lib="webworker" />
 // Service worker, built to public/sw.js by @serwist/next (see next.config.js).
 // https://serwist.pages.dev/docs/next
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";

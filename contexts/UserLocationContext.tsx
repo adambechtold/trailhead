@@ -9,10 +9,11 @@ import {
 } from "./userLocationReducer";
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
-  useState,
+  useRef,
 } from "react";
 
 import { Location } from "@/types/Vector";
@@ -52,12 +53,37 @@ export default function UserLocationContextProvider({
     INITIAL_HEADING,
   );
 
-  const [watchId, setWatchId] = useState<number | null>(null);
+  // Refs, not state: the cleanup and event handlers must see the current values,
+  // not the ones from the render they were created in.
+  const watchIdRef = useRef<number | null>(null);
+  const reportedHeadingUnsupportedRef = useRef(false);
+
+  // Same function on every render, so removeEventListener removes what addEventListener added.
+  const getCurrentHeading = useCallback((event: DeviceOrientationEvent) => {
+    const compassHeading = (event as any).webkitCompassHeading; // iOS non-standard
+
+    if (compassHeading) {
+      userHeadingContextDispatch({
+        type: "UPDATE_USER_HEADING",
+        payload: compassHeading as number,
+      });
+    } else if (!reportedHeadingUnsupportedRef.current) {
+      reportedHeadingUnsupportedRef.current = true;
+      userHeadingContextDispatch({
+        type: "ERROR_UPDATE_USER_HEADING",
+        payload: "NOT_SUPPORTED",
+      });
+    }
+  }, []);
 
   const startWatchingUserLocation = async (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       userLocationContextDispatch({ type: "START_WATCH_USER_LOCATION" });
-      const watchID = navigator.geolocation.watchPosition(
+      // Never run two watches at once; the old one would keep the GPS on.
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+      }
+      watchIdRef.current = navigator.geolocation.watchPosition(
         (position) => {
           handleLocationUpdate(position);
           resolve(true);
@@ -72,14 +98,13 @@ export default function UserLocationContextProvider({
           maximumAge: 0,
         },
       );
-      setWatchId(watchID);
     });
   };
 
   const stopWatchingUserLocation = (): void => {
-    if (watchId) {
-      navigator.geolocation.clearWatch(watchId);
-      setWatchId(null);
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
       userLocationContextDispatch({ type: "STOP_WATCH_USER_LOCATION" });
     }
   };
@@ -164,26 +189,6 @@ export default function UserLocationContextProvider({
     userHeadingContextDispatch({ type: "STOP_WATCH_USER_HEADING" });
     if (!window) return;
     window.removeEventListener("deviceorientation", getCurrentHeading);
-  }
-
-  function getCurrentHeading(event: DeviceOrientationEvent) {
-    let alpha = event.alpha; // z-axis rotation [0,360)
-
-    if ((event as any).webkitCompassHeading) {
-      alpha = (event as any).webkitCompassHeading! as number; // iOS non-standard
-
-      userHeadingContextDispatch({
-        type: "UPDATE_USER_HEADING",
-        payload: alpha,
-      });
-    } else {
-      if (!userHeadingState.error) {
-        userHeadingContextDispatch({
-          type: "ERROR_UPDATE_USER_HEADING",
-          payload: "NOT_SUPPORTED",
-        });
-      }
-    }
   }
 
   const { currentLocationIndex, userLocations, isWatchingLocation, error } =

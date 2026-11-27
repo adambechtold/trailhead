@@ -1,0 +1,11 @@
+{
+  // The service worker runs in a worker, not a page, so it gets its own
+  // types (webworker instead of dom). Checked by `npm run type-check`.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "webworker"],
+    "types": []
+  },
+  "include": ["sw.ts"],
+  "exclude": []
+}

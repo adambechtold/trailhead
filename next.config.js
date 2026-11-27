@@ -32,8 +32,8 @@ module.exports = withSentryConfig(module.exports, {
   org: "adam-bechtold",
   project: "trailhead",
 
-  // Suppresses source map uploading logs during build
-  silent: true,
+  // Show source map upload logs in CI (Vercel sets CI=1), so a failed upload is visible
+  silent: !process.env.CI,
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,

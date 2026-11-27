@@ -24,3 +24,6 @@ Sentry.init({
     }),
   ],
 });
+
+// Records client-side navigations (called by Next.js on route changes).
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

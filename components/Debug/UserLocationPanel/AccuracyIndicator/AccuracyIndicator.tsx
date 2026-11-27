@@ -25,7 +25,7 @@ const getAccuracyClass = (error: boolean, accuracy?: number) => {
 };
 
 const setGlowBackground = (
-  glowRef: React.RefObject<HTMLDivElement>,
+  glowRef: React.RefObject<HTMLDivElement | null>,
   error: boolean,
   accuracy?: number
 ) => {

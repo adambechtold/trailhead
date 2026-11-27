@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
 import {
   TransformComponent,
   TransformWrapper,
@@ -64,10 +63,7 @@ export default function InterpolateMap(props: Props) {
     setMapScale(scale);
     if (!mapReference.current) return;
 
-    const mapNode = ReactDOM.findDOMNode(mapReference.current);
-
-    if (!mapNode || !(mapNode instanceof HTMLElement)) return;
-    const mapRect = mapNode.getBoundingClientRect();
+    const mapRect = mapReference.current.getBoundingClientRect();
 
     if (onMapStateUpdate) {
       onMapStateUpdate({
@@ -158,7 +154,7 @@ export default function InterpolateMap(props: Props) {
         <>
           {React.Children.map(children, (child) => {
             if (!child) return;
-            return React.cloneElement(child as React.ReactElement, {
+            return React.cloneElement(child as React.ReactElement<Record<string, unknown>>, {
               zoomToFit,
               zoomToImage,
               resetImage,
@@ -232,11 +228,11 @@ const PinComponent: React.FC<PinMarkerProps> = (props) => {
 /**
  * Calculates the transform needed to fit the map image within the window.
  *
- * @param {React.RefObject<HTMLImageElement>} mapReference - The reference to the map image element.
+ * @param {React.RefObject<HTMLImageElement | null>} mapReference - The reference to the map image element.
  * @returns {{ x: number, y: number, scale: number }} - The transform object containing the x and y offsets and the scale factor.
  */
 const calculateZoomToFitTransform = (
-  mapReference: React.RefObject<HTMLImageElement>
+  mapReference: React.RefObject<HTMLImageElement | null>
 ) => {
   const imageWidth = mapReference.current?.width;
   const imageHeight = mapReference.current?.height;
@@ -277,13 +273,13 @@ const calculateZoomToFitTransform = (
  * @param {number} targetWidth - The target width in meters.
  * @param {Pin} start - The start pin.
  * @param {Pin} end - The end pin.
- * @param {React.RefObject<HTMLImageElement>} mapReference - The reference to the map image element.
+ * @param {React.RefObject<HTMLImageElement | null>} mapReference - The reference to the map image element.
  * @returns {number | undefined} - The scale factor or undefined if the function cannot calculate the scale.
  */
 const calculateScaleForTargetWidth = (
   targetWidth: number,
   pins: Pin[],
-  mapReference: React.RefObject<HTMLImageElement>
+  mapReference: React.RefObject<HTMLImageElement | null>
 ): number | undefined => {
   if (pins.length >= 2 && mapReference.current) {
     const imageWidth = mapReference.current?.width;
@@ -322,7 +318,7 @@ const calculateScaleForTargetWidth = (
 
 function isPointWithinMap(
   point: Point,
-  mapReference: React.RefObject<HTMLImageElement>
+  mapReference: React.RefObject<HTMLImageElement | null>
 ) {
   const top = -point.y;
   const left = point.x;

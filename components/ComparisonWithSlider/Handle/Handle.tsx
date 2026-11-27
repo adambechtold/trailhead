@@ -7,7 +7,7 @@ interface Props {
   onDragStart: (e: React.MouseEvent<HTMLDivElement>) => void;
   onDragStop: () => void;
   positionLeft: number;
-  elementRef: React.RefObject<HTMLDivElement>;
+  elementRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function Handle({

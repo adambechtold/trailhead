@@ -11,11 +11,8 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = withBundleAnalyzer(
   withPWA({
     reactStrictMode: true,
-    // Needed on Next.js 14 for instrumentation.ts (Sentry). Stable in Next.js 15.
-    experimental: {
-      instrumentationHook: true,
-    },
-    publicRuntimeConfig: {
+    // Inlined into the client bundle at build time
+    env: {
       GA_TRACKING_ID: process.env.GA_TRACKING_ID,
     },
   }),

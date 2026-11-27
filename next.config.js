@@ -1,6 +1,11 @@
-const withPWA = require("next-pwa")({
-  dest: "public",
+const { randomUUID } = require("node:crypto");
+
+const withSerwist = require("@serwist/next").default({
+  swSrc: "worker/sw.ts",
+  swDest: "public/sw.js",
   disable: process.env.NODE_ENV === "development",
+  // The offline fallback page must be precached; the revision changes every build.
+  additionalPrecacheEntries: [{ url: "/_offline", revision: randomUUID() }],
 });
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
@@ -9,7 +14,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = withBundleAnalyzer(
-  withPWA({
+  withSerwist({
     reactStrictMode: true,
     // Inlined into the client bundle at build time
     env: {

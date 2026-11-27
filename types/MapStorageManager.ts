@@ -76,26 +76,28 @@ const saveMapToLocalStorage = async (
   }
 };
 
+// Resolves to false if the map couldn't be saved (for example, storage is full),
+// like the localStorage version. It never rejects.
 async function saveMapToIndexedDB(
   map: Map,
   overwriteIfExists: boolean = true
 ): Promise<boolean> {
-  const savedMapKeys = await getMapKeysFromIndexedDB();
-  const mapAlreadyExists = savedMapKeys.includes(map.key);
+  try {
+    const savedMapKeys = await getMapKeysFromIndexedDB();
+    const mapAlreadyExists = savedMapKeys.includes(map.key);
 
-  if (!overwriteIfExists && mapAlreadyExists) return true;
+    if (!overwriteIfExists && mapAlreadyExists) return true;
 
-  const db = await getMapsDB();
-  const transaction = db.transaction("maps", "readwrite");
-  const objectStore = transaction.objectStore("maps");
-
-  return new Promise((resolve) => {
-    const request = objectStore.put(map);
-    request.onerror = onIndexDBRequestError;
-    request.onsuccess = () => {
-      resolve(true);
-    };
-  });
+    const db = await getMapsDB();
+    const transaction = db.transaction("maps", "readwrite");
+    transaction.objectStore("maps").put(map);
+    // The write only counts once the transaction commits; quota errors surface as an abort.
+    await transactionDone(transaction);
+    return true;
+  } catch (error) {
+    console.error("Could not save map to IndexedDB", error);
+    return false;
+  }
 }
 
 // =========== GET MAP KEYS ============
@@ -106,13 +108,8 @@ async function getMapKeysFromLocalStorage(): Promise<string[]> {
 
 async function getMapKeysFromIndexedDB(): Promise<string[]> {
   const db = await getMapsDB();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("maps", "readonly");
-    const objectStore = transaction.objectStore("maps");
-    const request = objectStore.getAllKeys();
-    request.onerror = reject;
-    request.onsuccess = () => resolve(request.result as string[]);
-  });
+  const objectStore = db.transaction("maps", "readonly").objectStore("maps");
+  return (await requestResult(objectStore.getAllKeys())) as string[];
 }
 
 // =========== GET MAPS ============
@@ -131,14 +128,9 @@ async function getMapsFromLocalStorage(): Promise<Map[]> {
 
 async function getMapsFromIndexedDB(): Promise<Map[]> {
   const db = await getMapsDB();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("maps", "readonly");
-    const objectStore = transaction.objectStore("maps");
-    const request = objectStore.getAll();
-    request.onerror = reject;
-    request.onsuccess = () =>
-      resolve((request.result as Map[]).map(updateMapToLatestVersion));
-  });
+  const objectStore = db.transaction("maps", "readonly").objectStore("maps");
+  const maps = (await requestResult(objectStore.getAll())) as Map[];
+  return maps.map(updateMapToLatestVersion);
 }
 
 // =========== GET MAP BY KEY ============
@@ -149,13 +141,8 @@ async function getMapFromLocalStorage(key: string): Promise<Map | undefined> {
 
 async function getMapFromIndexedDB(key: string): Promise<Map | undefined> {
   const db = await getMapsDB();
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("maps", "readonly");
-    const objectStore = transaction.objectStore("maps");
-    const request = objectStore.get(key);
-    request.onerror = reject;
-    request.onsuccess = () => resolve(request.result as Map);
-  });
+  const objectStore = db.transaction("maps", "readonly").objectStore("maps");
+  return (await requestResult(objectStore.get(key))) as Map | undefined;
 }
 
 // =========== DELETE MAP BY KEY ============
@@ -172,24 +159,58 @@ async function deleteMapFromLocalStorage(key: string): Promise<boolean> {
   }
 }
 
+// Resolves to false if the map couldn't be deleted. It never rejects.
 async function deleteMapFromIndexedDB(key: string): Promise<boolean> {
-  const db = await getMapsDB();
-  return new Promise((resolve, reject) => {
+  try {
+    const db = await getMapsDB();
     const transaction = db.transaction("maps", "readwrite");
-    const objectStore = transaction.objectStore("maps");
-    const request = objectStore.delete(key);
-    request.onerror = reject;
-    request.onsuccess = () => resolve(true);
-  });
+    transaction.objectStore("maps").delete(key);
+    await transactionDone(transaction);
+    return true;
+  } catch (error) {
+    console.error("Could not delete map from IndexedDB", error);
+    return false;
+  }
 }
 
 // =========== INDEXEDDB UTILS ============
-async function getMapsDB(): Promise<IDBDatabase> {
-  return new Promise((resolve) => {
+// One shared connection. If opening fails, the next call tries again.
+let mapsDB: Promise<IDBDatabase> | null = null;
+
+function getMapsDB(): Promise<IDBDatabase> {
+  if (!mapsDB) {
+    mapsDB = openMapsDB().catch((error) => {
+      mapsDB = null;
+      throw error;
+    });
+  }
+  return mapsDB;
+}
+
+function openMapsDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    let wasBlocked = false;
     const request = indexedDB.open("maps", 1);
-    request.onerror = onIndexDBRequestError;
-    request.onsuccess = () => resolve(request.result as IDBDatabase);
     request.onupgradeneeded = () => configureIndexedDB(request.result);
+    request.onsuccess = () => {
+      const db = request.result;
+      if (wasBlocked) {
+        // We already gave up on this request; don't leave the connection open.
+        db.close();
+        return;
+      }
+      // Let a newer version of the app upgrade the database in another tab.
+      db.onversionchange = () => {
+        db.close();
+        mapsDB = null;
+      };
+      resolve(db);
+    };
+    request.onerror = () => reject(request.error);
+    request.onblocked = () => {
+      wasBlocked = true;
+      reject(new Error("Opening the maps database is blocked by another tab"));
+    };
   });
 }
 
@@ -197,9 +218,21 @@ const configureIndexedDB = (db: IDBDatabase) => {
   db.createObjectStore("maps", { keyPath: "key" });
 };
 
-const onIndexDBRequestError = (event: Event) => {
-  console.error("error: ", event);
-};
+function requestResult<T>(request: IDBRequest<T>): Promise<T> {
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+function transactionDone(transaction: IDBTransaction): Promise<void> {
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () =>
+      reject(transaction.error ?? new Error("Transaction aborted"));
+  });
+}
 
 // ========== LOCAL STORAGE UTILS ==========
 const updateLocalStorageToLatest = async () => {

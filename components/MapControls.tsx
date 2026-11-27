@@ -1,7 +1,7 @@
 import React from "react";
 
-import styles from "./MapControls.module.css";
 import ZoomToUserButton from "./Buttons/ZoomToUserButton/ZoomToUserButton";
+import styles from "./MapControls.module.css";
 
 type Props = {
   zoomToImage?: () => void;

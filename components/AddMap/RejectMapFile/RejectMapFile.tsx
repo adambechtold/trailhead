@@ -2,8 +2,8 @@ import React from "react";
 
 import InterpolateMap from "@/components/InterpolateMap";
 
-import styles from "./RejectMapFile.module.css";
 import Button from "@/components/Buttons/Button";
+import styles from "./RejectMapFile.module.css";
 
 type Props = {
   previewSrc: string;
@@ -30,7 +30,7 @@ export default function RefectMapFile({
             <p>Create smaller photos by...</p>
             <ol>
               <li>Take a Photo with the normal camera app</li>
-              <li>Return to Trailhead and Click "Add Map"</li>
+              <li>Return to Trailhead and Click &quot;Add Map&quot;</li>
               <li>
                 Select a Photo from your <strong>Photo Library</strong> and{" "}
                 <strong>Select the Reduced File Size</strong>

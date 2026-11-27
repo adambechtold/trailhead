@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer, useState } from "react";
 
 import {
-  increaseStorageReducer,
   INITIAL_STATE,
+  increaseStorageReducer,
 } from "../../../contexts/increaseStorageReducer";
 
 export default function IncreaseStorage() {
@@ -15,7 +15,7 @@ export default function IncreaseStorage() {
 
   useEffect(() => {
     const request = indexedDB.open("names", 1);
-    request.onsuccess = (event) => {
+    request.onsuccess = () => {
       setDb(request.result);
       const nowDB = request.result;
 
@@ -23,7 +23,7 @@ export default function IncreaseStorage() {
       const transaction = nowDB.transaction(["names"], "readonly");
       const objectStore = transaction.objectStore("names");
       const getNamesRequest = objectStore.getAll();
-      getNamesRequest.onsuccess = (event) => {
+      getNamesRequest.onsuccess = () => {
         const names = getNamesRequest.result as { name: string }[];
         increaseStorageDispatch({
           type: "SET_NAMES",
@@ -34,9 +34,9 @@ export default function IncreaseStorage() {
         });
       };
     };
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = () => {
       const db = request.result as IDBDatabase;
-      const objectStore = db.createObjectStore("names", {
+      db.createObjectStore("names", {
         keyPath: "key",
       });
     };
@@ -67,7 +67,7 @@ export default function IncreaseStorage() {
 
   return (
     <div>
-      <h1>Let's Store Items with IndexedDB</h1>
+      <h1>Let&apos;s Store Items with IndexedDB</h1>
       <input
         type="text"
         value={nameInput}

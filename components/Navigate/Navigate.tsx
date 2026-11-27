@@ -2,20 +2,20 @@ import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
-import { useMapContext } from "@/contexts/MapContext";
 import { useCreatePinContext } from "@/contexts/CreatePinContext";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import { useMapContext } from "@/contexts/MapContext";
 import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
-import MenuTray from "@/components/MenuTray";
-import Crosshairs from "@/components/Crosshairs";
 import AddMap from "../AddMap/AddMap";
+import Crosshairs from "@/components/Crosshairs";
+import MenuTray from "@/components/MenuTray";
 import SettingsPanel from "../SettingsPanel/SettingsPanel";
 
-import styles from "./Navigate.module.css";
 import HelpButton from "../HelpButton";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 import { notifyWatchingLocationFailed } from "../Toasts/FailTrackingLocation/FailTrackingLocation";
+import styles from "./Navigate.module.css";
 
 const CurrentMap = dynamic(() => import("@/components/CurrentMap/CurrentMap"), {
   ssr: false,
@@ -61,6 +61,7 @@ export default function Navigate() {
     return () => {
       isMounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run when a map is first loaded or removed
   }, [hasMap]);
 
   const canDisplayResetButton = !!(map && map.pins && map.pins.length > 0);

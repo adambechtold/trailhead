@@ -1,5 +1,5 @@
-import React from "react";
 import { Map } from "@/types/Map";
+import React from "react";
 
 import SingleMapNavigation from "@/components/SingleMapNavigation/SingleMapNavigation";
 import { configurations } from "@/types/overlay.configurations";

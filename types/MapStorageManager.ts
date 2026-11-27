@@ -89,10 +89,10 @@ async function saveMapToIndexedDB(
   const transaction = db.transaction("maps", "readwrite");
   const objectStore = transaction.objectStore("maps");
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const request = objectStore.put(map);
     request.onerror = onIndexDBRequestError;
-    request.onsuccess = (event) => {
+    request.onsuccess = () => {
       resolve(true);
     };
   });
@@ -185,11 +185,11 @@ async function deleteMapFromIndexedDB(key: string): Promise<boolean> {
 
 // =========== INDEXEDDB UTILS ============
 async function getMapsDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const request = indexedDB.open("maps", 1);
     request.onerror = onIndexDBRequestError;
     request.onsuccess = () => resolve(request.result as IDBDatabase);
-    request.onupgradeneeded = (event) => configureIndexedDB(request.result);
+    request.onupgradeneeded = () => configureIndexedDB(request.result);
   });
 }
 
@@ -205,7 +205,7 @@ const onIndexDBRequestError = (event: Event) => {
 const updateLocalStorageToLatest = async () => {
   const currentVersion = localStorage.getItem("version") || "0.0.0";
   switch (currentVersion) {
-    case "0.0.0":
+    case "0.0.0": {
       const mapKeys = await getMapKeysFromLocalStorage();
       const updateMap = (key: string) => {
         const map = localStorage.getItem(key);
@@ -220,6 +220,7 @@ const updateLocalStorageToLatest = async () => {
       mapKeys.forEach(updateMap);
       localStorage.setItem("version", "0.0.1");
       break;
+    }
     default:
       break;
   }

@@ -1,9 +1,9 @@
-import React, { createContext, useReducer, useEffect, useContext } from "react";
-import { Pin } from "@/types/Vector";
-import { mapContextReducer, INITIAL_STATE } from "./mapContextReducer";
-import { MapPosition } from "@/types/MapPosition";
+import { INITIAL_STATE, mapContextReducer } from "./mapContextReducer";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { Map } from "@/types/Map";
+import { MapPosition } from "@/types/MapPosition";
 import { MapStorageManager } from "@/types/MapStorageManager";
+import { Pin } from "@/types/Vector";
 
 type MapContextProviderProps = {
   children: React.ReactNode;
@@ -56,6 +56,7 @@ export default function MapContextProvider({
       .catch((err) => {
         console.error("load saved maps error", err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load saved maps once; mapStorage is recreated every render
   }, []);
 
   const currentMap = mapContextState.mapList[mapContextState.mapIndex];

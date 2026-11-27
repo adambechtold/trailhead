@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 
 import { useMapContext } from "@/contexts/MapContext";
 
+import Button from "@/components/Buttons/Button";
 import ListOfMaps from "./ListOfMaps";
 import Toolbar from "./Toolbar";
-import Button from "@/components/Buttons/Button";
 
 import styles from "@/components/MenuTray.module.css";
 
@@ -48,9 +48,9 @@ export default function MenuTray() {
     );
     return getMaximumOffset(elementHeight) - 19 * rootFontSize;
   };
-  const maxOffset = menuRef.current
-    ? getMaximumOffset(menuRef.current.offsetHeight)
-    : 0;
+  // Read from the DOM when handling events, not during render.
+  const getMaxOffset = () =>
+    menuRef.current ? getMaximumOffset(menuRef.current.offsetHeight) : 0;
 
   const handleAddNewMap = () => {
     router.push("/add-map");
@@ -97,6 +97,7 @@ export default function MenuTray() {
 
     setIsDragging(false);
 
+    const maxOffset = getMaxOffset();
     const wasOpen = previousOffset === maxOffset;
     const wasClosed = previousOffset === 0;
 
@@ -141,6 +142,7 @@ export default function MenuTray() {
 
   const openMenu = () => {
     if (!containerRef.current || !menuRef.current) return;
+    const maxOffset = getMaxOffset();
     moveMenuHeightTo(maxOffset);
     setPreviousOffset(maxOffset);
     setIsMenuOpen(true);

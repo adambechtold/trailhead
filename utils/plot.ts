@@ -24,7 +24,7 @@ export const getLineOfCoordinates = (
   return line;
 };
 
-const getExampleCoordinates1 = () =>
+export const getExampleCoordinates1 = () =>
   // short and stout, upwards
   getLineOfCoordinates(
     {
@@ -38,7 +38,7 @@ const getExampleCoordinates1 = () =>
     6
   );
 
-const getExampleCoordinates2 = () =>
+export const getExampleCoordinates2 = () =>
   // wide and tall, upwards
   getLineOfCoordinates(
     {
@@ -52,7 +52,7 @@ const getExampleCoordinates2 = () =>
     6
   );
 
-const getExampleCoordinates3 = () =>
+export const getExampleCoordinates3 = () =>
   // wide and tall, downwards
   getLineOfCoordinates(
     {
@@ -66,7 +66,7 @@ const getExampleCoordinates3 = () =>
     6
   );
 
-const getExampleCoordinates4 = () =>
+export const getExampleCoordinates4 = () =>
   // very narrow vertical, upwards
   getLineOfCoordinates(
     {

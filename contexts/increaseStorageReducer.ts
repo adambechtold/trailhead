@@ -25,7 +25,7 @@ export const increaseStorageReducer = (
 ) => {
   const { db, value } = action.payload;
   switch (action.type) {
-    case "ADD_NAME":
+    case "ADD_NAME": {
       const nameToAdd = value as string; // TODO: check if this is the right way to do this
       if (db) {
         const addNameTransaction = db.transaction("names", "readwrite");
@@ -36,13 +36,15 @@ export const increaseStorageReducer = (
         ...state,
         names: [...state.names, nameToAdd],
       };
-    case "SET_NAMES":
+    }
+    case "SET_NAMES": {
       const namesToLoad = value as string[];
       return {
         ...state,
         names: namesToLoad,
       };
-    case "DELETE_NAME":
+    }
+    case "DELETE_NAME": {
       const indexToDelete = value as number;
 
       const isIndexNotInRange =
@@ -64,6 +66,7 @@ export const increaseStorageReducer = (
         ...state,
         names: newNames,
       };
+    }
     default:
       return state;
   }

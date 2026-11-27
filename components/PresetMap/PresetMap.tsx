@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Map } from "@/types/Map";
 
 import SingleMapNavigation from "@/components/SingleMapNavigation/SingleMapNavigation";
@@ -18,7 +18,7 @@ export default function PresetMap({ url, name }: Props) {
       setMap(jsonData);
     }
     fetchMap();
-  }, []);
+  }, [url]);
 
   return (
     <>

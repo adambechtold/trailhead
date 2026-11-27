@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 
 import { useUserAgreementContext } from "@/contexts/UserAgreementContext";
 
-import styles from "./index.module.css";
 import Button from "@/components/Buttons/Button";
+import styles from "./index.module.css";
 
 export default function DisclaimerPage() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function DisclaimerPage() {
       <div className={styles["section-container"]}>
         <h2>Warning: Saved maps can disappear</h2>
         <p>
-          Maps are saved to your browser's local storage. That means they will
+          Maps are saved to your browser&apos;s local storage. That means they will
           disappear if you clear your browsing data.
         </p>
       </div>

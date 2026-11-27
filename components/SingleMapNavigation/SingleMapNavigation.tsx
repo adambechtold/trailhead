@@ -4,12 +4,12 @@ import toast from "react-hot-toast";
 import { ArrowIcon, CompassIcon, DownloadIcon } from "@/components/Icons/Icons";
 import Button from "@/components/Buttons/Button";
 import ConfirmTrackingLocation from "@/components/Toasts/ConfirmTrackingLocation/ConfirmTrackingLocation";
-import { notifyWatchingLocationFailed } from "@/components/Toasts/FailTrackingLocation/FailTrackingLocation";
 import InterpolateMap from "@/components/InterpolateMap";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
+import { Map } from "@/types/Map";
 import UserLocationPanel from "../Debug/UserLocationPanel/UserLocationPanel";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
-import { Map } from "@/types/Map";
+import { notifyWatchingLocationFailed } from "@/components/Toasts/FailTrackingLocation/FailTrackingLocation";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import styles from "./SingleMapNavigation.module.css";
 

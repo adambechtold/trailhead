@@ -1,8 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import styles from "./InfoHeader.module.css";
 import Logo from "../Logo/Logo";
+import styles from "./InfoHeader.module.css";
 
 type Props = {
   audience: "hikers" | "trail-managers";

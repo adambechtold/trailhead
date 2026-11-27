@@ -9,13 +9,13 @@ export default function HowToSaveOffline() {
         <li>Open Trailhead in a Browser</li>
         <li>Go to the Main Navigation Page</li>
         <li>Open the Share Menu</li>
-        <li>Click "Add to Homescreen" and Follow the Prompts</li>
+        <li>Click &quot;Add to Homescreen&quot; and Follow the Prompts</li>
       </ol>
       <h3>Android</h3>
       <ol>
         <li>Open Trailhead in Chrome</li>
-        <li>Click the "three dot" Icon</li>
-        <li>Select "Add to Homescreen"</li>
+        <li>Click the &quot;three dot&quot; Icon</li>
+        <li>Select &quot;Add to Homescreen&quot;</li>
       </ol>
     </div>
   );

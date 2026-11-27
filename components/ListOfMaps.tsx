@@ -1,8 +1,8 @@
-import React from "react";
 import { Map } from "@/types/Map";
+import React from "react";
 
-import Button from "@/components/Buttons/Button";
 import { ShareIcon, TrashIcon } from "./Icons/Icons";
+import Button from "@/components/Buttons/Button";
 
 import styles from "@/components/ListOfMaps.module.css";
 
@@ -71,7 +71,12 @@ function MapItem({
   onShare,
 }: MapItemProps) {
   let itemPicture = (
-    <img src={mapURL} className={styles["map-picture"]} onClick={onClick} />
+    <img
+      src={mapURL}
+      alt="Saved trail map"
+      className={styles["map-picture"]}
+      onClick={onClick}
+    />
   );
   const outline = (child: React.ReactNode) => (
     <div className={styles["selected-map-outline"]}>{child}</div>

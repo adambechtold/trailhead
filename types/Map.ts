@@ -1,5 +1,5 @@
-import shortHash from "short-hash";
 import { Pin } from "./Vector";
+import shortHash from "short-hash";
 
 type MapFormatVersion = "0.1" | "0.2";
 
@@ -51,7 +51,7 @@ export function updateToLatestVersion(maybeMap: any): Map {
   }
   const map = maybeMap as Map;
   switch (map.formatVersion) {
-    case "0.1":
+    case "0.1": {
       const { pins, start, end, ...rest } = map;
       let newPins = [];
       if (pins) newPins = pins;
@@ -64,6 +64,7 @@ export function updateToLatestVersion(maybeMap: any): Map {
         pins: newPins,
         formatVersion: "0.2",
       };
+    }
     case "0.2":
       return map;
     default:

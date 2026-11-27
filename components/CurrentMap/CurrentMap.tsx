@@ -1,10 +1,10 @@
 // this components job is just to pass the state into one of the stateless options
 // Consider renaming it to MapDisplay or Map
-import { useMapContext } from "@/contexts/MapContext";
-import { useUserLocationContext } from "@/contexts/UserLocationContext";
 import InterpolateMap from "@/components/InterpolateMap";
 import { MapPosition } from "@/types/MapPosition";
 import ZoomToUserButton from "@/components/Buttons/ZoomToUserButton/ZoomToUserButton";
+import { useMapContext } from "@/contexts/MapContext";
+import { useUserLocationContext } from "@/contexts/UserLocationContext";
 
 import styles from "./CurrentMap.module.css";
 

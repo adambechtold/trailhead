@@ -15,10 +15,10 @@ type TypedIconProps = {
   size?: Size;
 };
 
-function Icon({ size = DEFAULT_SIZE, inText = false, src }: BaseIconProps) {
+function Icon({ size = DEFAULT_SIZE, src }: BaseIconProps) {
   const iconClasses = [styles[`size-${size}`]];
 
-  return <img className={iconClasses.join(" ")} src={src} />;
+  return <img className={iconClasses.join(" ")} src={src} alt="" />;
 }
 
 export function CancelIcon({ size = DEFAULT_SIZE }: TypedIconProps) {

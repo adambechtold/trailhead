@@ -46,7 +46,7 @@ export const userLocationReducer = (
       return { ...state, isWatchingLocation: false };
     case "ERROR_UPDATE_USER_LOCATION":
       return { ...state, error: action.payload };
-    case "RECORD_USER_LOCATION":
+    case "RECORD_USER_LOCATION": {
       const { location, time, useLocation } = action.payload;
       const newLocation = {
         location,
@@ -79,6 +79,7 @@ export const userLocationReducer = (
         userLocations: locationsToKeep,
         currentLocationIndex: newCurrentLocationIndex,
       };
+    }
     default:
       return state;
   }
